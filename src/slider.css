@@ -1,0 +1,122 @@
+/* =========================================
+   RAGAS CAREER WORLD
+   NORMAL FAST SCROLL
+========================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  /* IMPORTANT:
+     Do NOT hide body overflow */
+  overflow-x: hidden;
+}
+
+/* =========================================
+   MAIN PAGE
+========================================= */
+
+.page-slider {
+  width: 100%;
+
+  height: calc(100vh - 78px);
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* REMOVE SLIDE SNAP */
+  scroll-snap-type: none;
+
+  /* Normal scrolling */
+  scroll-behavior: auto;
+
+  scrollbar-width: none;
+}
+
+.page-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================
+   EACH SECTION
+========================================= */
+
+.page-slide {
+  width: 100%;
+
+  min-height: calc(100vh - 78px);
+
+  position: relative;
+
+  /* REMOVE SNAP */
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+}
+
+/* =========================================
+   PAGE CONTENT
+========================================= */
+
+.page-slide > * {
+  width: 100%;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer-slide {
+  width: 100%;
+  min-height: auto;
+
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .page-slider {
+    height: calc(100vh - 72px);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scroll-snap-type: none;
+  }
+
+  .page-slide {
+    min-height: calc(100vh - 72px);
+
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .page-slider {
+    height: calc(100vh - 72px);
+  }
+
+  .page-slide {
+    min-height: auto;
+  }
+
+}
