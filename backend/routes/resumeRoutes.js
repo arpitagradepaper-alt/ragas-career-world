@@ -11,7 +11,7 @@ const router = express.Router();
 // UPLOAD FOLDER
 // ==========================================
 
-const uploadDir = "C:\\ragas_uploads";
+const uploadDir = "/tmp/ragas_uploads";
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
