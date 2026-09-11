@@ -10,7 +10,7 @@ const router = express.Router();
 
 
 const uploadDir =
-  "C:\\ragas_uploads\\applications";
+  "/tmp/ragas_uploads/applications";
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, {
