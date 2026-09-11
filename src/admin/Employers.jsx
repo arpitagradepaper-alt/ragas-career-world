@@ -1,80 +1,191 @@
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Employers.css";
 
-const employers = [
-  {
-    id: "EMP-2041",
-    company: "TechNova Pvt Ltd",
-    industry: "IT & Software",
-    contact: "Rahul Mehta",
-    email: "hr@technova.com",
-    jobs: 18,
-    status: "Verified",
-  },
-  {
-    id: "EMP-2040",
-    company: "Global Infra Solutions",
-    industry: "Engineering",
-    contact: "Priya Shah",
-    email: "careers@globalinfra.com",
-    jobs: 12,
-    status: "Verified",
-  },
-  {
-    id: "EMP-2039",
-    company: "MedCare International",
-    industry: "Healthcare",
-    contact: "Anita Verma",
-    email: "hr@medcare.com",
-    jobs: 9,
-    status: "Pending",
-  },
-  {
-    id: "EMP-2038",
-    company: "Royal Hospitality Group",
-    industry: "Hospitality",
-    contact: "Mohammed Ali",
-    email: "jobs@royalgroup.com",
-    jobs: 24,
-    status: "Verified",
-  },
-  {
-    id: "EMP-2037",
-    company: "BuildRight Constructions",
-    industry: "Construction",
-    contact: "Sanjay Kapoor",
-    email: "hr@buildright.com",
-    jobs: 7,
-    status: "Pending",
-  },
-  {
-    id: "EMP-2036",
-    company: "FinEdge Services",
-    industry: "Finance",
-    contact: "Neha Jain",
-    email: "careers@finedge.com",
-    jobs: 14,
-    status: "Verified",
-  },
-];
+const API_URL = "http://localhost:5000";
 
 function Employers() {
+  const navigate = useNavigate();
+
+  const [employers, setEmployers] = useState([]);
+  const [jobs, setJobs] = useState([]);
+
+  const [search, setSearch] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("All");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // =========================================
+  // FETCH EMPLOYERS + JOBS
+  // =========================================
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const [employersResponse, jobsResponse] =
+          await Promise.all([
+            fetch(`${API_URL}/api/employers`),
+            fetch(`${API_URL}/api/jobs`),
+          ]);
+
+        if (!employersResponse.ok || !jobsResponse.ok) {
+          throw new Error("Unable to load employer data.");
+        }
+
+        const employersData = await employersResponse.json();
+        const jobsData = await jobsResponse.json();
+
+        setEmployers(employersData.data || []);
+        setJobs(jobsData.data || []);
+      } catch (err) {
+        console.error("Employers error:", err);
+        setError("Unable to load employers.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // =========================================
+  // INDUSTRIES
+  // =========================================
+
+  const industries = useMemo(() => {
+    const values = employers
+      .map((employer) => employer.industry)
+      .filter(Boolean);
+
+    return [...new Set(values)];
+  }, [employers]);
+
+  // =========================================
+  // JOB COUNT FOR COMPANY
+  // =========================================
+
+  const getCompanyJobs = (companyName) => {
+    return jobs.filter(
+      (job) =>
+        job.companyName?.toLowerCase().trim() ===
+        companyName?.toLowerCase().trim()
+    ).length;
+  };
+
+  // =========================================
+  // FILTER
+  // =========================================
+
+  const filteredEmployers = useMemo(() => {
+    return employers.filter((employer) => {
+      const searchValue = search.toLowerCase();
+
+      const matchesSearch =
+        employer.companyName
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        employer.contactPerson
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        employer.email
+          ?.toLowerCase()
+          .includes(searchValue);
+
+      const matchesIndustry =
+        industryFilter === "All" ||
+        employer.industry === industryFilter;
+
+      return matchesSearch && matchesIndustry;
+    });
+  }, [employers, search, industryFilter]);
+
+  // =========================================
+  // EMPLOYER ID
+  // =========================================
+
+  const getEmployerId = (employer, index) => {
+    if (employer._id) {
+      return `EMP-${employer._id
+        .slice(-4)
+        .toUpperCase()}`;
+    }
+
+    return `EMP-${String(index + 1).padStart(4, "0")}`;
+  };
+
+  // =========================================
+  // AVATAR
+  // =========================================
+
+  const getInitials = (name = "Company") => {
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
+  // =========================================
+  // VIEW EMPLOYER
+  // =========================================
+
+  const handleViewEmployer = (employer) => {
+    if (!employer?._id) {
+      return;
+    }
+
+    navigate(`/admin/employers/${employer._id}`);
+  };
+
+  // =========================================
+  // RENDER
+  // =========================================
+
   return (
     <div className="employers-page">
+
+      {/* HEADING */}
 
       <div className="employers-heading">
         <div>
           <p>EMPLOYER MANAGEMENT</p>
+
           <h2>Employers</h2>
+
           <span>
-            Verify companies, manage employer profiles and monitor their
-            recruitment activity.
+            Verify companies, manage employer profiles and
+            monitor their recruitment activity.
           </span>
         </div>
 
-        <button className="add-employer-btn">
+        <button
+          className="add-employer-btn"
+          type="button"
+        >
           + Add Employer
         </button>
       </div>
+
+      {/* ERROR */}
+
+      {error && (
+        <div
+          style={{
+            padding: "12px 16px",
+            marginBottom: "20px",
+            background: "#fff4f4",
+            color: "#b42318",
+            borderRadius: "8px",
+          }}
+        >
+          {error}
+        </div>
+      )}
 
       {/* STATS */}
 
@@ -82,26 +193,66 @@ function Employers() {
 
         <div className="employer-stat">
           <span>Total Employers</span>
-          <strong>1,842</strong>
-          <small>Registered companies</small>
+
+          <strong>
+            {loading ? "..." : employers.length}
+          </strong>
+
+          <small>
+            Registered companies
+          </small>
         </div>
 
         <div className="employer-stat">
-          <span>Verified</span>
-          <strong>1,624</strong>
-          <small>88.2% verified</small>
+          <span>New This Month</span>
+
+          <strong>
+            {loading
+              ? "..."
+              : employers.filter((employer) => {
+                  if (!employer.createdAt) {
+                    return false;
+                  }
+
+                  const created = new Date(
+                    employer.createdAt
+                  );
+
+                  const now = new Date();
+
+                  return (
+                    created.getMonth() === now.getMonth() &&
+                    created.getFullYear() ===
+                      now.getFullYear()
+                  );
+                }).length}
+          </strong>
+
+          <small>
+            Registered this month
+          </small>
         </div>
 
         <div className="employer-stat">
           <span>Pending Verification</span>
-          <strong>218</strong>
-          <small>Requires admin review</small>
+
+          <strong>0</strong>
+
+          <small>
+            Verification tracking coming soon
+          </small>
         </div>
 
         <div className="employer-stat">
           <span>Active Job Posts</span>
-          <strong>214</strong>
-          <small>Across all employers</small>
+
+          <strong>
+            {loading ? "..." : jobs.length}
+          </strong>
+
+          <small>
+            Jobs across all employers
+          </small>
         </div>
 
       </div>
@@ -110,37 +261,57 @@ function Employers() {
 
       <section className="employers-card">
 
+        {/* TOOLBAR */}
+
         <div className="employer-toolbar">
 
           <div className="employer-search">
             <span>⌕</span>
+
             <input
               type="text"
-              placeholder="Search company, contact or employer ID..."
+              placeholder="Search company, contact or email..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
           </div>
 
-          <select>
-            <option>All Industries</option>
-            <option>IT & Software</option>
-            <option>Engineering</option>
-            <option>Healthcare</option>
-            <option>Hospitality</option>
-            <option>Construction</option>
-            <option>Finance</option>
+          <select
+            value={industryFilter}
+            onChange={(e) =>
+              setIndustryFilter(e.target.value)
+            }
+          >
+            <option value="All">
+              All Industries
+            </option>
+
+            {industries.map((industry) => (
+              <option
+                key={industry}
+                value={industry}
+              >
+                {industry}
+              </option>
+            ))}
           </select>
 
-          <select>
-            <option>All Status</option>
-            <option>Verified</option>
-            <option>Pending</option>
-          </select>
-
-          <button className="employer-filter-btn">
-            Filter
+          <button
+            className="employer-filter-btn"
+            type="button"
+            onClick={() => {
+              setSearch("");
+              setIndustryFilter("All");
+            }}
+          >
+            Reset
           </button>
 
         </div>
+
+        {/* TABLE */}
 
         <div className="employers-table-wrapper">
 
@@ -160,62 +331,135 @@ function Employers() {
 
             <tbody>
 
-              {employers.map((employer) => (
-                <tr key={employer.id}>
-
-                  <td>
-                    <div className="employer-company">
-
-                      <div className="company-avatar">
-                        {employer.company
-                          .split(" ")
-                          .map((word) => word[0])
-                          .join("")
-                          .slice(0, 2)}
-                      </div>
-
-                      <div>
-                        <strong>{employer.company}</strong>
-                        <small>{employer.id}</small>
-                      </div>
-
-                    </div>
+              {loading ? (
+                <tr>
+                  <td
+                    colSpan="7"
+                    style={{
+                      textAlign: "center",
+                      padding: "40px",
+                    }}
+                  >
+                    Loading employers...
                   </td>
-
-                  <td>{employer.industry}</td>
-
-                  <td>{employer.contact}</td>
-
-                  <td>
-                    <span className="employer-email">
-                      {employer.email}
-                    </span>
-                  </td>
-
-                  <td>
-                    <strong className="job-count">
-                      {employer.jobs}
-                    </strong>
-                  </td>
-
-                  <td>
-                    <span
-                      className={`employer-status ${
-                        employer.status.toLowerCase()
-                      }`}
-                    >
-                      {employer.status}
-                    </span>
-                  </td>
-
-                  <td>
-                    <button className="employer-view-btn">
-                      View
-                    </button>
-                  </td>
-
                 </tr>
-              ))}
+              ) : filteredEmployers.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="7"
+                    style={{
+                      textAlign: "center",
+                      padding: "40px",
+                    }}
+                  >
+                    No employers found.
+                  </td>
+                </tr>
+              ) : (
+                filteredEmployers.map(
+                  (employer, index) => {
+
+                    const employerId =
+                      getEmployerId(
+                        employer,
+                        index
+                      );
+
+                    const companyJobs =
+                      getCompanyJobs(
+                        employer.companyName
+                      );
+
+                    return (
+                      <tr
+                        key={
+                          employer._id ||
+                          employerId
+                        }
+                      >
+
+                        {/* COMPANY */}
+
+                        <td>
+                          <div className="employer-company">
+
+                            <div className="company-avatar">
+                              {getInitials(
+                                employer.companyName
+                              )}
+                            </div>
+
+                            <div>
+                              <strong>
+                                {employer.companyName ||
+                                  "—"}
+                              </strong>
+
+                              <small>
+                                {employerId}
+                              </small>
+                            </div>
+
+                          </div>
+                        </td>
+
+                        {/* INDUSTRY */}
+
+                        <td>
+                          {employer.industry || "—"}
+                        </td>
+
+                        {/* CONTACT */}
+
+                        <td>
+                          {employer.contactPerson || "—"}
+                        </td>
+
+                        {/* EMAIL */}
+
+                        <td>
+                          <span className="employer-email">
+                            {employer.email || "—"}
+                          </span>
+                        </td>
+
+                        {/* JOBS */}
+
+                        <td>
+                          <strong className="job-count">
+                            {companyJobs}
+                          </strong>
+                        </td>
+
+                        {/* STATUS */}
+
+                        <td>
+                          <span className="employer-status verified">
+                            Registered
+                          </span>
+                        </td>
+
+                        {/* ACTION */}
+
+                        <td>
+                          <button
+                            className="employer-view-btn"
+                            type="button"
+                            onClick={() =>
+                              handleViewEmployer(
+                                employer
+                              )
+                            }
+                          >
+                            View
+                          </button>
+                        </td>
+
+                      </tr>
+                    );
+                  }
+                )
+              )}
 
             </tbody>
 
@@ -228,17 +472,22 @@ function Employers() {
         <div className="employer-pagination">
 
           <span>
-            Showing 1–6 of 1,842 employers
+            Showing {filteredEmployers.length} of{" "}
+            {employers.length} employers
           </span>
 
           <div>
-            <button>‹</button>
-            <button className="employer-page-active">1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>...</button>
-            <button>307</button>
-            <button>›</button>
+            <button disabled>
+              ‹
+            </button>
+
+            <button className="employer-page-active">
+              1
+            </button>
+
+            <button disabled>
+              ›
+            </button>
           </div>
 
         </div>

@@ -1,223 +1,770 @@
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Candidates.css";
 
-const candidates = [
-  {
-    id: "CAN-10284",
-    name: "Amit Sharma",
-    email: "amit.sharma@email.com",
-    phone: "+91 98765 43210",
-    industry: "IT & Software",
-    experience: "5 Years",
-    location: "Mumbai",
-    status: "Active",
-  },
-  {
-    id: "CAN-10283",
-    name: "Fatima Khan",
-    email: "fatima.khan@email.com",
-    phone: "+91 98765 12345",
-    industry: "Healthcare",
-    experience: "4 Years",
-    location: "Delhi NCR",
-    status: "Active",
-  },
-  {
-    id: "CAN-10282",
-    name: "Rahul Singh",
-    email: "rahul.singh@email.com",
-    phone: "+91 99887 66554",
-    industry: "Engineering",
-    experience: "7 Years",
-    location: "Bengaluru",
-    status: "Shortlisted",
-  },
-  {
-    id: "CAN-10281",
-    name: "Neha Patel",
-    email: "neha.patel@email.com",
-    phone: "+91 98761 22334",
-    industry: "Finance",
-    experience: "3 Years",
-    location: "Ahmedabad",
-    status: "Active",
-  },
-  {
-    id: "CAN-10280",
-    name: "Sanjay Mehta",
-    email: "sanjay.mehta@email.com",
-    phone: "+91 91234 56789",
-    industry: "Construction",
-    experience: "9 Years",
-    location: "Pune",
-    status: "Placed",
-  },
-  {
-    id: "CAN-10279",
-    name: "Priya Verma",
-    email: "priya.verma@email.com",
-    phone: "+91 90123 45678",
-    industry: "Hospitality",
-    experience: "2 Years",
-    location: "Hyderabad",
-    status: "Active",
-  },
-];
+const API_URL = "http://localhost:5000";
+const ITEMS_PER_PAGE = 10;
 
 function Candidates() {
+  const navigate = useNavigate();
+
+  const [candidates, setCandidates] = useState([]);
+  const [search, setSearch] = useState("");
+  const [qualificationFilter, setQualificationFilter] =
+    useState("All");
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // =========================================
+  // FETCH CANDIDATES
+  // =========================================
+
+  const fetchCandidates = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await fetch(
+        `${API_URL}/api/candidates`
+      );
+
+      if (!response.ok) {
+        throw new Error("Unable to fetch candidates.");
+      }
+
+      const data = await response.json();
+
+      setCandidates(data.data || []);
+      setCurrentPage(1);
+    } catch (err) {
+      console.error("Candidates error:", err);
+      setError("Unable to load candidates.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCandidates();
+  }, []);
+
+  // =========================================
+  // QUALIFICATIONS
+  // =========================================
+
+  const qualifications = useMemo(() => {
+    const values = candidates
+      .map((candidate) => candidate.qualification)
+      .filter(Boolean);
+
+    return [...new Set(values)];
+  }, [candidates]);
+
+  // =========================================
+  // FILTER CANDIDATES
+  // =========================================
+
+  const filteredCandidates = useMemo(() => {
+    return candidates.filter((candidate) => {
+      const searchValue = search
+        .toLowerCase()
+        .trim();
+
+      const matchesSearch =
+        searchValue === "" ||
+        candidate.name
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        candidate.email
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        candidate.phone
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        candidate.location
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        candidate.qualification
+          ?.toLowerCase()
+          .includes(searchValue) ||
+        candidate.experience
+          ?.toLowerCase()
+          .includes(searchValue);
+
+      const matchesQualification =
+        qualificationFilter === "All" ||
+        candidate.qualification ===
+          qualificationFilter;
+
+      return (
+        matchesSearch &&
+        matchesQualification
+      );
+    });
+  }, [
+    candidates,
+    search,
+    qualificationFilter,
+  ]);
+
+  // =========================================
+  // PAGINATION
+  // =========================================
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(
+      filteredCandidates.length /
+        ITEMS_PER_PAGE
+    )
+  );
+
+  const paginatedCandidates = useMemo(() => {
+    const start =
+      (currentPage - 1) *
+      ITEMS_PER_PAGE;
+
+    const end =
+      start + ITEMS_PER_PAGE;
+
+    return filteredCandidates.slice(
+      start,
+      end
+    );
+  }, [
+    filteredCandidates,
+    currentPage,
+  ]);
+
+  // =========================================
+  // KEEP PAGE VALID
+  // =========================================
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [
+    currentPage,
+    totalPages,
+  ]);
+
+  // =========================================
+  // CANDIDATE ID
+  // =========================================
+
+  const getCandidateId = (
+    candidate,
+    index
+  ) => {
+    if (candidate._id) {
+      return `CAN-${candidate._id
+        .slice(-5)
+        .toUpperCase()}`;
+    }
+
+    return `CAN-${String(
+      index + 1
+    ).padStart(5, "0")}`;
+  };
+
+  // =========================================
+  // INITIALS
+  // =========================================
+
+  const getInitials = (
+    name = "Candidate"
+  ) => {
+    return name
+      .split(" ")
+      .filter(Boolean)
+      .map((word) => word[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
+  // =========================================
+  // NEW THIS MONTH
+  // =========================================
+
+  const newThisMonth =
+    candidates.filter((candidate) => {
+      if (!candidate.createdAt) {
+        return false;
+      }
+
+      const created = new Date(
+        candidate.createdAt
+      );
+
+      const now = new Date();
+
+      return (
+        created.getMonth() ===
+          now.getMonth() &&
+        created.getFullYear() ===
+          now.getFullYear()
+      );
+    }).length;
+
+  // =========================================
+  // VIEW CANDIDATE
+  // =========================================
+
+  const handleViewCandidate = (
+    candidate
+  ) => {
+    if (!candidate?._id) {
+      alert(
+        "Candidate ID is not available."
+      );
+      return;
+    }
+
+    navigate(
+      `/admin/candidates/${candidate._id}`
+    );
+  };
+
+  // =========================================
+  // ADD CANDIDATE
+  // =========================================
+  // IMPORTANT:
+  // Open ADMIN Add Candidate page
+  // NOT public Job Seekers page
+  // =========================================
+
+  const handleAddCandidate = () => {
+    navigate("/admin/candidates/add");
+  };
+
+  // =========================================
+  // RESET FILTERS
+  // =========================================
+
+  const handleReset = () => {
+    setSearch("");
+    setQualificationFilter("All");
+    setCurrentPage(1);
+  };
+
+  // =========================================
+  // SEARCH CHANGE
+  // =========================================
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
+
+  // =========================================
+  // QUALIFICATION CHANGE
+  // =========================================
+
+  const handleQualificationChange = (
+    e
+  ) => {
+    setQualificationFilter(
+      e.target.value
+    );
+
+    setCurrentPage(1);
+  };
+
+  // =========================================
+  // PAGINATION
+  // =========================================
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(
+        (page) => page - 1
+      );
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(
+        (page) => page + 1
+      );
+    }
+  };
+
+  const handlePageChange = (page) => {
+    if (
+      page >= 1 &&
+      page <= totalPages
+    ) {
+      setCurrentPage(page);
+    }
+  };
+
+  // =========================================
+  // PAGE NUMBERS
+  // =========================================
+
+  const pageNumbers = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1
+  );
+
+  // =========================================
+  // SHOWING RANGE
+  // =========================================
+
+  const showingStart =
+    filteredCandidates.length === 0
+      ? 0
+      : (currentPage - 1) *
+          ITEMS_PER_PAGE +
+        1;
+
+  const showingEnd = Math.min(
+    currentPage * ITEMS_PER_PAGE,
+    filteredCandidates.length
+  );
+
+  // =========================================
+  // PAGE
+  // =========================================
+
   return (
     <div className="candidates-page">
 
+      {/* =====================================
+          PAGE HEADING
+      ===================================== */}
+
       <div className="candidates-heading">
+
         <div>
-          <p>CANDIDATE MANAGEMENT</p>
-          <h2>Candidates</h2>
+          <p>
+            CANDIDATE MANAGEMENT
+          </p>
+
+          <h2>
+            Candidates
+          </h2>
+
           <span>
-            Manage candidate profiles, applications, resumes and recruitment
-            status.
+            Manage candidate profiles,
+            applications, resumes and
+            recruitment status.
           </span>
         </div>
 
-        <button className="add-candidate-btn">
+        {/* ADD CANDIDATE */}
+
+        <button
+          className="add-candidate-btn"
+          type="button"
+          onClick={
+            handleAddCandidate
+          }
+        >
           + Add Candidate
         </button>
+
       </div>
 
-      {/* STATS */}
+
+      {/* =====================================
+          ERROR
+      ===================================== */}
+
+      {error && (
+        <div
+          style={{
+            padding: "12px 16px",
+            marginBottom: "20px",
+            background: "#fff4f4",
+            color: "#b42318",
+            borderRadius: "8px",
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+
+      {/* =====================================
+          STATS
+      ===================================== */}
 
       <div className="candidate-stats">
 
         <div className="candidate-stat">
-          <span>Total Candidates</span>
-          <strong>8,426</strong>
-          <small>All registered profiles</small>
+          <span>
+            Total Candidates
+          </span>
+
+          <strong>
+            {loading
+              ? "..."
+              : candidates.length}
+          </strong>
+
+          <small>
+            All registered profiles
+          </small>
         </div>
 
-        <div className="candidate-stat">
-          <span>New This Month</span>
-          <strong>286</strong>
-          <small>+14.8% from last month</small>
-        </div>
 
         <div className="candidate-stat">
-          <span>Shortlisted</span>
-          <strong>742</strong>
-          <small>Currently shortlisted</small>
+          <span>
+            New This Month
+          </span>
+
+          <strong>
+            {loading
+              ? "..."
+              : newThisMonth}
+          </strong>
+
+          <small>
+            Registered this month
+          </small>
         </div>
 
+
         <div className="candidate-stat">
-          <span>Placed</span>
-          <strong>1,084</strong>
-          <small>Total successful placements</small>
+          <span>
+            Shortlisted
+          </span>
+
+          <strong>
+            0
+          </strong>
+
+          <small>
+            Status tracking coming soon
+          </small>
+        </div>
+
+
+        <div className="candidate-stat">
+          <span>
+            Placed
+          </span>
+
+          <strong>
+            0
+          </strong>
+
+          <small>
+            Placement tracking coming soon
+          </small>
         </div>
 
       </div>
 
-      {/* MAIN CARD */}
+
+      {/* =====================================
+          MAIN CARD
+      ===================================== */}
 
       <section className="candidates-card">
 
+        {/* ===================================
+            TOOLBAR
+        =================================== */}
+
         <div className="candidate-toolbar">
 
+          {/* SEARCH */}
+
           <div className="candidate-search">
-            <span>⌕</span>
+
+            <span>
+              ⌕
+            </span>
+
             <input
               type="text"
-              placeholder="Search candidate, email or ID..."
+              placeholder="Search candidate, email or phone..."
+              value={search}
+              onChange={
+                handleSearchChange
+              }
             />
+
           </div>
 
-          <select>
-            <option>All Industries</option>
-            <option>IT & Software</option>
-            <option>Healthcare</option>
-            <option>Engineering</option>
-            <option>Finance</option>
-            <option>Construction</option>
-            <option>Hospitality</option>
+
+          {/* QUALIFICATION */}
+
+          <select
+            value={
+              qualificationFilter
+            }
+            onChange={
+              handleQualificationChange
+            }
+          >
+
+            <option value="All">
+              All Qualifications
+            </option>
+
+            {qualifications.map(
+              (qualification) => (
+                <option
+                  key={qualification}
+                  value={qualification}
+                >
+                  {qualification}
+                </option>
+              )
+            )}
+
           </select>
 
-          <select>
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Shortlisted</option>
-            <option>Placed</option>
-          </select>
 
-          <button className="candidate-filter-btn">
-            Filter
+          {/* RESET */}
+
+          <button
+            className="candidate-filter-btn"
+            type="button"
+            onClick={
+              handleReset
+            }
+          >
+            Reset
           </button>
 
         </div>
+
+
+        {/* ===================================
+            TABLE
+        =================================== */}
 
         <div className="candidates-table-wrapper">
 
           <table className="candidates-table">
 
             <thead>
+
               <tr>
-                <th>Candidate</th>
-                <th>Contact</th>
-                <th>Industry</th>
-                <th>Experience</th>
-                <th>Location</th>
-                <th>Status</th>
-                <th>Action</th>
+
+                <th>
+                  Candidate
+                </th>
+
+                <th>
+                  Contact
+                </th>
+
+                <th>
+                  Qualification
+                </th>
+
+                <th>
+                  Experience
+                </th>
+
+                <th>
+                  Location
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Action
+                </th>
+
               </tr>
+
             </thead>
+
 
             <tbody>
 
-              {candidates.map((candidate) => (
-                <tr key={candidate.id}>
+              {/* LOADING */}
 
-                  <td>
-                    <div className="candidate-name">
-                      <div className="candidate-avatar">
-                        {candidate.name
-                          .split(" ")
-                          .map((word) => word[0])
-                          .join("")
-                          .slice(0, 2)}
-                      </div>
+              {loading ? (
 
-                      <div>
-                        <strong>{candidate.name}</strong>
-                        <small>{candidate.id}</small>
-                      </div>
-                    </div>
-                  </td>
+                <tr>
 
-                  <td>
-                    <div className="candidate-contact">
-                      <span>{candidate.email}</span>
-                      <small>{candidate.phone}</small>
-                    </div>
-                  </td>
-
-                  <td>{candidate.industry}</td>
-
-                  <td>{candidate.experience}</td>
-
-                  <td>{candidate.location}</td>
-
-                  <td>
-                    <span
-                      className={`candidate-status ${
-                        candidate.status.toLowerCase()
-                      }`}
-                    >
-                      {candidate.status}
-                    </span>
-                  </td>
-
-                  <td>
-                    <button className="candidate-view-btn">
-                      View
-                    </button>
+                  <td
+                    colSpan="7"
+                    style={{
+                      textAlign:
+                        "center",
+                      padding: "40px",
+                    }}
+                  >
+                    Loading candidates...
                   </td>
 
                 </tr>
-              ))}
+
+              ) : filteredCandidates.length ===
+                0 ? (
+
+                /* EMPTY */
+
+                <tr>
+
+                  <td
+                    colSpan="7"
+                    style={{
+                      textAlign:
+                        "center",
+                      padding: "40px",
+                    }}
+                  >
+                    No candidates found.
+                  </td>
+
+                </tr>
+
+              ) : (
+
+                /* CANDIDATES */
+
+                paginatedCandidates.map(
+                  (
+                    candidate,
+                    index
+                  ) => {
+
+                    const absoluteIndex =
+                      (currentPage - 1) *
+                        ITEMS_PER_PAGE +
+                      index;
+
+                    const candidateId =
+                      getCandidateId(
+                        candidate,
+                        absoluteIndex
+                      );
+
+                    return (
+                      <tr
+                        key={
+                          candidate._id ||
+                          candidateId
+                        }
+                      >
+
+                        {/* CANDIDATE */}
+
+                        <td>
+
+                          <div className="candidate-name">
+
+                            <div className="candidate-avatar">
+                              {getInitials(
+                                candidate.name
+                              )}
+                            </div>
+
+                            <div>
+
+                              <strong>
+                                {candidate.name ||
+                                  "Candidate"}
+                              </strong>
+
+                              <small>
+                                {candidateId}
+                              </small>
+
+                            </div>
+
+                          </div>
+
+                        </td>
+
+
+                        {/* CONTACT */}
+
+                        <td>
+
+                          <div className="candidate-contact">
+
+                            <span>
+                              {candidate.email ||
+                                "—"}
+                            </span>
+
+                            <small>
+                              {candidate.phone ||
+                                "—"}
+                            </small>
+
+                          </div>
+
+                        </td>
+
+
+                        {/* QUALIFICATION */}
+
+                        <td>
+                          {candidate.qualification ||
+                            "—"}
+                        </td>
+
+
+                        {/* EXPERIENCE */}
+
+                        <td>
+                          {candidate.experience ||
+                            "—"}
+                        </td>
+
+
+                        {/* LOCATION */}
+
+                        <td>
+                          {candidate.location ||
+                            "—"}
+                        </td>
+
+
+                        {/* STATUS */}
+
+                        <td>
+
+                          <span className="candidate-status active">
+                            {candidate.status ||
+                              "Active"}
+                          </span>
+
+                        </td>
+
+
+                        {/* VIEW */}
+
+                        <td>
+
+                          <button
+                            className="candidate-view-btn"
+                            type="button"
+                            onClick={() =>
+                              handleViewCandidate(
+                                candidate
+                              )
+                            }
+                          >
+                            View
+                          </button>
+
+                        </td>
+
+                      </tr>
+                    );
+                  }
+                )
+              )}
 
             </tbody>
 
@@ -225,22 +772,86 @@ function Candidates() {
 
         </div>
 
-        {/* PAGINATION */}
+
+        {/* =====================================
+            PAGINATION
+        ===================================== */}
 
         <div className="candidate-pagination">
 
           <span>
-            Showing 1–6 of 8,426 candidates
+            Showing{" "}
+            {showingStart}
+            {"–"}
+            {showingEnd}
+            {" "}
+            of{" "}
+            {filteredCandidates.length}
+            {" "}
+            candidates
           </span>
 
+
           <div>
-            <button>‹</button>
-            <button className="candidate-page-active">1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>...</button>
-            <button>1,405</button>
-            <button>›</button>
+
+            {/* PREVIOUS */}
+
+            <button
+              type="button"
+              onClick={
+                handlePreviousPage
+              }
+              disabled={
+                currentPage === 1
+              }
+              aria-label="Previous page"
+            >
+              ‹
+            </button>
+
+
+            {/* PAGE NUMBERS */}
+
+            {pageNumbers.map(
+              (page) => (
+
+                <button
+                  key={page}
+                  type="button"
+                  className={
+                    currentPage === page
+                      ? "candidate-page-active"
+                      : ""
+                  }
+                  onClick={() =>
+                    handlePageChange(
+                      page
+                    )
+                  }
+                >
+                  {page}
+                </button>
+
+              )
+            )}
+
+
+            {/* NEXT */}
+
+            <button
+              type="button"
+              onClick={
+                handleNextPage
+              }
+              disabled={
+                currentPage ===
+                totalPages
+              }
+              aria-label="Next page"
+            >
+              ›
+            </button>
+
           </div>
 
         </div>

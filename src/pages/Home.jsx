@@ -1,513 +1,496 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
   Search,
-  Laptop,
+  MapPin,
+  BriefcaseBusiness,
+  Building2,
+  Code2,
   Landmark,
   Plane,
-  House,
-  Heart,
+  Hotel,
   Factory,
-  Check,
-  Building2,
   GraduationCap,
   Car,
   Utensils,
   ShoppingBag,
   Truck,
-  BriefcaseBusiness,
-  Wrench,
-  Radio,
   ShieldCheck,
-  Construction,
   Stethoscope,
-  Pill,
-  Hotel,
+  Scale,
+  Wrench,
+  Users,
+  Globe2,
+  Package,
+  Megaphone,
+  Banknote,
+  Cpu,
+  HardHat,
+  Radio,
   Ship,
   Zap,
-  Wheat,
-  Package,
-  Smartphone,
-  Scale,
-  Megaphone,
-  Users,
-  Globe,
-  HardHat,
-  Settings,
   FlaskConical,
-  Database,
+  Leaf,
+  Newspaper,
+  Camera,
   Palette,
-  Film,
-  Store,
-  Coins,
-  Cpu,
+  Music,
+  Dumbbell,
+  Gamepad2,
 } from "lucide-react";
+
+import About from "./About";
+import Services from "./Services";
+import InternationalJobs from "./InternationalJobs";
+import DomesticJobs from "./DomesticJobs";
+import CurrentOpenings from "./CurrentOpenings";
+import Employers from "./Employers";
+import JobSeekers from "./JobSeekers";
+import UploadResume from "./UploadResume";
+import PostAJob from "./PostAJob";
+import PartnerWithUs from "./PartnerWithUs";
+import RecruitmentProcess from "./RecruitmentProcess";
+import VisaSupport from "./VisaSupport";
+import Blog from "./Blog";
+import Testimonials from "./Testimonials";
+import Contact from "./Contact";
+import Careers from "./Careers";
 
 import homeRecruitment from "../assets/home-recruitment.png";
 
 import "./Home.css";
 
-
-/* =========================================
-   INDUSTRIES
-========================================= */
-
 const industries = [
-  { icon: Laptop, title: "Information Technology" },
-  { icon: Landmark, title: "Banking & Financial Services" },
-  { icon: Plane, title: "Aviation & Airports" },
-  { icon: House, title: "Hospitality & Hotels" },
-  { icon: Heart, title: "Healthcare & Hospitals" },
-  { icon: Factory, title: "Manufacturing" },
-  { icon: GraduationCap, title: "Education & Training" },
-  { icon: Car, title: "Automotive" },
-  { icon: Utensils, title: "Food & Beverage" },
-  { icon: ShoppingBag, title: "Retail & E-commerce" },
-  { icon: Truck, title: "Logistics & Transportation" },
-  { icon: BriefcaseBusiness, title: "Business Services" },
-  { icon: Wrench, title: "Engineering Services" },
-  { icon: Radio, title: "Telecommunications" },
-  { icon: ShieldCheck, title: "Security Services" },
-  { icon: Construction, title: "Construction" },
-  { icon: Stethoscope, title: "Medical Services" },
-  { icon: Pill, title: "Pharmaceuticals" },
-  { icon: Hotel, title: "Travel & Tourism" },
-  { icon: Ship, title: "Shipping & Maritime" },
-  { icon: Zap, title: "Energy & Utilities" },
-  { icon: Wheat, title: "Agriculture & Agribusiness" },
-  { icon: Package, title: "Warehousing" },
-  { icon: Smartphone, title: "Digital & Technology" },
-  { icon: Scale, title: "Legal Services" },
-  { icon: Megaphone, title: "Media & Advertising" },
-  { icon: Users, title: "Human Resources" },
-  { icon: Globe, title: "International Trade" },
-  { icon: HardHat, title: "Oil & Gas" },
-  { icon: Settings, title: "Industrial Services" },
-  { icon: FlaskConical, title: "Research & Development" },
-  { icon: Database, title: "Data & Analytics" },
-  { icon: Palette, title: "Design & Creative" },
-  { icon: Film, title: "Entertainment" },
-  { icon: Store, title: "Consumer Goods" },
-  { icon: Coins, title: "Insurance" },
-  { icon: Building2, title: "Real Estate" },
-  { icon: Cpu, title: "Electronics & Semiconductors" },
-  { icon: Factory, title: "Textiles & Apparel" },
-  { icon: Building2, title: "Government & Public Sector" },
+  { name: "IT & Software", icon: Code2 },
+  { name: "Banking & Finance", icon: Landmark },
+  { name: "Aviation & Airports", icon: Plane },
+  { name: "Hospitality & Hotels", icon: Hotel },
+  { name: "Healthcare & Hospitals", icon: Stethoscope },
+  { name: "Manufacturing", icon: Factory },
+  { name: "Education & Training", icon: GraduationCap },
+  { name: "Automotive", icon: Car },
+  { name: "Food & Beverage", icon: Utensils },
+  { name: "Retail & E-commerce", icon: ShoppingBag },
+  { name: "Logistics & Transportation", icon: Truck },
+  { name: "Security Services", icon: ShieldCheck },
+  { name: "Medical & Pharma", icon: Stethoscope },
+  { name: "Construction", icon: HardHat },
+  { name: "Engineering", icon: Wrench },
+  { name: "Legal Services", icon: Scale },
+  { name: "Human Resources", icon: Users },
+  { name: "International Trade", icon: Globe2 },
+  { name: "Warehouse & Supply Chain", icon: Package },
+  { name: "Marketing & Advertising", icon: Megaphone },
+  { name: "Insurance", icon: Banknote },
+  { name: "Technology & AI", icon: Cpu },
+  { name: "Oil & Gas", icon: Zap },
+  { name: "Pharmaceuticals", icon: FlaskConical },
+  { name: "Agriculture", icon: Leaf },
+  { name: "Media & Journalism", icon: Newspaper },
+  { name: "Photography", icon: Camera },
+  { name: "Design & Creative", icon: Palette },
+  { name: "Entertainment", icon: Music },
+  { name: "Sports & Fitness", icon: Dumbbell },
+  { name: "Gaming", icon: Gamepad2 },
+  { name: "Telecommunications", icon: Radio },
+  { name: "Shipping & Maritime", icon: Ship },
+  { name: "Real Estate", icon: Building2 },
+  { name: "Travel & Tourism", icon: Globe2 },
+  { name: "Government Services", icon: Landmark },
+  { name: "Consulting", icon: BriefcaseBusiness },
+  { name: "Energy & Utilities", icon: Zap },
+  { name: "NGO & Social Services", icon: Users },
+  { name: "Other Industries", icon: BriefcaseBusiness },
 ];
 
-
-/* =========================================
-   CURRENT JOBS
-========================================= */
-
-const jobs = [
-  {
-    id: "senior-software-engineer",
-    title: "Senior Software Engineer",
-    category: "IT & Software",
-    location: "Bengaluru, India",
-    type: "Full-time",
-  },
-  {
-    id: "registered-nurse-gulf",
-    title: "Registered Nurse — Gulf",
-    category: "Healthcare",
-    location: "Dubai, UAE",
-    type: "Overseas",
-  },
-  {
-    id: "financial-analyst",
-    title: "Financial Analyst",
-    category: "Banking & Finance",
-    location: "Mumbai, India",
-    type: "Full-time",
-  },
-];
-
-
-function Home() {
-  const [showAllIndustries, setShowAllIndustries] = useState(false);
-
+export function Home() {
   const navigate = useNavigate();
 
+  const [showAllIndustries, setShowAllIndustries] =
+    useState(false);
 
-  /* =========================================
-     VISIBLE INDUSTRIES
-  ========================================= */
+  useEffect(() => {
+    const sections = document.querySelectorAll(
+      ".home-page > .page-slide"
+    );
 
-  const visibleIndustries = showAllIndustries
-    ? industries
-    : industries.slice(0, 6);
+    if (!sections.length) return;
 
+    const handleScroll = () => {
+      let closestSection = null;
+      let closestDistance = Infinity;
 
-  /* =========================================
-     APPLY
-  ========================================= */
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
 
-  const handleApply = (jobId) => {
-    navigate(`/apply/${jobId}`);
+        const distance = Math.abs(rect.top - 80);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section;
+        }
+      });
+
+      if (closestSection) {
+        window.dispatchEvent(
+          new CustomEvent("homeSectionChange", {
+            detail: closestSection.id,
+          })
+        );
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    handleScroll();
+
+    return () => {
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+    };
+  }, []);
+
+  const handleSearch = () => {
+    navigate("/current-openings");
   };
 
+  const handleIndustryOpenings = () => {
+    navigate("/current-openings");
+  };
 
   return (
     <main className="home-page">
 
-      {/* =========================================
-          HERO
-      ========================================= */}
+      {/* HOME */}
 
-      <section className="home-hero">
+      <section
+        id="home"
+        className="page-slide home-home-slide"
+      >
+        <div className="home-hero">
 
-        {/* Decorative background circle */}
-        <div className="hero-decoration"></div>
+          <div className="hero-decoration"></div>
 
+          <div className="hero-image-frame">
+            <div className="hero-image-inner">
+              <img
+                src={homeRecruitment}
+                alt="Global and Pan-India Recruitment"
+              />
+            </div>
 
-        {/* =====================================
-            HERO IMAGE
-        ===================================== */}
-
-        <div className="hero-image-frame">
-
-          <div className="hero-image-inner">
-            <img
-              src={homeRecruitment}
-              alt="Global recruitment and talent management"
-            />
+            <div className="hero-image-badge">
+              <strong>1000+</strong>
+              <span>Successful Placements</span>
+            </div>
           </div>
 
+          <div className="home-hero-content">
 
-          {/* Floating placement badge */}
-          <div className="hero-image-badge">
-            <strong>1000+</strong>
-            <span>Successful Placements</span>
+            <p className="hero-eyebrow">
+              GLOBAL & PAN-INDIA RECRUITMENT
+            </p>
+
+            <h1>
+              Connecting employers with qualified talent,
+              worldwide.
+            </h1>
+
+            <p className="hero-text">
+              International and domestic recruitment
+              across 40+ industries — for job seekers
+              building careers and employers hiring
+              verified talent.
+            </p>
+
+            <div className="job-search">
+
+              <div className="search-field">
+                <BriefcaseBusiness size={16} />
+
+                <input
+                  type="text"
+                  placeholder="Job title or keyword"
+                />
+              </div>
+
+              <div className="search-field">
+                <MapPin size={16} />
+
+                <input
+                  type="text"
+                  placeholder="Country or Location"
+                />
+              </div>
+
+              <div className="search-field">
+                <Building2 size={16} />
+
+                <input
+                  type="text"
+                  placeholder="Industry"
+                />
+              </div>
+
+              <button
+                type="button"
+                className="search-button"
+                onClick={handleSearch}
+              >
+                <Search size={15} />
+                Search Jobs
+              </button>
+
+            </div>
+
+            <div className="hero-stats">
+
+              <div className="hero-stat">
+                <strong>40+</strong>
+                <span>Industries</span>
+              </div>
+
+              <div className="hero-stat">
+                <strong>18</strong>
+                <span>Countries Served</span>
+              </div>
+
+              <div className="hero-stat">
+                <strong>1000+</strong>
+                <span>Placements</span>
+              </div>
+
+            </div>
+
           </div>
-
         </div>
+      </section>
 
+      {/* INDUSTRIES */}
 
-        {/* =====================================
-            HERO CONTENT
-        ===================================== */}
+      <section
+        id="industries"
+        className="page-slide"
+      >
+        <section className="industries-section">
 
-        <div className="home-hero-content">
+          <div className="section-top">
 
-          <p className="hero-eyebrow">
-            GLOBAL & PAN-INDIA RECRUITMENT
-          </p>
+            <div>
+              <p className="section-eyebrow">
+                FEATURED VERTICALS
+              </p>
 
-
-          <h1>
-            Connecting employers with qualified
-            <br />
-            talent, worldwide.
-          </h1>
-
-
-          <p className="hero-text">
-            International and domestic recruitment across 40+ industries —
-            for job seekers building careers and employers hiring verified
-            talent.
-          </p>
-
-
-          {/* =====================================
-              JOB SEARCH
-          ===================================== */}
-
-          <div className="job-search">
-
-            <div className="search-field">
-              <input
-                type="text"
-                placeholder="Job title or keyword"
-              />
+              <h2>Industries We Serve</h2>
             </div>
-
-
-            <div className="search-field">
-              <input
-                type="text"
-                placeholder="Country / Location"
-              />
-            </div>
-
-
-            <div className="search-field">
-              <input
-                type="text"
-                placeholder="Industry"
-              />
-            </div>
-
 
             <button
               type="button"
-              className="search-button"
-              onClick={() => navigate("/")}
+              className="outline-button"
+              onClick={() =>
+                setShowAllIndustries(
+                  (prev) => !prev
+                )
+              }
             >
-              <Search size={17} />
-              Search Jobs
+              {showAllIndustries
+                ? "Show less"
+                : "View all 40 industries"}
             </button>
 
           </div>
 
-
-          {/* =====================================
-              HERO STATS
-          ===================================== */}
-
-          <div className="hero-stats">
-
-            <div className="hero-stat">
-              <strong>40+</strong>
-              <span>Industries</span>
-            </div>
-
-
-            <div className="hero-stat">
-              <strong>18</strong>
-              <span>Countries Served</span>
-            </div>
-
-
-            <div className="hero-stat">
-              <strong>1000+</strong>
-              <span>Placements</span>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* =========================================
-          INDUSTRIES
-      ========================================= */}
-
-      <section className="industries-section">
-
-        <div className="section-top">
-
-          <div>
-
-            <p className="section-eyebrow">
-              FEATURED VERTICALS
-            </p>
-
-            <h2>
-              Industries We Serve
-            </h2>
-
-          </div>
-
-
-          <button
-            type="button"
-            className="outline-button"
-            onClick={() =>
-              setShowAllIndustries(!showAllIndustries)
-            }
+          <div
+            className={`industry-grid ${
+              showAllIndustries
+                ? "industry-grid-expanded"
+                : ""
+            }`}
           >
-            {showAllIndustries
-              ? "Show less"
-              : "View all 40 industries"}
-          </button>
+            {(showAllIndustries
+              ? industries
+              : industries.slice(0, 12)
+            ).map((industry) => {
 
-        </div>
+              const Icon = industry.icon;
 
+              return (
+                <div
+                  className="industry-card"
+                  key={industry.name}
+                >
+                  <div className="industry-icon">
+                    <Icon size={18} />
+                  </div>
 
-        <div
-          className={`industry-grid ${
-            showAllIndustries
-              ? "industry-grid-expanded"
-              : ""
-          }`}
-        >
-
-          {visibleIndustries.map((industry, index) => {
-
-            const Icon = industry.icon;
-
-            return (
-              <div
-                className="industry-card"
-                key={index}
-              >
-
-                <div className="industry-icon">
-                  <Icon size={19} />
-                </div>
-
-
-                <h3>
-                  {industry.title}
-                </h3>
-
-
-                <a href="#current-openings">
-                  View Openings →
-                </a>
-
-              </div>
-            );
-
-          })}
-
-        </div>
-
-      </section>
-
-
-      {/* =========================================
-          CURRENT VACANCIES
-      ========================================= */}
-
-      <section className="openings-section">
-
-        <div className="openings-left">
-
-          <p className="section-eyebrow">
-            LATEST OPENINGS
-          </p>
-
-
-          <h2>
-            Current Vacancies
-          </h2>
-
-
-          <div className="jobs-list">
-
-            {jobs.map((job) => (
-
-              <div
-                className="job-card"
-                key={job.id}
-              >
-
-                <div className="job-info">
-
-                  <h3>
-                    {job.title}
-                  </h3>
-
-                  <p>
-                    {job.category}
-                    <span>•</span>
-                    {job.location}
-                  </p>
-
-                </div>
-
-
-                <div className="job-action">
-
-                  <span className="job-type">
-                    {job.type}
-                  </span>
-
+                  <h3>{industry.name}</h3>
 
                   <button
                     type="button"
-                    onClick={() => handleApply(job.id)}
+                    className="industry-opening-link"
+                    onClick={
+                      handleIndustryOpenings
+                    }
                   >
-                    Apply
+                    View Openings →
                   </button>
-
                 </div>
-
-              </div>
-
-            ))}
-
+              );
+            })}
           </div>
 
-        </div>
+        </section>
+      </section>
 
+      {/* CURRENT OPENINGS */}
 
-        {/* =====================================
-            WHY CHOOSE US
-        ===================================== */}
+      <section
+        id="current-openings"
+        className="page-slide home-existing-section"
+      >
+        <CurrentOpenings />
+      </section>
 
-        <aside className="why-card">
+      {/* ABOUT */}
 
-          <p className="section-eyebrow">
-            WHY CHOOSE US
-          </p>
+      <section
+        id="about"
+        className="page-slide home-existing-section"
+      >
+        <About />
+      </section>
 
+      {/* SERVICES */}
 
-          <h2>
-            Trusted, verified, global.
-          </h2>
+      <section
+        id="services"
+        className="page-slide home-existing-section"
+      >
+        <Services />
+      </section>
 
+      {/* INTERNATIONAL JOBS */}
 
-          <ul>
+      <section
+        id="international-jobs"
+        className="page-slide home-existing-section"
+      >
+        <InternationalJobs />
+      </section>
 
-            <li>
-              <Check size={13} />
+      {/* DOMESTIC JOBS */}
 
-              <span>
-                Verified employers & partner network
-              </span>
-            </li>
+      <section
+        id="domestic-jobs"
+        className="page-slide home-existing-section"
+      >
+        <DomesticJobs />
+      </section>
 
+      {/* EMPLOYERS */}
 
-            <li>
-              <Check size={13} />
+      <section
+        id="employers"
+        className="page-slide home-existing-section"
+      >
+        <Employers />
+      </section>
 
-              <span>
-                Visa & immigration guidance included
-              </span>
-            </li>
+      {/* JOB SEEKERS */}
 
+      <section
+        id="job-seekers"
+        className="page-slide home-existing-section"
+      >
+        <JobSeekers />
+      </section>
 
-            <li>
-              <Check size={13} />
+      {/* UPLOAD RESUME */}
 
-              <span>
-                24/7 AI chatbot + live human support
-              </span>
-            </li>
+      <section
+        id="upload-resume"
+        className="page-slide home-existing-section"
+      >
+        <UploadResume />
+      </section>
 
+      {/* POST A JOB */}
 
-            <li>
-              <Check size={13} />
+      <section
+        id="post-a-job"
+        className="page-slide home-existing-section"
+      >
+        <PostAJob />
+      </section>
 
-              <span>
-                Track your application in real time
-              </span>
-            </li>
+      {/* PARTNER WITH US */}
 
-          </ul>
+      <section
+        id="partner-with-us"
+        className="page-slide home-existing-section"
+      >
+        <PartnerWithUs />
+      </section>
 
+      {/* RECRUITMENT PROCESS */}
 
-          <button
-            type="button"
-            className="resume-button"
-            onClick={() => {
-              const element =
-                document.getElementById("upload-resume");
+      <section
+        id="recruitment-process"
+        className="page-slide home-existing-section"
+      >
+        <RecruitmentProcess />
+      </section>
 
-              if (element) {
-                element.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }
-            }}
-          >
-            Upload Your Resume
-          </button>
+      {/* VISA & IMMIGRATION */}
 
-        </aside>
+      <section
+        id="visa-immigration"
+        className="page-slide home-existing-section"
+      >
+        <VisaSupport />
+      </section>
 
+      {/* BLOG */}
+
+      <section
+        id="blog"
+        className="page-slide home-existing-section"
+      >
+        <Blog />
+      </section>
+
+      {/* TESTIMONIALS */}
+
+      <section
+        id="testimonials"
+        className="page-slide home-existing-section"
+      >
+        <Testimonials />
+      </section>
+
+      {/* CONTACT */}
+
+      <section
+        id="contact"
+        className="page-slide home-existing-section"
+      >
+        <Contact />
+      </section>
+
+      {/* CAREERS */}
+
+      <section
+        id="careers"
+        className="page-slide home-existing-section"
+      >
+        <Careers />
       </section>
 
     </main>
   );
 }
-
-export default Home;

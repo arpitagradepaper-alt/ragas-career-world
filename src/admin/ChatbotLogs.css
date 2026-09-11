@@ -311,3 +311,47 @@
     gap: 12px;
   }
 }
+/* ==========================================
+   CLICKABLE CHATBOT LOG ELEMENTS
+========================================== */
+
+.logs-stat-button {
+  width: 100%;
+  border: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  background: #ffffff;
+}
+
+.logs-stat-button:hover {
+  transform: translateY(-2px);
+}
+
+.logs-stat-button:focus {
+  outline: none;
+}
+
+.export-btn,
+.filter-btn,
+.view-log-btn,
+.logs-pagination button {
+  cursor: pointer;
+}
+
+.logs-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.pagination-dots {
+  cursor: default !important;
+}
+
+.view-log-btn:hover {
+  transform: translateY(-1px);
+}
+
+.filter-btn:hover {
+  transform: translateY(-1px);
+}

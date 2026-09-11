@@ -1,23 +1,62 @@
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import ragasLogo from "../assets/ragas-logo.png";
 import "./AdminLayout.css";
 
 function AdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    const handleLogout = () => {
+  const handleLogout = () => {
     localStorage.removeItem("ragasAdminLoggedIn");
     window.location.href = "/admin/login";
-    };
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <div className="admin-layout">
 
-      {/* SIDEBAR */}
-      <aside className="admin-sidebar">
+      {/* MOBILE OVERLAY */}
+      {sidebarOpen && (
+        <div
+          className="admin-sidebar-overlay"
+          onClick={closeSidebar}
+        ></div>
+      )}
 
+      {/* SIDEBAR */}
+      <aside
+        className={`admin-sidebar ${
+          sidebarOpen ? "sidebar-open" : ""
+        }`}
+      >
+
+        {/* MOBILE CLOSE BUTTON */}
+        <button
+          className="admin-mobile-close"
+          onClick={closeSidebar}
+          aria-label="Close menu"
+        >
+          ×
+        </button>
+
+        {/* BRAND */}
         <div className="admin-brand">
-          <strong>RAGAS</strong>
-          <span>CAREER WORLD</span>
+          <img
+            src={ragasLogo}
+            alt="RAGAS Career World"
+            className="admin-brand-logo"
+          />
+
+          <div>
+            <strong>RAGAS</strong>
+            <span>CAREER WORLD</span>
+          </div>
         </div>
 
+        {/* ADMIN USER */}
         <div className="admin-user">
           <div className="admin-avatar">SA</div>
 
@@ -27,53 +66,110 @@ function AdminLayout() {
           </div>
         </div>
 
+        {/* NAVIGATION */}
         <nav className="admin-nav">
 
-          <NavLink to="/admin" end>
+          {/* DASHBOARD */}
+          <NavLink
+            to="/admin"
+            end
+            onClick={closeSidebar}
+          >
             <span>▦</span>
             Dashboard
           </NavLink>
 
-          <NavLink to="/admin/chatbot-logs">
+          {/* CHATBOT LOGS */}
+          <NavLink
+            to="/admin/chatbot-logs"
+            onClick={closeSidebar}
+          >
             <span>◫</span>
             Chatbot Logs
           </NavLink>
 
-          <NavLink to="/admin/candidates">
+          {/* APPLICATIONS */}
+          <NavLink
+            to="/admin/applications"
+            onClick={closeSidebar}
+          >
+            <span>▤</span>
+            Applications
+          </NavLink>
+
+          {/* CANDIDATES */}
+          <NavLink
+            to="/admin/candidates"
+            onClick={closeSidebar}
+          >
             <span>♙</span>
             Candidates
           </NavLink>
 
-          <NavLink to="/admin/employers">
+          {/* EMPLOYERS */}
+          <NavLink
+            to="/admin/employers"
+            onClick={closeSidebar}
+          >
             <span>▤</span>
             Employers
           </NavLink>
 
-          <NavLink to="/admin/jobs">
+          {/* JOB POSTS */}
+          <NavLink
+            to="/admin/jobs"
+            onClick={closeSidebar}
+          >
             <span>▣</span>
             Job Posts
           </NavLink>
 
-          <NavLink to="/admin/resumes">
+          {/* RESUME DATABASE */}
+          <NavLink
+            to="/admin/resumes"
+            onClick={closeSidebar}
+          >
             <span>↥</span>
             Resume Database
           </NavLink>
 
-          <NavLink to="/admin/partners">
+          {/* CONTACT MESSAGES */}
+          <NavLink
+            to="/admin/contact-messages"
+            onClick={closeSidebar}
+          >
+            <span>✉</span>
+            Contact Messages
+          </NavLink>
+
+          {/* PARTNERS */}
+          <NavLink
+            to="/admin/partners"
+            onClick={closeSidebar}
+          >
             <span>◎</span>
             Partners
           </NavLink>
 
         </nav>
 
+        {/* SIDEBAR BOTTOM */}
         <div className="admin-sidebar-bottom">
 
-          <a href="/" className="admin-website-link">
+          {/* VIEW WEBSITE */}
+          <a
+            href="/"
+            className="admin-website-link"
+            onClick={closeSidebar}
+          >
             ↗ View Website
           </a>
 
-          <button className="admin-logout"
-                  onClick={handleLogout}>
+          {/* LOGOUT */}
+          <button
+            className="admin-logout"
+            onClick={handleLogout}
+          >
             ← Logout
           </button>
 
@@ -84,20 +180,31 @@ function AdminLayout() {
       {/* RIGHT SIDE */}
       <main className="admin-main">
 
+        {/* TOPBAR */}
         <header className="admin-topbar">
 
-          <div>
+          {/* MOBILE MENU BUTTON */}
+          <button
+            className="admin-mobile-menu"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open admin menu"
+          >
+            ☰
+          </button>
+
+          <div className="admin-topbar-title">
             <p>RAGAS CAREER WORLD</p>
             <h1>Admin Panel</h1>
           </div>
 
           <div className="admin-system-status">
             <i></i>
-            System Online
+            <span>System Online</span>
           </div>
 
         </header>
 
+        {/* PAGE CONTENT */}
         <div className="admin-page-content">
           <Outlet />
         </div>

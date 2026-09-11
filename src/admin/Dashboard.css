@@ -640,3 +640,97 @@
   }
 
 }
+/* ==========================================
+   CLICKABLE DASHBOARD ELEMENTS
+========================================== */
+
+.dashboard-stat-button {
+  width: 100%;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.dashboard-stat-button:hover {
+  transform: translateY(-2px);
+}
+
+.dashboard-month-wrapper {
+  position: relative;
+}
+
+.dashboard-month-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+}
+
+.dashboard-month-menu button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 9px 11px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.dashboard-month-menu button:hover {
+  background: #f3f5f4;
+}
+
+.online-label {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.summary-button {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  background: transparent;
+}
+
+.summary-button:hover {
+  background: #f7f8f8;
+}
+
+.dashboard-view-all {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.dashboard-view-all:hover {
+  text-decoration: underline;
+}
+
+.conversation-row {
+  cursor: pointer;
+}
+
+.conversation-row:hover {
+  background: #f7f8f8;
+}
+
+.chart-days button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}

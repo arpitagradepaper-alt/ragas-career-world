@@ -1,6 +1,6 @@
 /* =========================================
    RAGAS CAREER WORLD
-   NORMAL FAST SCROLL
+   NORMAL WEBSITE SCROLL
 ========================================= */
 
 html {
@@ -14,29 +14,24 @@ html {
 body {
   margin: 0;
   padding: 0;
-
-  /* IMPORTANT:
-     Do NOT hide body overflow */
   overflow-x: hidden;
 }
 
+
 /* =========================================
    MAIN PAGE
+   NO FIXED HEIGHT
 ========================================= */
 
 .page-slider {
   width: 100%;
+  height: auto;
 
-  height: calc(100vh - 78px);
+  overflow: visible;
 
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  /* REMOVE SLIDE SNAP */
   scroll-snap-type: none;
 
-  /* Normal scrolling */
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
 
   scrollbar-width: none;
 }
@@ -45,29 +40,35 @@ body {
   display: none;
 }
 
+
 /* =========================================
-   EACH SECTION
+   SECTIONS
+   NATURAL HEIGHT
 ========================================= */
 
 .page-slide {
   width: 100%;
 
-  min-height: calc(100vh - 78px);
+  height: auto;
+  min-height: 0;
 
   position: relative;
 
-  /* REMOVE SNAP */
   scroll-snap-align: none;
   scroll-snap-stop: normal;
+
+  overflow: visible;
 }
 
+
 /* =========================================
-   PAGE CONTENT
+   CONTENT
 ========================================= */
 
 .page-slide > * {
   width: 100%;
 }
+
 
 /* =========================================
    FOOTER
@@ -75,11 +76,14 @@ body {
 
 .footer-slide {
   width: 100%;
-  min-height: auto;
+
+  height: auto;
+  min-height: 0;
 
   scroll-snap-align: none;
   scroll-snap-stop: normal;
 }
+
 
 /* =========================================
    MOBILE
@@ -88,22 +92,27 @@ body {
 @media (max-width: 900px) {
 
   .page-slider {
-    height: calc(100vh - 72px);
+    width: 100%;
+    height: auto;
 
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: visible;
 
     scroll-snap-type: none;
   }
 
   .page-slide {
-    min-height: calc(100vh - 72px);
+    width: 100%;
+
+    height: auto;
+    min-height: 0;
+
+    overflow: visible;
 
     scroll-snap-align: none;
     scroll-snap-stop: normal;
   }
-
 }
+
 
 /* =========================================
    SMALL MOBILE
@@ -112,11 +121,12 @@ body {
 @media (max-width: 600px) {
 
   .page-slider {
-    height: calc(100vh - 72px);
+    height: auto;
+    overflow: visible;
   }
 
   .page-slide {
-    min-height: auto;
+    height: auto;
+    min-height: 0;
   }
-
 }

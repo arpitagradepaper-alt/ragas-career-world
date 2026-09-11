@@ -1,65 +1,147 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
+import ragasLogo from "../assets/ragas-logo.png";
 import "./Navbar.css";
 
 function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileDropdown, setMobileDropdown] = useState(null);
-
-  useEffect(() => {
-    const slider = document.querySelector(".page-slider");
-
-    if (!slider) return;
-
-    const sections = slider.querySelectorAll(".page-slide");
-
-    const handleScroll = () => {
-      const sliderTop = slider.getBoundingClientRect().top;
-
-      let currentSection = "home";
-      let closestDistance = Infinity;
-
-      sections.forEach((section) => {
-        const distance = Math.abs(
-          section.getBoundingClientRect().top - sliderTop
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          currentSection = section.id;
-        }
-      });
-
-      setActiveSection(currentSection);
-    };
-
-    slider.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => {
-      slider.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const [desktopDropdown, setDesktopDropdown] = useState(null);
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
-
-    if (section) {
-      section.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+    if (!section) {
+      console.warn(`Section #${id} not found`);
+      return;
     }
 
+    setActiveSection(id);
     setMobileMenuOpen(false);
     setMobileDropdown(null);
+    setDesktopDropdown(null);
+
+    setTimeout(() => {
+      const navbar = document.querySelector(".navbar");
+      const navbarHeight = navbar
+        ? navbar.getBoundingClientRect().height
+        : 0;
+
+      const sectionTop =
+        section.getBoundingClientRect().top +
+        window.scrollY -
+        navbarHeight;
+
+      window.scrollTo({
+        top: Math.max(0, sectionTop),
+        behavior: "smooth",
+      });
+    }, 50);
   };
 
   const toggleMobileDropdown = (name) => {
     setMobileDropdown((prev) => (prev === name ? null : name));
   };
+
+  const toggleDesktopDropdown = (name) => {
+    setDesktopDropdown((prev) => (prev === name ? null : name));
+  };
+
+  useEffect(() => {
+    const sectionIds = [
+      "home",
+      "about",
+      "services",
+      "international-jobs",
+      "domestic-jobs",
+      "industries",
+      "current-openings",
+      "employers",
+      "job-seekers",
+      "upload-resume",
+      "post-a-job",
+      "partner-with-us",
+      "recruitment-process",
+      "visa-immigration",
+      "blog",
+      "testimonials",
+      "contact",
+      "careers",
+    ];
+
+    const handleScroll = () => {
+      const navbar = document.querySelector(".navbar");
+      const navbarHeight = navbar
+        ? navbar.getBoundingClientRect().height
+        : 80;
+
+      let current = "home";
+      let smallestDistance = Infinity;
+
+      sectionIds.forEach((id) => {
+        const section = document.getElementById(id);
+        if (!section) return;
+
+        const rect = section.getBoundingClientRect();
+        const distance = Math.abs(rect.top - navbarHeight);
+
+        if (distance < smallestDistance) {
+          smallestDistance = distance;
+          current = id;
+        }
+      });
+
+      setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    handleScroll();
+
+    return () =>
+      window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest(".navbar-dropdown")) {
+        setDesktopDropdown(null);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () =>
+      document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
+  const servicesActive = [
+    "services",
+    "international-jobs",
+    "domestic-jobs",
+    "recruitment-process",
+    "visa-immigration",
+  ].includes(activeSection);
+
+  const jobsActive = [
+    "international-jobs",
+    "domestic-jobs",
+    "current-openings",
+  ].includes(activeSection);
+
+  const candidatesActive = [
+    "job-seekers",
+    "upload-resume",
+  ].includes(activeSection);
+
+  const employersActive = [
+    "employers",
+    "post-a-job",
+    "partner-with-us",
+  ].includes(activeSection);
 
   return (
     <header className="navbar">
@@ -69,16 +151,26 @@ function Navbar() {
         <Link
           to="/"
           className="navbar-logo"
-          onClick={() => scrollToSection("home")}
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection("home");
+          }}
         >
-          <span className="logo-title">RAGAS</span>
-          <span className="logo-subtitle">CAREER WORLD</span>
+          <img
+            src={ragasLogo}
+            alt="RAGAS Career World"
+            className="navbar-logo-image"
+          />
+
+          <div className="navbar-brand-text">
+            <span className="logo-title">RAGAS</span>
+            <span className="logo-subtitle">CAREER WORLD</span>
+          </div>
         </Link>
 
         {/* DESKTOP NAVIGATION */}
         <nav className="navbar-links">
 
-          {/* HOME */}
           <a
             href="#home"
             className={activeSection === "home" ? "active" : ""}
@@ -90,7 +182,6 @@ function Navbar() {
             Home
           </a>
 
-          {/* ABOUT */}
           <a
             href="#about"
             className={activeSection === "about" ? "active" : ""}
@@ -102,168 +193,158 @@ function Navbar() {
             About
           </a>
 
-          {/* SERVICES */}
-          <div className="navbar-dropdown">
+          {/* SERVICES DROPDOWN */}
+          <div
+            className={`navbar-dropdown ${
+              desktopDropdown === "services"
+                ? "dropdown-open"
+                : ""
+            }`}
+          >
             <button
-              className={[
-                "services-button",
-                [
-                  "services",
-                  "international-jobs",
-                  "domestic-jobs",
-                  "recruitment-process",
-                  "visa-immigration",
-                ].includes(activeSection)
-                  ? "active"
-                  : "",
-              ].join(" ")}
+              type="button"
+              className={`services-button ${
+                servicesActive ? "active" : ""
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDesktopDropdown("services");
+              }}
             >
               Services
-              <ChevronDown size={15} />
+              <ChevronDown
+                size={15}
+                className={
+                  desktopDropdown === "services"
+                    ? "rotate-arrow"
+                    : ""
+                }
+              />
             </button>
 
-            <div className="dropdown-menu">
+            {desktopDropdown === "services" && (
+              <div className="dropdown-menu">
+                <a
+                  href="#services"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("services");
+                  }}
+                >
+                  Recruitment Services
+                </a>
 
-              <a
-                href="#services"
-                className={activeSection === "services" ? "active" : ""}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("services");
-                }}
-              >
-                Recruitment Services
-              </a>
+                <a
+                  href="#international-jobs"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("international-jobs");
+                  }}
+                >
+                  International Jobs
+                </a>
 
-              <a
-                href="#international-jobs"
-                className={
-                  activeSection === "international-jobs" ? "active" : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("international-jobs");
-                }}
-              >
-                International Jobs
-              </a>
+                <a
+                  href="#domestic-jobs"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("domestic-jobs");
+                  }}
+                >
+                  Domestic Jobs
+                </a>
 
-              <a
-                href="#domestic-jobs"
-                className={
-                  activeSection === "domestic-jobs" ? "active" : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("domestic-jobs");
-                }}
-              >
-                Domestic Jobs
-              </a>
+                <a
+                  href="#recruitment-process"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("recruitment-process");
+                  }}
+                >
+                  Recruitment Process
+                </a>
 
-              <a
-                href="#recruitment-process"
-                className={
-                  activeSection === "recruitment-process"
-                    ? "active"
-                    : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("recruitment-process");
-                }}
-              >
-                Recruitment Process
-              </a>
-
-              <a
-                href="#visa-immigration"
-                className={
-                  activeSection === "visa-immigration"
-                    ? "active"
-                    : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("visa-immigration");
-                }}
-              >
-                Visa Support
-              </a>
-
-            </div>
+                <a
+                  href="#visa-immigration"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("visa-immigration");
+                  }}
+                >
+                  Visa Support
+                </a>
+              </div>
+            )}
           </div>
 
-          {/* JOBS */}
-          <div className="navbar-dropdown">
+          {/* JOBS DROPDOWN */}
+          <div
+            className={`navbar-dropdown ${
+              desktopDropdown === "jobs"
+                ? "dropdown-open"
+                : ""
+            }`}
+          >
             <button
-              className={
-                [
-                  "international-jobs",
-                  "domestic-jobs",
-                  "current-openings",
-                ].includes(activeSection)
-                  ? "active"
-                  : ""
-              }
+              type="button"
+              className={jobsActive ? "active" : ""}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDesktopDropdown("jobs");
+              }}
             >
               Jobs
-              <ChevronDown size={15} />
+              <ChevronDown
+                size={15}
+                className={
+                  desktopDropdown === "jobs"
+                    ? "rotate-arrow"
+                    : ""
+                }
+              />
             </button>
 
-            <div className="dropdown-menu">
+            {desktopDropdown === "jobs" && (
+              <div className="dropdown-menu">
+                <a
+                  href="#international-jobs"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("international-jobs");
+                  }}
+                >
+                  International Jobs
+                </a>
 
-              <a
-                href="#international-jobs"
-                className={
-                  activeSection === "international-jobs"
-                    ? "active"
-                    : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("international-jobs");
-                }}
-              >
-                International Jobs
-              </a>
+                <a
+                  href="#domestic-jobs"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("domestic-jobs");
+                  }}
+                >
+                  Domestic Jobs
+                </a>
 
-              <a
-                href="#domestic-jobs"
-                className={
-                  activeSection === "domestic-jobs" ? "active" : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("domestic-jobs");
-                }}
-              >
-                Domestic Jobs
-              </a>
-
-              <a
-                href="#current-openings"
-                className={
-                  activeSection === "current-openings"
-                    ? "active"
-                    : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("current-openings");
-                }}
-              >
-                Current Openings
-              </a>
-
-            </div>
+                <a
+                  href="#current-openings"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("current-openings");
+                  }}
+                >
+                  Current Openings
+                </a>
+              </div>
+            )}
           </div>
 
-          {/* INDUSTRIES */}
           <a
             href="#industries"
             className={
-              activeSection === "industries" ? "active" : ""
+              activeSection === "industries"
+                ? "active"
+                : ""
             }
             onClick={(e) => {
               e.preventDefault();
@@ -273,117 +354,120 @@ function Navbar() {
             Industries
           </a>
 
-          {/* CANDIDATES */}
-          <div className="navbar-dropdown">
+          {/* CANDIDATES DROPDOWN */}
+          <div
+            className={`navbar-dropdown ${
+              desktopDropdown === "candidates"
+                ? "dropdown-open"
+                : ""
+            }`}
+          >
             <button
-              className={
-                [
-                  "job-seekers",
-                  "upload-resume",
-                ].includes(activeSection)
-                  ? "active"
-                  : ""
-              }
+              type="button"
+              className={candidatesActive ? "active" : ""}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDesktopDropdown("candidates");
+              }}
             >
               Candidates
-              <ChevronDown size={15} />
-            </button>
-
-            <div className="dropdown-menu">
-
-              <a
-                href="#job-seekers"
+              <ChevronDown
+                size={15}
                 className={
-                  activeSection === "job-seekers" ? "active" : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("job-seekers");
-                }}
-              >
-                For Candidates
-              </a>
-
-              <a
-                href="#upload-resume"
-                className={
-                  activeSection === "upload-resume" ? "active" : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("upload-resume");
-                }}
-              >
-                Upload Resume
-              </a>
-
-            </div>
-          </div>
-
-          {/* EMPLOYERS */}
-          <div className="navbar-dropdown">
-            <button
-              className={
-                [
-                  "employers",
-                  "post-a-job",
-                  "partner-with-us",
-                ].includes(activeSection)
-                  ? "active"
-                  : ""
-              }
-            >
-              Employers
-              <ChevronDown size={15} />
-            </button>
-
-            <div className="dropdown-menu">
-
-              <a
-                href="#employers"
-                className={
-                  activeSection === "employers" ? "active" : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("employers");
-                }}
-              >
-                For Employers
-              </a>
-
-              <a
-                href="#post-a-job"
-                className={
-                  activeSection === "post-a-job" ? "active" : ""
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("post-a-job");
-                }}
-              >
-                Post a Job
-              </a>
-
-              <a
-                href="#partner-with-us"
-                className={
-                  activeSection === "partner-with-us"
-                    ? "active"
+                  desktopDropdown === "candidates"
+                    ? "rotate-arrow"
                     : ""
                 }
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("partner-with-us");
-                }}
-              >
-                Partner With Us
-              </a>
+              />
+            </button>
 
-            </div>
+            {desktopDropdown === "candidates" && (
+              <div className="dropdown-menu">
+                <a
+                  href="#job-seekers"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("job-seekers");
+                  }}
+                >
+                  For Candidates
+                </a>
+
+                <a
+                  href="#upload-resume"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("upload-resume");
+                  }}
+                >
+                  Upload Resume
+                </a>
+              </div>
+            )}
           </div>
 
-          {/* BLOG */}
+          {/* EMPLOYERS DROPDOWN */}
+          <div
+            className={`navbar-dropdown ${
+              desktopDropdown === "employers"
+                ? "dropdown-open"
+                : ""
+            }`}
+          >
+            <button
+              type="button"
+              className={employersActive ? "active" : ""}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDesktopDropdown("employers");
+              }}
+            >
+              Employers
+              <ChevronDown
+                size={15}
+                className={
+                  desktopDropdown === "employers"
+                    ? "rotate-arrow"
+                    : ""
+                }
+              />
+            </button>
+
+            {desktopDropdown === "employers" && (
+              <div className="dropdown-menu">
+                <a
+                  href="#employers"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("employers");
+                  }}
+                >
+                  For Employers
+                </a>
+
+                <a
+                  href="#post-a-job"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("post-a-job");
+                  }}
+                >
+                  Post a Job
+                </a>
+
+                <a
+                  href="#partner-with-us"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("partner-with-us");
+                  }}
+                >
+                  Partner With Us
+                </a>
+              </div>
+            )}
+          </div>
+
           <a
             href="#blog"
             className={activeSection === "blog" ? "active" : ""}
@@ -395,11 +479,12 @@ function Navbar() {
             Blog
           </a>
 
-          {/* TESTIMONIALS */}
           <a
             href="#testimonials"
             className={
-              activeSection === "testimonials" ? "active" : ""
+              activeSection === "testimonials"
+                ? "active"
+                : ""
             }
             onClick={(e) => {
               e.preventDefault();
@@ -409,7 +494,6 @@ function Navbar() {
             Testimonials
           </a>
 
-          {/* CAREERS */}
           <a
             href="#careers"
             className={
@@ -423,10 +507,11 @@ function Navbar() {
             Careers
           </a>
 
-          {/* CONTACT */}
           <a
             href="#contact"
-            className={activeSection === "contact" ? "active" : ""}
+            className={
+              activeSection === "contact" ? "active" : ""
+            }
             onClick={(e) => {
               e.preventDefault();
               scrollToSection("contact");
@@ -434,35 +519,35 @@ function Navbar() {
           >
             Contact
           </a>
-
         </nav>
 
         {/* DESKTOP CTA */}
-        <a
-          href="#job-seekers"
+        <button
+          type="button"
           className="navbar-cta"
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("job-seekers");
-          }}
+          onClick={() => scrollToSection("job-seekers")}
         >
           Get Started
-        </a>
+        </button>
 
-        {/* MOBILE HAMBURGER */}
+        {/* MOBILE BUTTON */}
         <button
           type="button"
           className="mobile-menu-button"
           onClick={() => {
             setMobileMenuOpen((prev) => !prev);
             setMobileDropdown(null);
+            setDesktopDropdown(null);
           }}
           aria-label="Toggle navigation menu"
           aria-expanded={mobileMenuOpen}
         >
-          {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          {mobileMenuOpen ? (
+            <X size={26} />
+          ) : (
+            <Menu size={26} />
+          )}
         </button>
-
       </div>
 
       {/* MOBILE MENU */}
@@ -471,10 +556,11 @@ function Navbar() {
           mobileMenuOpen ? "mobile-menu-open" : ""
         }`}
       >
-
         <a
           href="#home"
-          className={activeSection === "home" ? "active" : ""}
+          className={
+            activeSection === "home" ? "active" : ""
+          }
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("home");
@@ -485,7 +571,9 @@ function Navbar() {
 
         <a
           href="#about"
-          className={activeSection === "about" ? "active" : ""}
+          className={
+            activeSection === "about" ? "active" : ""
+          }
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("about");
@@ -494,24 +582,26 @@ function Navbar() {
           About
         </a>
 
-        {/* SERVICES MOBILE */}
         <div className="mobile-dropdown">
           <button
             type="button"
-            onClick={() => toggleMobileDropdown("services")}
+            onClick={() =>
+              toggleMobileDropdown("services")
+            }
           >
             Services
             <ChevronDown
               size={17}
               className={
-                mobileDropdown === "services" ? "rotate-arrow" : ""
+                mobileDropdown === "services"
+                  ? "rotate-arrow"
+                  : ""
               }
             />
           </button>
 
           {mobileDropdown === "services" && (
             <div className="mobile-submenu">
-
               <a
                 href="#services"
                 onClick={(e) => {
@@ -561,12 +651,10 @@ function Navbar() {
               >
                 Visa Support
               </a>
-
             </div>
           )}
         </div>
 
-        {/* JOBS MOBILE */}
         <div className="mobile-dropdown">
           <button
             type="button"
@@ -576,14 +664,15 @@ function Navbar() {
             <ChevronDown
               size={17}
               className={
-                mobileDropdown === "jobs" ? "rotate-arrow" : ""
+                mobileDropdown === "jobs"
+                  ? "rotate-arrow"
+                  : ""
               }
             />
           </button>
 
           {mobileDropdown === "jobs" && (
             <div className="mobile-submenu">
-
               <a
                 href="#international-jobs"
                 onClick={(e) => {
@@ -613,13 +702,17 @@ function Navbar() {
               >
                 Current Openings
               </a>
-
             </div>
           )}
         </div>
 
         <a
           href="#industries"
+          className={
+            activeSection === "industries"
+              ? "active"
+              : ""
+          }
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("industries");
@@ -628,11 +721,12 @@ function Navbar() {
           Industries
         </a>
 
-        {/* CANDIDATES MOBILE */}
         <div className="mobile-dropdown">
           <button
             type="button"
-            onClick={() => toggleMobileDropdown("candidates")}
+            onClick={() =>
+              toggleMobileDropdown("candidates")
+            }
           >
             Candidates
             <ChevronDown
@@ -647,7 +741,6 @@ function Navbar() {
 
           {mobileDropdown === "candidates" && (
             <div className="mobile-submenu">
-
               <a
                 href="#job-seekers"
                 onClick={(e) => {
@@ -667,16 +760,16 @@ function Navbar() {
               >
                 Upload Resume
               </a>
-
             </div>
           )}
         </div>
 
-        {/* EMPLOYERS MOBILE */}
         <div className="mobile-dropdown">
           <button
             type="button"
-            onClick={() => toggleMobileDropdown("employers")}
+            onClick={() =>
+              toggleMobileDropdown("employers")
+            }
           >
             Employers
             <ChevronDown
@@ -691,7 +784,6 @@ function Navbar() {
 
           {mobileDropdown === "employers" && (
             <div className="mobile-submenu">
-
               <a
                 href="#employers"
                 onClick={(e) => {
@@ -721,13 +813,15 @@ function Navbar() {
               >
                 Partner With Us
               </a>
-
             </div>
           )}
         </div>
 
         <a
           href="#blog"
+          className={
+            activeSection === "blog" ? "active" : ""
+          }
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("blog");
@@ -738,6 +832,11 @@ function Navbar() {
 
         <a
           href="#testimonials"
+          className={
+            activeSection === "testimonials"
+              ? "active"
+              : ""
+          }
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("testimonials");
@@ -748,6 +847,9 @@ function Navbar() {
 
         <a
           href="#careers"
+          className={
+            activeSection === "careers" ? "active" : ""
+          }
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("careers");
@@ -758,6 +860,9 @@ function Navbar() {
 
         <a
           href="#contact"
+          className={
+            activeSection === "contact" ? "active" : ""
+          }
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("contact");
@@ -766,15 +871,15 @@ function Navbar() {
           Contact
         </a>
 
-        {/* MOBILE CTA */}
         <button
           type="button"
           className="mobile-get-started"
-          onClick={() => scrollToSection("job-seekers")}
+          onClick={() =>
+            scrollToSection("job-seekers")
+          }
         >
           Get Started
         </button>
-
       </div>
     </header>
   );

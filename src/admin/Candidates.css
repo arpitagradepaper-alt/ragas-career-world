@@ -356,3 +356,147 @@
     gap: 12px;
   }
 }
+/* ================================
+   PAGINATION BUTTONS
+================================ */
+
+.candidate-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.candidate-pagination button {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #d9e1df;
+  background: #ffffff;
+  color: #24332f;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.candidate-pagination button:hover:not(:disabled) {
+  background: #0d3029;
+  color: #ffffff;
+  border-color: #0d3029;
+}
+
+.candidate-pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.candidate-pagination
+.candidate-page-active {
+  background: #0d3029;
+  color: #ffffff;
+  border-color: #0d3029;
+}
+
+
+/* ================================
+   ADD CANDIDATE BUTTON
+================================ */
+
+.add-candidate-btn {
+  border: none;
+  background: #0d3029;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-candidate-btn:hover {
+  background: #17483e;
+  transform: translateY(-1px);
+}
+
+
+/* ================================
+   VIEW BUTTON
+================================ */
+
+.candidate-view-btn {
+  border: 1px solid #0d3029;
+  background: #ffffff;
+  color: #0d3029;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.candidate-view-btn:hover {
+  background: #0d3029;
+  color: #ffffff;
+}
+
+
+/* ================================
+   RESET BUTTON
+================================ */
+
+.candidate-filter-btn {
+  border: 1px solid #d9e1df;
+  background: #ffffff;
+  color: #24332f;
+  padding: 10px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.candidate-filter-btn:hover {
+  background: #f2f6f5;
+  border-color: #0d3029;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+  .candidates-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .candidate-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .candidate-search {
+    width: 100%;
+  }
+
+  .candidate-toolbar select,
+  .candidate-filter-btn {
+    width: 100%;
+  }
+
+  .candidates-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .candidate-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+}

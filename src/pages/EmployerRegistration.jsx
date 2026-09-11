@@ -15,6 +15,8 @@ import {
 
 import "./EmployerRegistration.css";
 
+const API_URL = "http://localhost:5000/api/employers";
+
 function EmployerRegistration() {
   const navigate = useNavigate();
 
@@ -32,20 +34,61 @@ function EmployerRegistration() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Employer Registration:", formData);
+    setLoading(true);
+    setError("");
 
-    setSubmitted(true);
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyName: formData.companyName,
+          contactPerson: formData.contactPerson,
+          email: formData.email,
+          phone: formData.phone,
+          industry: formData.industry,
+          companyWebsite: formData.website,
+          companySize: formData.companySize,
+          location: formData.location,
+          hiringNeeds: formData.hiringRequirement,
+          message: formData.message,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to submit registration.");
+      }
+
+      console.log("Employer saved:", data);
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Employer Registration Error:", err);
+
+      setError(
+        err.message ||
+          "Something went wrong. Please check the backend server."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -56,7 +99,9 @@ function EmployerRegistration() {
             <CheckCircle2 size={38} />
           </div>
 
-          <p className="registration-eyebrow">REGISTRATION SUBMITTED</p>
+          <p className="registration-eyebrow">
+            REGISTRATION SUBMITTED
+          </p>
 
           <h1>Thank You for Registering</h1>
 
@@ -84,11 +129,9 @@ function EmployerRegistration() {
 
   return (
     <main className="employer-registration-page">
-
       <section className="registration-container">
 
         {/* HEADER */}
-
         <div className="registration-header">
           <p className="registration-eyebrow">
             FOR EMPLOYERS
@@ -102,17 +145,30 @@ function EmployerRegistration() {
           </p>
         </div>
 
-        {/* FORM */}
+        {/* ERROR */}
+        {error && (
+          <div
+            style={{
+              marginBottom: "20px",
+              padding: "14px 16px",
+              borderRadius: "10px",
+              background: "#fff1f1",
+              color: "#b42318",
+              border: "1px solid #f3b5b5",
+            }}
+          >
+            {error}
+          </div>
+        )}
 
+        {/* FORM */}
         <form
           className="employer-registration-form"
           onSubmit={handleSubmit}
         >
 
           {/* COMPANY INFORMATION */}
-
           <div className="form-section">
-
             <div className="form-section-title">
               <Building2 size={19} />
 
@@ -228,15 +284,15 @@ function EmployerRegistration() {
           </div>
 
           {/* CONTACT INFORMATION */}
-
           <div className="form-section">
-
             <div className="form-section-title">
               <User size={19} />
 
               <div>
                 <h2>Contact Information</h2>
-                <p>Primary contact for recruitment communication.</p>
+                <p>
+                  Primary contact for recruitment communication.
+                </p>
               </div>
             </div>
 
@@ -297,20 +353,19 @@ function EmployerRegistration() {
           </div>
 
           {/* HIRING REQUIREMENT */}
-
           <div className="form-section">
-
             <div className="form-section-title">
               <BriefcaseBusiness size={19} />
 
               <div>
                 <h2>Hiring Requirements</h2>
-                <p>Help us understand your recruitment needs.</p>
+                <p>
+                  Help us understand your recruitment needs.
+                </p>
               </div>
             </div>
 
             <div className="form-group">
-
               <label>Current Hiring Requirement *</label>
 
               <textarea
@@ -320,11 +375,9 @@ function EmployerRegistration() {
                 onChange={handleChange}
                 required
               />
-
             </div>
 
             <div className="form-group">
-
               <label>Additional Message</label>
 
               <textarea
@@ -333,13 +386,10 @@ function EmployerRegistration() {
                 value={formData.message}
                 onChange={handleChange}
               />
-
             </div>
-
           </div>
 
           {/* DOCUMENT NOTE */}
-
           <div className="verification-note">
             <FileText size={18} />
 
@@ -354,24 +404,21 @@ function EmployerRegistration() {
           </div>
 
           {/* SUBMIT */}
-
           <div className="registration-submit">
-
-            <button type="submit">
-              Submit Employer Registration
+            <button type="submit" disabled={loading}>
+              {loading
+                ? "Submitting..."
+                : "Submit Employer Registration"}
             </button>
 
             <p>
               By submitting this form, you agree to be contacted by
               RAGAS CAREER WORLD regarding recruitment services.
             </p>
-
           </div>
 
         </form>
-
       </section>
-
     </main>
   );
 }
