@@ -1,6 +1,6 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 
 import Navbar from "./components/Navbar.jsx";
@@ -86,7 +86,6 @@ function AdminRoute() {
   return <AdminLayout />;
 }
 
-
 // ==========================================
 // PUBLIC WEBSITE
 // ==========================================
@@ -137,7 +136,7 @@ function PublicWebsite() {
         {/* CURRENT OPENINGS */}
         <Route
           path="/current-openings"
-          element={<CurrentOpenings />}
+          element={<ProtectedRoute><CurrentOpenings /></ProtectedRoute>}
         />
 
         {/* EMPLOYERS */}
@@ -161,7 +160,7 @@ function PublicWebsite() {
         {/* POST A JOB */}
         <Route
           path="/post-a-job"
-          element={<PostAJob />}
+          element={<ProtectedRoute><PostAJob /></ProtectedRoute>}
         />
 
         {/* PARTNER WITH US */}
@@ -209,7 +208,7 @@ function PublicWebsite() {
         {/* JOB APPLICATION */}
         <Route
           path="/apply/:jobId"
-          element={<JobApplication />}
+          element={<ProtectedRoute><JobApplication /></ProtectedRoute>}
         />
 
         {/* EMPLOYER REGISTRATION */}

@@ -107,8 +107,40 @@ const industries = [
 export function Home() {
   const navigate = useNavigate();
 
+  const isUserLoggedIn =
+    localStorage.getItem("ragasUserLoggedIn") === "true" ||
+    sessionStorage.getItem("ragasUserLoggedIn") === "true";
+
   const [showAllIndustries, setShowAllIndustries] =
     useState(false);
+
+  useEffect(() => {
+    const sectionId = window.location.hash.slice(1);
+    if (!sectionId) return undefined;
+
+    const timer = window.setTimeout(() => {
+      const section = document.getElementById(sectionId);
+      const navbar = document.querySelector(".navbar");
+
+      if (!section) return;
+
+      const navbarHeight = navbar
+        ? navbar.getBoundingClientRect().height
+        : 0;
+
+      window.scrollTo({
+        top: Math.max(
+          0,
+          section.getBoundingClientRect().top +
+            window.scrollY -
+            navbarHeight
+        ),
+        behavior: "smooth",
+      });
+    }, 100);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const sections = document.querySelectorAll(
@@ -349,12 +381,14 @@ export function Home() {
 
       {/* CURRENT OPENINGS */}
 
-      <section
-        id="current-openings"
-        className="page-slide home-existing-section"
-      >
-        <CurrentOpenings />
-      </section>
+      {isUserLoggedIn && (
+        <section
+          id="current-openings"
+          className="page-slide home-existing-section"
+        >
+          <CurrentOpenings />
+        </section>
+      )}
 
       {/* ABOUT */}
 
@@ -421,12 +455,14 @@ export function Home() {
 
       {/* POST A JOB */}
 
-      <section
-        id="post-a-job"
-        className="page-slide home-existing-section"
-      >
-        <PostAJob />
-      </section>
+      {isUserLoggedIn && (
+        <section
+          id="post-a-job"
+          className="page-slide home-existing-section"
+        >
+          <PostAJob />
+        </section>
+      )}
 
       {/* PARTNER WITH US */}
 

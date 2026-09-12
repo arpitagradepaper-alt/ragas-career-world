@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import "./JobSeekers.css";
 
 function JobSeekers() {
+  const navigate = useNavigate();
   return (
     <main className="job-seekers-page">
 
@@ -31,8 +33,12 @@ function JobSeekers() {
             </a>
 
             <a
-              href="#current-openings"
+              href="/current-openings"
               className="job-seekers-btn secondary"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate("/current-openings");
+              }}
             >
               Browse Openings
             </a>

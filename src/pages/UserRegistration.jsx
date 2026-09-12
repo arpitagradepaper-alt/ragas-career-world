@@ -1,11 +1,12 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./UserRegistration.css";
 import ragasLogo from "../assets/ragas-logo.png";
 
 function UserRegistration() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -90,7 +91,7 @@ function UserRegistration() {
       setLoading(false);
 
       // Registration successful
-      navigate("/user-login");
+      navigate("/user-login", { state: { from: location.state?.from } });
     } catch (error) {
       console.error("Registration error:", error);
 

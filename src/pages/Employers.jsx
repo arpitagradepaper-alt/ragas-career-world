@@ -65,8 +65,12 @@ function Employers() {
 
             {/* POST A JOB */}
             <a
-              href="#post-a-job"
+              href="/post-a-job"
               className="employer-btn outline"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate("/post-a-job");
+              }}
             >
               Post a Job
             </a>

@@ -1,16 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
 import ragasLogo from "../assets/ragas-logo.png";
 import "./Navbar.css";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileDropdown, setMobileDropdown] = useState(null);
   const [desktopDropdown, setDesktopDropdown] = useState(null);
 
   const scrollToSection = (id) => {
+    if (location.pathname !== "/") {
+      setMobileMenuOpen(false);
+      setMobileDropdown(null);
+      setDesktopDropdown(null);
+      navigate(`/#${id}`);
+      return;
+    }
+
     const section = document.getElementById(id);
     if (!section) {
       console.warn(`Section #${id} not found`);
@@ -327,10 +337,10 @@ function Navbar() {
                 </a>
 
                 <a
-                  href="#current-openings"
+                  href="/current-openings"
                   onClick={(e) => {
                     e.preventDefault();
-                    scrollToSection("current-openings");
+                    navigate("/current-openings");
                   }}
                 >
                   Current Openings
@@ -446,10 +456,10 @@ function Navbar() {
                 </a>
 
                 <a
-                  href="#post-a-job"
+                  href="/post-a-job"
                   onClick={(e) => {
                     e.preventDefault();
-                    scrollToSection("post-a-job");
+                    navigate("/post-a-job");
                   }}
                 >
                   Post a Job
@@ -694,10 +704,10 @@ function Navbar() {
               </a>
 
               <a
-                href="#current-openings"
+                href="/current-openings"
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection("current-openings");
+                  navigate("/current-openings");
                 }}
               >
                 Current Openings
@@ -795,10 +805,10 @@ function Navbar() {
               </a>
 
               <a
-                href="#post-a-job"
+                href="/post-a-job"
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection("post-a-job");
+                  navigate("/post-a-job");
                 }}
               >
                 Post a Job

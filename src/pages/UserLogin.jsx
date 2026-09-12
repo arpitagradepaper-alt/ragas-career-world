@@ -1,10 +1,11 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./UserLogin.css";
 
 function UserLogin() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,7 +77,12 @@ function UserLogin() {
       // ==============================
       // GO TO WEBSITE
       // ==============================
-      navigate("/home");
+      const requestedPage = location.state?.from;
+      navigate(
+        requestedPage
+          ? `${requestedPage.pathname}${requestedPage.search || ""}${requestedPage.hash || ""}`
+          : "/"
+      );
     } catch (error) {
       console.error("Login error:", error);
 
@@ -265,7 +271,9 @@ function UserLogin() {
             <button
               type="button"
               onClick={() =>
-                navigate("/register")
+                navigate("/register", {
+                  state: { from: location.state?.from },
+                })
               }
             >
               Create Account
