@@ -52,6 +52,16 @@ function UserLogin() {
         return;
       }
 
+      // The current backend may return the account as either `user` or
+      // `admin`; keep the profile data under one consistent browser key.
+      const loggedInUser = data.user || data.admin;
+
+      if (!loggedInUser) {
+        setError("Login succeeded, but profile details were not received.");
+        setLoading(false);
+        return;
+      }
+
       // ==============================
       // SAVE LOGIN DATA
       // ==============================
@@ -61,14 +71,14 @@ function UserLogin() {
         localStorage.setItem("ragasUserLoggedIn", "true");
         localStorage.setItem(
           "ragasUser",
-          JSON.stringify(data.user)
+          JSON.stringify(loggedInUser)
         );
       } else {
         sessionStorage.setItem("ragasUserToken", data.token);
         sessionStorage.setItem("ragasUserLoggedIn", "true");
         sessionStorage.setItem(
           "ragasUser",
-          JSON.stringify(data.user)
+          JSON.stringify(loggedInUser)
         );
       }
 

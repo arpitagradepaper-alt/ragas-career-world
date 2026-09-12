@@ -260,7 +260,7 @@ function App() {
 
         <Route
           path="/"
-          element={<Home />}
+          element={<PublicWebsite />}
         />
 
         {/* =====================================

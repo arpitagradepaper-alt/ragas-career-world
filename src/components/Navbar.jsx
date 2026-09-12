@@ -1,16 +1,32 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, UserRound, X } from "lucide-react";
 import ragasLogo from "../assets/ragas-logo.png";
 import "./Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isUserLoggedIn =
+    localStorage.getItem("ragasUserLoggedIn") === "true" ||
+    sessionStorage.getItem("ragasUserLoggedIn") === "true";
+  const savedUser =
+    localStorage.getItem("ragasUser") ||
+    sessionStorage.getItem("ragasUser");
+  let user = null;
+  let userName = "Profile";
+
+  try {
+    user = savedUser ? JSON.parse(savedUser) : null;
+    userName = user?.fullName || user?.name || user?.email || "Profile";
+  } catch {
+    userName = "Profile";
+  }
   const [activeSection, setActiveSection] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileDropdown, setMobileDropdown] = useState(null);
   const [desktopDropdown, setDesktopDropdown] = useState(null);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const scrollToSection = (id) => {
     if (location.pathname !== "/") {
@@ -56,6 +72,17 @@ function Navbar() {
 
   const toggleDesktopDropdown = (name) => {
     setDesktopDropdown((prev) => (prev === name ? null : name));
+  };
+
+  const handleLogout = () => {
+    [localStorage, sessionStorage].forEach((storage) => {
+      storage.removeItem("ragasUserToken");
+      storage.removeItem("ragasUserLoggedIn");
+      storage.removeItem("ragasUser");
+    });
+
+    navigate("/");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -117,8 +144,9 @@ function Navbar() {
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (!event.target.closest(".navbar-dropdown")) {
+      if (!event.target.closest(".navbar-dropdown, .navbar-profile-menu")) {
         setDesktopDropdown(null);
+        setProfileOpen(false);
       }
     };
 
@@ -531,14 +559,48 @@ function Navbar() {
           </a>
         </nav>
 
-        {/* DESKTOP CTA */}
-        <button
-          type="button"
-          className="navbar-cta"
-          onClick={() => scrollToSection("job-seekers")}
-        >
-          Get Started
-        </button>
+        <div className="navbar-actions">
+          {/* DESKTOP CTA */}
+          <button
+            type="button"
+            className="navbar-cta"
+            onClick={() => scrollToSection("job-seekers")}
+          >
+            Get Started
+          </button>
+
+          {isUserLoggedIn && (
+            <div className="navbar-profile-menu">
+              <button
+                type="button"
+                className="navbar-profile"
+                onClick={() => setProfileOpen((isOpen) => !isOpen)}
+                aria-label="Open profile details"
+                aria-expanded={profileOpen}
+              >
+                {userName.charAt(0).toUpperCase()}
+              </button>
+
+              {profileOpen && (
+                <div className="navbar-profile-dropdown">
+                  <div className="navbar-profile-heading">
+                    <UserRound size={18} aria-hidden="true" />
+                    <strong>{userName}</strong>
+                  </div>
+                  <p><span>Email</span>{user?.email || "Not available"}</p>
+                  <p><span>Phone</span>{user?.phone || user?.phoneNumber || "Not available"}</p>
+                  <button
+                    type="button"
+                    className="navbar-logout"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* MOBILE BUTTON */}
         <button
