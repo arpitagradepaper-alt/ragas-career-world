@@ -2,7 +2,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user.js");
+const Admin = require("../models/admin.js");
 
 const router = express.Router();
 
@@ -27,42 +27,44 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({
+    const existingAdmin = await Admin.findOne({
       email: email.toLowerCase().trim(),
     });
 
-    if (existingUser) {
+    if (existingAdmin) {
       return res.status(409).json({
         success: false,
-        message: "An account with this email already exists.",
+        message: "An admin with this email already exists.",
       });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    const admin = await Admin.create({
       fullName: fullName.trim(),
       email: email.toLowerCase().trim(),
       phone: phone.trim(),
       password: hashedPassword,
+      role: "admin",
     });
 
     res.status(201).json({
       success: true,
-      message: "Registration successful.",
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        phone: user.phone,
+      message: "Admin registration successful.",
+      admin: {
+        id: admin._id,
+        fullName: admin.fullName,
+        email: admin.email,
+        phone: admin.phone,
+        role: admin.role,
       },
     });
   } catch (error) {
-    console.error("User registration error:", error);
+    console.error("Admin registration error:", error);
 
     res.status(500).json({
       success: false,
-      message: "Server error during registration.",
+      message: "Server error during admin registration.",
     });
   }
 });
@@ -81,31 +83,31 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const user = await User.findOne({
+    const admin = await Admin.findOne({
       email: email.toLowerCase().trim(),
     });
 
-    if (!user) {
+    if (!admin) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password.",
+        message: "Invalid admin email or password.",
       });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, admin.password);
 
     if (!passwordMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password.",
+        message: "Invalid admin email or password.",
       });
     }
 
     const token = jwt.sign(
       {
-        id: user._id,
-        email: user.email,
-        role: "user",
+        id: admin._id,
+        email: admin.email,
+        role: "admin",
       },
       process.env.JWT_SECRET,
       {
@@ -115,21 +117,22 @@ router.post("/login", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Login successful.",
+      message: "Admin login successful.",
       token,
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        phone: user.phone,
+      admin: {
+        id: admin._id,
+        fullName: admin.fullName,
+        email: admin.email,
+        phone: admin.phone,
+        role: admin.role,
       },
     });
   } catch (error) {
-    console.error("User login error:", error);
+    console.error("Admin login error:", error);
 
     res.status(500).json({
       success: false,
-      message: "Server error during login.",
+      message: "Server error during admin login.",
     });
   }
 });

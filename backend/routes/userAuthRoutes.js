@@ -2,7 +2,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Admin = require("../models/admin.js");
+const User = require("../models/user.js");
 
 const router = express.Router();
 
@@ -29,55 +29,53 @@ router.post("/register", async (req, res) => {
 
     const cleanEmail = email.toLowerCase().trim();
 
-    // Check existing admin
-    const existingAdmin = await Admin.findOne({
+    // Check existing user
+    const existingUser = await User.findOne({
       email: cleanEmail,
     });
 
-    if (existingAdmin) {
+    if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "An admin with this email already exists.",
+        message: "An account with this email already exists.",
       });
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create admin
-    const admin = await Admin.create({
+    // Create user
+    const user = await User.create({
       fullName: fullName.trim(),
       email: cleanEmail,
       phone: phone.trim(),
       password: hashedPassword,
-      role: "admin",
     });
 
    
 
     return res.status(201).json({
       success: true,
-      message: "Admin registration successful.",
-      admin: {
-        id: admin._id,
-        fullName: admin.fullName,
-        email: admin.email,
-        phone: admin.phone,
-        role: admin.role,
+      message: "User registration successful.",
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
       },
     });
   } catch (error) {
-    console.error("Admin registration error:", error);
+    console.error("User registration error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Server error during admin registration.",
+      message: "Server error during user registration.",
     });
   }
 });
 
 // ==============================
-// ADMIN LOGIN
+// USER LOGIN
 // ==============================
 router.post("/login", async (req, res) => {
   try {
@@ -103,45 +101,37 @@ router.post("/login", async (req, res) => {
 
     const cleanEmail = email.toLowerCase().trim();
 
-    // Find admin
-    const admin = await Admin.findOne({
+    // Find user
+    const user = await User.findOne({
       email: cleanEmail,
     });
 
-    if (!admin) {
+    if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid admin email or password.",
-      });
-    }
-
-    // Make sure this account is actually an admin
-    if (admin.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Admin access denied.",
+        message: "Invalid email or password.",
       });
     }
 
     // Compare password
     const passwordMatch = await bcrypt.compare(
       password,
-      admin.password
+      user.password
     );
 
     if (!passwordMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid admin email or password.",
+        message: "Invalid email or password.",
       });
     }
 
     // Create JWT
     const token = jwt.sign(
       {
-        id: admin._id,
-        email: admin.email,
-        role: "admin",
+        id: user._id,
+        email: user.email,
+        role: "user",
       },
       process.env.JWT_SECRET,
       {
@@ -152,22 +142,21 @@ router.post("/login", async (req, res) => {
     // Successful login
     return res.status(200).json({
       success: true,
-      message: "Admin login successful.",
+      message: "User login successful.",
       token,
-      admin: {
-        id: admin._id,
-        fullName: admin.fullName,
-        email: admin.email,
-        phone: admin.phone,
-        role: admin.role,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
       },
     });
   } catch (error) {
-    console.error("Admin login error:", error);
+    console.error("User login error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Server error during admin login.",
+      message: "Server error during user login.",
     });
   }
 });

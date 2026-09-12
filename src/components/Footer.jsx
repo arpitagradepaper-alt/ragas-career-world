@@ -1,8 +1,6 @@
 import {
   MapPin,
-  Phone,
   Mail,
-  MessageCircle,
   ArrowUpRight,
 } from "lucide-react";
 
@@ -184,32 +182,36 @@ function Footer() {
             <MapPin size={16} />
 
             <div>
-              <strong>Head Office</strong>
-              <span>India</span>
+              <strong>Corporate Address</strong>
+              <span>
+                1885, Ground Floor, South End C Cross Road, 28th Main Road,
+                E End B Main Rd, near Kabab Magic, Jayanagara 11th Block,
+                Jayanagar, Bengaluru, Karnataka 560041
+              </span>
             </div>
           </div>
 
           <a
-            href="tel:+919999999999"
-            className="footer-contact-item"
-          >
-            <Phone size={16} />
-
-            <div>
-              <strong>Phone</strong>
-              <span>+91 99999 99999</span>
-            </div>
-          </a>
-
-          <a
-            href="mailto:info@ragascareerworld.com"
+            href="mailto:ragascareerworld@gmail.com"
             className="footer-contact-item"
           >
             <Mail size={16} />
 
             <div>
-              <strong>Email---</strong>
-              <span>info@ragascareerworld.com</span>
+              <strong>Contact Forms</strong>
+              <span>ragascareerworld@gmail.com</span>
+            </div>
+          </a>
+
+          <a
+            href="mailto:hr@ragascarrerworld.com"
+            className="footer-contact-item"
+          >
+            <Mail size={16} />
+
+            <div>
+              <strong>Corporate</strong>
+              <span>hr@ragascarrerworld.com</span>
             </div>
           </a>
 
