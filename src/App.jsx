@@ -1,16 +1,13 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// ==========================================
-// PUBLIC COMPONENTS
-// ==========================================
+
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Chatbot from "./components/Chatbot.jsx";
 
-// ==========================================
-// PUBLIC PAGES
-// ==========================================
+
 
 import { Home } from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
@@ -34,14 +31,21 @@ import JobApplication from "./pages/JobApplication.jsx";
 import EmployerRegistration from "./pages/EmployerRegistration.jsx";
 
 // ==========================================
+// USER AUTH
+// ==========================================
+
+import UserLogin from "./pages/UserLogin.jsx";
+import UserRegistration from "./pages/UserRegistration.jsx";
+
+// ==========================================
 // ADMIN
 // ==========================================
 
 import AdminLayout from "./admin/AdminLayout.jsx";
 import AdminLogin from "./admin/AdminLogin.jsx";
+import AdminRegistration from "./admin/AdminRegistration.jsx";
 
 import Dashboard from "./admin/Dashboard.jsx";
-
 import ChatbotLogs from "./admin/ChatbotLogs.jsx";
 import ChatbotLogDetails from "./admin/ChatbotLogDetails.jsx";
 
@@ -66,6 +70,23 @@ import ApplicationDetails from "./admin/ApplicationDetails.jsx";
 import ContactMessages from "./admin/ContactMessages.jsx";
 import ContactMessageDetails from "./admin/ContactMessageDetails.jsx";
 
+
+// ==========================================
+// ADMIN AUTH CHECK
+// ==========================================
+
+function AdminRoute() {
+  const isAdminLoggedIn =
+    localStorage.getItem("ragasAdminLoggedIn") === "true";
+
+  if (!isAdminLoggedIn) {
+    return <AdminLogin />;
+  }
+
+  return <AdminLayout />;
+}
+
+
 // ==========================================
 // PUBLIC WEBSITE
 // ==========================================
@@ -79,7 +100,7 @@ function PublicWebsite() {
 
         {/* HOME */}
         <Route
-          path="/"
+          path="/home"
           element={<Home />}
         />
 
@@ -155,7 +176,7 @@ function PublicWebsite() {
           element={<RecruitmentProcess />}
         />
 
-        {/* VISA SUPPORT */}
+        {/* VISA & IMMIGRATION SUPPORT */}
         <Route
           path="/visa-immigration-support"
           element={<VisaSupport />}
@@ -207,7 +228,7 @@ function PublicWebsite() {
           }
         />
 
-        {/* PUBLIC FALLBACK */}
+        {/* FALLBACK */}
         <Route
           path="*"
           element={<Home />}
@@ -222,6 +243,7 @@ function PublicWebsite() {
   );
 }
 
+
 // ==========================================
 // MAIN APP
 // ==========================================
@@ -232,35 +254,60 @@ function App() {
 
       <Routes>
 
-        {/* ======================================
-            ADMIN LOGIN
-        ====================================== */}
+        {/* =====================================
+            FIRST PAGE
+            USER REGISTRATION
+        ===================================== */}
 
         <Route
-          path="/admin/login"
-          element={<AdminLogin />}
+          path="/"
+          element={<Home />}
         />
 
+        {/* =====================================
+            USER REGISTRATION
+        ===================================== */}
 
-        {/* ======================================
+        <Route
+          path="/register"
+          element={<UserRegistration />}
+        />
+
+        {/* =====================================
+            USER LOGIN
+        ===================================== */}
+
+        <Route
+          path="/user-login"
+          element={<UserLogin />}
+        />
+
+        {/* =====================================
+            ADMIN REGISTRATION
+        ===================================== */}
+
+        <Route
+          path="/admin/register"
+          element={<AdminRegistration />}
+        />
+
+        {/* =====================================
             ADMIN PANEL
-        ====================================== */}
+        ===================================== */}
 
         <Route
           path="/admin"
-          element={<AdminLayout />}
+          element={<AdminRoute />}
         >
 
-          {/* ADMIN DASHBOARD */}
+          {/* DASHBOARD */}
+
           <Route
             index
             element={<Dashboard />}
           />
 
-
-          {/* ====================================
-              CHATBOT
-          ==================================== */}
+          {/* CHATBOT LOGS */}
 
           <Route
             path="chatbot-logs"
@@ -272,10 +319,7 @@ function App() {
             element={<ChatbotLogDetails />}
           />
 
-
-          {/* ====================================
-              APPLICATIONS
-          ==================================== */}
+          {/* APPLICATIONS */}
 
           <Route
             path="applications"
@@ -287,34 +331,24 @@ function App() {
             element={<ApplicationDetails />}
           />
 
-
-          {/* ====================================
-              CANDIDATES
-          ==================================== */}
+          {/* CANDIDATES */}
 
           <Route
             path="candidates"
             element={<Candidates />}
           />
 
-          {/* ADD CANDIDATE
-              IMPORTANT ROUTE
-          */}
           <Route
             path="candidates/add"
             element={<AddCandidate />}
           />
 
-          {/* CANDIDATE DETAILS */}
           <Route
             path="candidates/:id"
             element={<CandidateDetails />}
           />
 
-
-          {/* ====================================
-              EMPLOYERS
-          ==================================== */}
+          {/* EMPLOYERS */}
 
           <Route
             path="employers"
@@ -326,10 +360,7 @@ function App() {
             element={<EmployerDetails />}
           />
 
-
-          {/* ====================================
-              JOB POSTS
-          ==================================== */}
+          {/* JOBS */}
 
           <Route
             path="jobs"
@@ -341,10 +372,7 @@ function App() {
             element={<JobDetails />}
           />
 
-
-          {/* ====================================
-              RESUME DATABASE
-          ==================================== */}
+          {/* RESUMES */}
 
           <Route
             path="resumes"
@@ -356,20 +384,14 @@ function App() {
             element={<ResumeDetails />}
           />
 
-
-          {/* ====================================
-              PARTNERS
-          ==================================== */}
+          {/* PARTNERS */}
 
           <Route
             path="partners"
             element={<Partners />}
           />
 
-
-          {/* ====================================
-              CONTACT MESSAGES
-          ==================================== */}
+          {/* CONTACT MESSAGES */}
 
           <Route
             path="contact-messages"
@@ -384,9 +406,19 @@ function App() {
         </Route>
 
 
-        {/* ======================================
-            PUBLIC WEBSITE
-        ====================================== */}
+        {/* =====================================
+            ADMIN LOGIN
+        ===================================== */}
+
+        <Route
+          path="/admin/login"
+          element={<AdminLogin />}
+        />
+
+
+        {/* =====================================
+            PUBLIC WEBSITE FALLBACK
+        ===================================== */}
 
         <Route
           path="*"

@@ -1,11 +1,14 @@
+
 const dns = require("dns");
 
 dns.setServers(["8.8.8.8"]);
 dns.setDefaultResultOrder("ipv4first");
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+
 
 const contactRoutes = require("./routes/contactRoutes");
 const candidateRoutes = require("./routes/candidateRoutes");
@@ -16,8 +19,11 @@ const applicationRoutes = require("./routes/applicationRoutes");
 const partnerRoutes = require("./routes/partnerRoutes");
 const chatbotLogRoutes = require("./routes/chatbotLogRoutes");
 
-const app = express();
 
+const userAuthRoutes = require("./routes/userAuthRoutes");
+const adminAuthRoutes = require("./routes/adminAuthRoutes");
+
+const app = express();
 
 
 app.use(
@@ -27,9 +33,9 @@ app.use(
   })
 );
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 
 app.use("/api/contact", contactRoutes);
@@ -42,6 +48,12 @@ app.use("/api/partners", partnerRoutes);
 app.use("/api/chatbot-logs", chatbotLogRoutes);
 
 
+app.use("/api/auth/user", userAuthRoutes);
+
+
+app.use("/api/auth/admin", adminAuthRoutes);
+
+
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -49,7 +61,19 @@ app.get("/", (req, res) => {
   });
 });
 
+// ==============================
+// HEALTH CHECK
+// ==============================
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Backend is healthy.",
+  });
+});
 
+// ==============================
+// GLOBAL ERROR HANDLER
+// ==============================
 app.use((error, req, res, next) => {
   console.error("GLOBAL ERROR:", error);
 
@@ -59,8 +83,9 @@ app.use((error, req, res, next) => {
   });
 });
 
-
-
+// ==============================
+// MONGODB CONNECTION
+// ==============================
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
@@ -84,9 +109,7 @@ mongoose
     const PORT = process.env.PORT || 5000;
 
     app.listen(PORT, () => {
-      console.log(
-        `✅ Server running on http://localhost:${PORT}`
-      );
+      console.log(`✅ Server running on http://localhost:${PORT}`);
     });
   })
   .catch((error) => {

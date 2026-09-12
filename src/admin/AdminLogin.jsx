@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
@@ -8,14 +9,72 @@ function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Temporary frontend login
-    if (email && password) {
+    setError("");
+
+    if (!email || !password) {
+      setError("Please enter your email and password.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const API_URL =
+        import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+      const response = await fetch(
+        `${API_URL}/api/auth/admin/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        setError(
+          data.message || "Invalid admin email or password."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Save admin login session
       localStorage.setItem("ragasAdminLoggedIn", "true");
+      localStorage.setItem("ragasAdminToken", data.token);
+
+      if (data.admin) {
+        localStorage.setItem(
+          "ragasAdmin",
+          JSON.stringify(data.admin)
+        );
+      }
+
+      setLoading(false);
+
+      // Open admin dashboard
       navigate("/admin");
+    } catch (error) {
+      console.error("Admin login error:", error);
+
+      setError(
+        "Unable to connect to the server. Please try again."
+      );
+
+      setLoading(false);
     }
   };
 
@@ -77,6 +136,12 @@ function AdminLogin() {
             Sign in to access the RAGAS Career World admin dashboard.
           </p>
 
+          {error && (
+            <div className="login-error">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleLogin}>
 
             <div className="login-field">
@@ -126,9 +191,10 @@ function AdminLogin() {
             <button
               type="submit"
               className="admin-login-btn"
+              disabled={loading}
             >
-              Sign In to Admin Panel
-              <span>→</span>
+              {loading ? "Signing In..." : "Sign In to Admin Panel"}
+              {!loading && <span>→</span>}
             </button>
 
           </form>
@@ -147,3 +213,4 @@ function AdminLogin() {
 }
 
 export default AdminLogin;
+
