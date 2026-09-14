@@ -1,6 +1,15 @@
 import { useState } from "react";
 import "./AdminDashboard.css";
 
+function getStoredAdminName() {
+  try {
+    const savedAdmin = JSON.parse(localStorage.getItem("ragasAdmin") || "{}");
+    return savedAdmin?.fullName || "Admin";
+  } catch {
+    return "Admin";
+  }
+}
+
 const conversations = [
   {
     id: "#RC-10284",
@@ -41,6 +50,7 @@ const conversations = [
 
 function AdminDashboard() {
   const [search, setSearch] = useState("");
+  const adminName = getStoredAdminName();
 
   const filteredConversations = conversations.filter((item) =>
     `${item.user} ${item.topic} ${item.id}`
@@ -60,10 +70,10 @@ function AdminDashboard() {
         </div>
 
         <div className="admin-user">
-          <div className="admin-avatar">SA</div>
+          <div className="admin-avatar">{adminName?.charAt(0)?.toUpperCase() || "A"}</div>
 
           <div>
-            <strong>Super Admin</strong>
+            <strong>{adminName}</strong>
             <span>Administrator</span>
           </div>
         </div>

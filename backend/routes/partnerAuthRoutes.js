@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const Partner = require("../models/Partner");
+const LoginLog = require("../models/LoginLog");
 
 const router = express.Router();
 
@@ -101,6 +102,14 @@ router.post("/login", async (req, res) => {
         expiresIn: "7d",
       }
     );
+
+    await LoginLog.create({
+      fullName: partner.contactPerson || partner.companyName,
+      email: partner.email,
+      phone: partner.phone || "",
+      role: "partner",
+      collectionName: "partners",
+    });
 
     /* -----------------------------------------
        RESPONSE

@@ -277,7 +277,7 @@ function UserLogin() {
             <button
               type="button"
               onClick={() =>
-                navigate("/register", {
+                navigate("/user-registration", {
                   state: { from: location.state?.from },
                 })
               }

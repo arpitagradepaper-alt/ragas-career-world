@@ -3,74 +3,12 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/admin.js");
+const LoginLog = require("../models/LoginLog");
 
 const router = express.Router();
 
 // ==============================
-// USER REGISTRATION
-// ==============================
-router.post("/register", async (req, res) => {
-  try {
-    const { fullName, email, phone, password } = req.body;
-
-    if (!fullName || !email || !phone || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Please fill in all fields.",
-      });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters.",
-      });
-    }
-
-    const existingAdmin = await Admin.findOne({
-      email: email.toLowerCase().trim(),
-    });
-
-    if (existingAdmin) {
-      return res.status(409).json({
-        success: false,
-        message: "An admin with this email already exists.",
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const admin = await Admin.create({
-      fullName: fullName.trim(),
-      email: email.toLowerCase().trim(),
-      phone: phone.trim(),
-      password: hashedPassword,
-      role: "admin",
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Admin registration successful.",
-      admin: {
-        id: admin._id,
-        fullName: admin.fullName,
-        email: admin.email,
-        phone: admin.phone,
-        role: admin.role,
-      },
-    });
-  } catch (error) {
-    console.error("Admin registration error:", error);
-
-    res.status(500).json({
-      success: false,
-      message: "Server error during admin registration.",
-    });
-  }
-});
-
-// ==============================
-// USER LOGIN
+// ADMIN LOGIN ONLY
 // ==============================
 router.post("/login", async (req, res) => {
   try {
@@ -114,6 +52,14 @@ router.post("/login", async (req, res) => {
         expiresIn: "7d",
       }
     );
+
+    await LoginLog.create({
+      fullName: admin.fullName,
+      email: admin.email,
+      phone: admin.phone || "",
+      role: "admin",
+      collectionName: "admins",
+    });
 
     res.status(200).json({
       success: true,

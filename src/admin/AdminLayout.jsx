@@ -6,6 +6,15 @@ import "./AdminLayout.css";
 function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  let storedAdmin = null;
+  try {
+    storedAdmin = JSON.parse(localStorage.getItem("ragasAdmin") || "{}");
+  } catch {
+    storedAdmin = null;
+  }
+
+  const adminName = storedAdmin?.fullName || "Admin";
+
   const handleLogout = () => {
     localStorage.removeItem("ragasAdminLoggedIn");
     window.location.href = "/admin/login";
@@ -58,10 +67,10 @@ function AdminLayout() {
 
         {/* ADMIN USER */}
         <div className="admin-user">
-          <div className="admin-avatar">SA</div>
+          <div className="admin-avatar">{adminName?.charAt(0)?.toUpperCase() || "A"}</div>
 
           <div>
-            <strong>Super Admin</strong>
+            <strong>{adminName}</strong>
             <span>Administrator</span>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -49,7 +49,6 @@ import ApplicationDetails from "./admin/ApplicationDetails";
 import ContactMessages from "./admin/ContactMessages";
 import ContactMessageDetails from "./admin/ContactMessageDetails";
 import AddCandidate from "./admin/AddCandidate";
-import AdminRegistration from "./admin/AdminRegistration";
 
 // Partner Panel
 import PartnerLayout from "./partner/PartnerLayout";
@@ -145,12 +144,17 @@ function PartnerRoute() {
 
 
 function PublicWebsite() {
+  const location = useLocation();
+  const hidePublicShell =
+    location.pathname === "/user-login" ||
+    location.pathname === "/user-registration";
+
   return (
     <>
-      <Navbar />
+      {!hidePublicShell && <Navbar />}
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
         <Route path="/international-jobs" element={<InternationalJobs />} />
@@ -201,15 +205,10 @@ function PublicWebsite() {
             </ProtectedRoute>
           }
         />
-
-        <Route
-          path="*"
-          element={<Navigate to="/" replace />}
-        />
       </Routes>
 
-      <Chatbot />
-      <Footer />
+      {!hidePublicShell && <Chatbot />}
+      {!hidePublicShell && <Footer />}
     </>
   );
 }
@@ -218,59 +217,26 @@ function PublicWebsite() {
 function AdminWebsite() {
   return (
     <Routes>
-      <Route path="/admin" element={<AdminRoute />}>
+      <Route path="login" element={<AdminLogin />} />
 
+      <Route path="" element={<AdminRoute />}>
         <Route index element={<Dashboard />} />
-
         <Route path="dashboard" element={<Dashboard />} />
-
         <Route path="chatbot-logs" element={<ChatbotLogs />} />
-        <Route
-          path="chatbot-logs/:id"
-          element={<ChatbotLogDetails />}
-        />
-
+        <Route path="chatbot-logs/:id" element={<ChatbotLogDetails />} />
         <Route path="candidates" element={<Candidates />} />
-        <Route
-          path="candidates/:id"
-          element={<CandidateDetails />}
-        />
-
-        <Route
-          path="employers/:id"
-          element={<EmployerDetails />}
-        />
-
+        <Route path="candidates/:id" element={<CandidateDetails />} />
+        <Route path="employers/:id" element={<EmployerDetails />} />
         <Route path="jobs" element={<Jobs />} />
         <Route path="jobs/:id" element={<JobDetails />} />
-
         <Route path="resumes" element={<Resumes />} />
         <Route path="resumes/:id" element={<ResumeDetails />} />
-
         <Route path="partners" element={<Partners />} />
-
         <Route path="applications" element={<Applications />} />
-        <Route
-          path="applications/:id"
-          element={<ApplicationDetails />}
-        />
-
-        <Route
-          path="contact-messages"
-          element={<ContactMessages />}
-        />
-        <Route
-          path="contact-messages/:id"
-          element={<ContactMessageDetails />}
-        />
-
+        <Route path="applications/:id" element={<ApplicationDetails />} />
+        <Route path="contact-messages" element={<ContactMessages />} />
+        <Route path="contact-messages/:id" element={<ContactMessageDetails />} />
         <Route path="add-candidate" element={<AddCandidate />} />
-
-        <Route
-          path="registration"
-          element={<AdminRegistration />}
-        />
-
       </Route>
     </Routes>
   );
@@ -331,9 +297,6 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* Public Website */}
-        <Route path="/*" element={<PublicWebsite />} />
-
         {/* Admin Panel */}
         <Route path="/admin/*" element={<AdminWebsite />} />
 
@@ -342,6 +305,9 @@ function App() {
           path="/partner-dashboard/*"
           element={<PartnerWebsite />}
         />
+
+        {/* Public Website */}
+        <Route path="/*" element={<PublicWebsite />} />
 
       </Routes>
     </BrowserRouter>

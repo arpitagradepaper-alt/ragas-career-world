@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const User = require("../models/user.js");
+const LoginLog = require("../models/LoginLog");
 const { sendPasswordResetOtp } = require("../services/mailer.js");
 
 const router = express.Router();
@@ -140,6 +141,15 @@ router.post("/login", async (req, res) => {
         expiresIn: "7d",
       }
     );
+
+    // Store login event in dedicated collection for login visibility
+    await LoginLog.create({
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone || "",
+      role: "user",
+      collectionName: "users",
+    });
 
     // Successful login
     return res.status(200).json({
