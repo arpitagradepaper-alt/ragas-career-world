@@ -444,15 +444,6 @@ export function Home() {
         <JobSeekers />
       </section>
 
-      {/* UPLOAD RESUME */}
-
-      <section
-        id="upload-resume"
-        className="page-slide home-existing-section"
-      >
-        <UploadResume />
-      </section>
-
       {/* POST A JOB */}
 
       {isUserLoggedIn && (

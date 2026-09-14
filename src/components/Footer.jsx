@@ -131,10 +131,6 @@ function Footer() {
             Job Seekers
           </button>
 
-          <button onClick={() => scrollToSection("upload-resume")}>
-            Upload Resume
-          </button>
-
           <button onClick={() => scrollToSection("visa-immigration")}>
             Visa & Immigration
           </button>

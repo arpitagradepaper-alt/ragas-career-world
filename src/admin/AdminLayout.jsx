@@ -133,15 +133,6 @@ function AdminLayout() {
             Job Posts
           </NavLink>
 
-          {/* RESUME DATABASE */}
-          <NavLink
-            to="/admin/resumes"
-            onClick={closeSidebar}
-          >
-            <span>↥</span>
-            Resume Database
-          </NavLink>
-
           {/* CONTACT MESSAGES */}
           <NavLink
             to="/admin/contact-messages"
