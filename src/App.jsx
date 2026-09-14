@@ -56,12 +56,19 @@ import PartnerDashboard from "./partner/PartnerDashboard";
 
 
 function ProtectedRoute({ children }) {
+  const location = useLocation();
   const isLoggedIn =
     localStorage.getItem("ragasUserLoggedIn") === "true" ||
     sessionStorage.getItem("ragasUserLoggedIn") === "true";
 
   if (!isLoggedIn) {
-    return <Navigate to="/user-login" replace />;
+    return (
+      <Navigate
+        to="/user-login"
+        replace
+        state={{ from: location }}
+      />
+    );
   }
 
   return children;
@@ -154,7 +161,7 @@ function PublicWebsite() {
       {!hidePublicShell && <Navbar />}
 
       <Routes>
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
         <Route path="/international-jobs" element={<InternationalJobs />} />
@@ -163,8 +170,22 @@ function PublicWebsite() {
         <Route path="/current-openings" element={<CurrentOpenings />} />
         <Route path="/employers" element={<Employers />} />
         <Route path="/job-seekers" element={<JobSeekers />} />
-        <Route path="/upload-resume" element={<UploadResume />} />
-        <Route path="/post-a-job" element={<PostAJob />} />
+        <Route
+          path="/upload-resume"
+          element={
+            <ProtectedRoute>
+              <UploadResume />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/post-a-job"
+          element={
+            <ProtectedRoute>
+              <PostAJob />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/partner-with-us" element={<PartnerWithUs />} />
         <Route path="/recruitment-process" element={<RecruitmentProcess />} />
         <Route path="/visa-support" element={<VisaSupport />} />
@@ -175,7 +196,6 @@ function PublicWebsite() {
 
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/user-registration" element={<UserRegistration />} />
-      
 
         <Route path="/partner-login" element={<PartnerLogin />} />
 
@@ -193,15 +213,6 @@ function PublicWebsite() {
           element={
             <ProtectedRoute>
               <EmployerRegistration />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/post-job"
-          element={
-            <ProtectedRoute>
-              <PostAJob />
             </ProtectedRoute>
           }
         />
