@@ -245,11 +245,7 @@ function UserLogin() {
               <button
                 type="button"
                 className="user-login-forgot"
-                onClick={() =>
-                  setError(
-                    "Password reset will be available soon."
-                  )
-                }
+                onClick={() => navigate("/forgot-password")}
               >
                 Forgot password?
               </button>

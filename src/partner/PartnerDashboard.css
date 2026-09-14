@@ -1,0 +1,249 @@
+.partner-dashboard {
+  width: 100%;
+}
+
+.partner-dashboard-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 26px;
+}
+
+.partner-dashboard-eyebrow {
+  margin: 0 0 7px;
+  color: #a77a2c;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.partner-dashboard-heading h2 {
+  margin: 0;
+  color: #10243f;
+  font-size: 27px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.partner-dashboard-description {
+  margin: 8px 0 0;
+  color: #68717a;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.partner-dashboard-action {
+  min-height: 42px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #10243f;
+  border-radius: 6px;
+  background: #10243f;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.partner-dashboard-action:hover {
+  background: #c9a254;
+  border-color: #c9a254;
+  color: #10243f;
+}
+
+/* STATS */
+
+.partner-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.partner-stat-card {
+  min-height: 105px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  border: 1px solid #e5e8e6;
+  border-radius: 8px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.partner-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: #d7d9d6;
+  box-shadow: 0 8px 22px rgba(16, 36, 63, 0.07);
+}
+
+.partner-stat-icon {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: #f4ead6;
+  color: #a77a2c;
+}
+
+.partner-stat-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.partner-stat-content span {
+  color: #68717a;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.partner-stat-content strong {
+  color: #10243f;
+  font-size: 23px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+/* DASHBOARD CARDS */
+
+.partner-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.partner-dashboard-card {
+  min-height: 300px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e8e6;
+  border-radius: 8px;
+}
+
+.partner-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #edf0ee;
+}
+
+.partner-card-header p {
+  margin: 0 0 5px;
+  color: #a77a2c;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+
+.partner-card-header h3 {
+  margin: 0;
+  color: #10243f;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.partner-card-header button {
+  border: none;
+  background: transparent;
+  color: #a77a2c;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.partner-card-header button:hover {
+  color: #10243f;
+}
+
+/* EMPTY STATE */
+
+.partner-empty-state {
+  min-height: 215px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #a77a2c;
+}
+
+.partner-empty-state svg {
+  margin-bottom: 12px;
+}
+
+.partner-empty-state h4 {
+  margin: 0 0 6px;
+  color: #344250;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.partner-empty-state p {
+  max-width: 250px;
+  margin: 0;
+  color: #899198;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* TABLET */
+
+@media (max-width: 1000px) {
+  .partner-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .partner-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .partner-dashboard-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .partner-dashboard-heading h2 {
+    font-size: 23px;
+  }
+
+  .partner-dashboard-action {
+    width: 100%;
+  }
+
+  .partner-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .partner-stat-card {
+    min-height: 95px;
+  }
+
+  .partner-dashboard-card {
+    padding: 16px;
+  }
+}

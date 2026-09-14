@@ -195,12 +195,9 @@ function Footer() {
             href="mailto:ragascareerworld@gmail.com"
             className="footer-contact-item"
           >
-            <Mail size={16} />
+          
 
-            <div>
-              <strong>Contact Forms</strong>
-              <span>ragascareerworld@gmail.com</span>
-            </div>
+            
           </a>
 
           <a

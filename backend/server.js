@@ -22,6 +22,7 @@ const chatbotLogRoutes = require("./routes/chatbotLogRoutes");
 
 const userAuthRoutes = require("./routes/userAuthRoutes");
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
+const partnerAuthRoutes = require("./routes/partnerAuthRoutes");
 
 const app = express();
 
@@ -52,7 +53,7 @@ app.use("/api/auth/user", userAuthRoutes);
 
 
 app.use("/api/auth/admin", adminAuthRoutes);
-
+app.use("/api/auth/partner", partnerAuthRoutes);
 
 app.get("/", (req, res) => {
   res.json({

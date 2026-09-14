@@ -1,94 +1,148 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Chatbot from "./components/Chatbot";
 
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import InternationalJobs from "./pages/InternationalJobs";
+import DomesticJobs from "./pages/DomesticJobs";
+import Industries from "./pages/Industries";
+import CurrentOpenings from "./pages/CurrentOpenings";
+import Employers from "./pages/Employers";
+import JobSeekers from "./pages/JobSeekers";
+import UploadResume from "./pages/UploadResume";
+import PostAJob from "./pages/PostAJob";
+import PartnerWithUs from "./pages/PartnerWithUs";
+import RecruitmentProcess from "./pages/RecruitmentProcess";
+import VisaSupport from "./pages/VisaSupport";
+import Blog from "./pages/Blog";
+import Testimonials from "./pages/Testimonials";
+import Contact from "./pages/Contact";
+import Careers from "./pages/Careers";
 
-import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
-import Chatbot from "./components/Chatbot.jsx";
+import JobApplication from "./pages/JobApplication";
+import EmployerRegistration from "./pages/EmployerRegistration";
+import UserLogin from "./pages/UserLogin";
+import UserRegistration from "./pages/UserRegistration";
 
+import PartnerLogin from "./pages/PartnerLogin";
 
+import AdminLayout from "./admin/AdminLayout";
+import AdminLogin from "./admin/AdminLogin";
 
-import { Home } from "./pages/Home.jsx";
-import About from "./pages/About.jsx";
-import Services from "./pages/Services.jsx";
-import InternationalJobs from "./pages/InternationalJobs.jsx";
-import DomesticJobs from "./pages/DomesticJobs.jsx";
-import Industries from "./pages/Industries.jsx";
-import CurrentOpenings from "./pages/CurrentOpenings.jsx";
-import Employers from "./pages/Employers.jsx";
-import JobSeekers from "./pages/JobSeekers.jsx";
-import UploadResume from "./pages/UploadResume.jsx";
-import PostAJob from "./pages/PostAJob.jsx";
-import PartnerWithUs from "./pages/PartnerWithUs.jsx";
-import RecruitmentProcess from "./pages/RecruitmentProcess.jsx";
-import VisaSupport from "./pages/VisaSupport.jsx";
-import Blog from "./pages/Blog.jsx";
-import Testimonials from "./pages/Testimonials.jsx";
-import Contact from "./pages/Contact.jsx";
-import Careers from "./pages/Careers.jsx";
-import JobApplication from "./pages/JobApplication.jsx";
-import EmployerRegistration from "./pages/EmployerRegistration.jsx";
+import Dashboard from "./admin/Dashboard";
+import ChatbotLogs from "./admin/ChatbotLogs";
+import ChatbotLogDetails from "./admin/ChatbotLogDetails";
+import Candidates from "./admin/Candidates";
+import CandidateDetails from "./admin/CandidateDetails";
+import EmployerDetails from "./admin/EmployerDetails";
+import Jobs from "./admin/Jobs";
+import JobDetails from "./admin/JobDetails";
+import Resumes from "./admin/Resumes";
+import ResumeDetails from "./admin/ResumeDetails";
+import Partners from "./admin/Partners";
+import Applications from "./admin/Applications";
+import ApplicationDetails from "./admin/ApplicationDetails";
+import ContactMessages from "./admin/ContactMessages";
+import ContactMessageDetails from "./admin/ContactMessageDetails";
+import AddCandidate from "./admin/AddCandidate";
+import AdminRegistration from "./admin/AdminRegistration";
 
-// ==========================================
-// USER AUTH
-// ==========================================
-
-import UserLogin from "./pages/UserLogin.jsx";
-import UserRegistration from "./pages/UserRegistration.jsx";
-
-// ==========================================
-// ADMIN
-// ==========================================
-
-import AdminLayout from "./admin/AdminLayout.jsx";
-import AdminLogin from "./admin/AdminLogin.jsx";
-import AdminRegistration from "./admin/AdminRegistration.jsx";
-
-import Dashboard from "./admin/Dashboard.jsx";
-import ChatbotLogs from "./admin/ChatbotLogs.jsx";
-import ChatbotLogDetails from "./admin/ChatbotLogDetails.jsx";
-
-import Candidates from "./admin/Candidates.jsx";
-import CandidateDetails from "./admin/CandidateDetails.jsx";
-import AddCandidate from "./admin/AddCandidate.jsx";
-
-import EmployersAdmin from "./admin/Employers.jsx";
-import EmployerDetails from "./admin/EmployerDetails.jsx";
-
-import Jobs from "./admin/Jobs.jsx";
-import JobDetails from "./admin/JobDetails.jsx";
-
-import Resumes from "./admin/Resumes.jsx";
-import ResumeDetails from "./admin/ResumeDetails.jsx";
-
-import Partners from "./admin/Partners.jsx";
-
-import Applications from "./admin/Applications.jsx";
-import ApplicationDetails from "./admin/ApplicationDetails.jsx";
-
-import ContactMessages from "./admin/ContactMessages.jsx";
-import ContactMessageDetails from "./admin/ContactMessageDetails.jsx";
+// Partner Panel
+import PartnerLayout from "./partner/PartnerLayout";
+import PartnerDashboard from "./partner/PartnerDashboard";
 
 
-// ==========================================
-// ADMIN AUTH CHECK
-// ==========================================
+function ProtectedRoute({ children }) {
+  const isLoggedIn =
+    localStorage.getItem("ragasUserLoggedIn") === "true" ||
+    sessionStorage.getItem("ragasUserLoggedIn") === "true";
+
+  if (!isLoggedIn) {
+    return <Navigate to="/user-login" replace />;
+  }
+
+  return children;
+}
+
 
 function AdminRoute() {
-  const isAdminLoggedIn =
+  const token = localStorage.getItem("ragasAdminToken");
+
+  const isLoggedIn =
     localStorage.getItem("ragasAdminLoggedIn") === "true";
 
-  if (!isAdminLoggedIn) {
+  let admin = null;
+
+  try {
+    const savedAdmin = localStorage.getItem("ragasAdmin");
+
+    if (savedAdmin) {
+      admin = JSON.parse(savedAdmin);
+    }
+  } catch (error) {
+    console.error("Invalid admin data:", error);
+
+    localStorage.removeItem("ragasAdmin");
+    localStorage.removeItem("ragasAdminToken");
+    localStorage.removeItem("ragasAdminLoggedIn");
+    localStorage.removeItem("ragasUserRole");
+
+    admin = null;
+  }
+
+  const isAdmin =
+    isLoggedIn &&
+    !!token &&
+    admin?.role === "admin";
+
+  if (!isAdmin) {
     return <AdminLogin />;
   }
 
   return <AdminLayout />;
 }
 
-// ==========================================
-// PUBLIC WEBSITE
-// ==========================================
+
+function PartnerRoute() {
+  const token = localStorage.getItem("ragasPartnerToken");
+
+  const isLoggedIn =
+    localStorage.getItem("ragasPartnerLoggedIn") === "true";
+
+  let partner = null;
+
+  try {
+    const savedPartner = localStorage.getItem("ragasPartner");
+
+    if (savedPartner) {
+      partner = JSON.parse(savedPartner);
+    }
+  } catch (error) {
+    console.error("Invalid partner data:", error);
+
+    localStorage.removeItem("ragasPartner");
+    localStorage.removeItem("ragasPartnerToken");
+    localStorage.removeItem("ragasPartnerLoggedIn");
+
+    partner = null;
+  }
+
+  const isPartner =
+    isLoggedIn &&
+    !!token &&
+    partner?.role === "partner";
+
+  if (!isPartner) {
+    return <Navigate to="/partner-login" replace />;
+  }
+
+  return <PartnerLayout />;
+}
+
 
 function PublicWebsite() {
   return (
@@ -96,336 +150,200 @@ function PublicWebsite() {
       <Navbar />
 
       <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/international-jobs" element={<InternationalJobs />} />
+        <Route path="/domestic-jobs" element={<DomesticJobs />} />
+        <Route path="/industries" element={<Industries />} />
+        <Route path="/current-openings" element={<CurrentOpenings />} />
+        <Route path="/employers" element={<Employers />} />
+        <Route path="/job-seekers" element={<JobSeekers />} />
+        <Route path="/upload-resume" element={<UploadResume />} />
+        <Route path="/post-a-job" element={<PostAJob />} />
+        <Route path="/partner-with-us" element={<PartnerWithUs />} />
+        <Route path="/recruitment-process" element={<RecruitmentProcess />} />
+        <Route path="/visa-support" element={<VisaSupport />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/careers" element={<Careers />} />
 
-        {/* HOME */}
-        <Route
-          path="/home"
-          element={<Home />}
-        />
+        <Route path="/user-login" element={<UserLogin />} />
+        <Route path="/user-registration" element={<UserRegistration />} />
+      
 
-        {/* ABOUT */}
-        <Route
-          path="/about"
-          element={<About />}
-        />
+        <Route path="/partner-login" element={<PartnerLogin />} />
 
-        {/* SERVICES */}
-        <Route
-          path="/services"
-          element={<Services />}
-        />
-
-        {/* INTERNATIONAL JOBS */}
-        <Route
-          path="/international-jobs"
-          element={<InternationalJobs />}
-        />
-
-        {/* DOMESTIC JOBS */}
-        <Route
-          path="/domestic-jobs"
-          element={<DomesticJobs />}
-        />
-
-        {/* INDUSTRIES */}
-        <Route
-          path="/industries"
-          element={<Industries />}
-        />
-
-        {/* CURRENT OPENINGS */}
-        <Route
-          path="/current-openings"
-          element={<ProtectedRoute><CurrentOpenings /></ProtectedRoute>}
-        />
-
-        {/* EMPLOYERS */}
-        <Route
-          path="/employers"
-          element={<Employers />}
-        />
-
-        {/* JOB SEEKERS */}
-        <Route
-          path="/job-seekers"
-          element={<JobSeekers />}
-        />
-
-        {/* UPLOAD RESUME */}
-        <Route
-          path="/upload-resume"
-          element={<UploadResume />}
-        />
-
-        {/* POST A JOB */}
-        <Route
-          path="/post-a-job"
-          element={<ProtectedRoute><PostAJob /></ProtectedRoute>}
-        />
-
-        {/* PARTNER WITH US */}
-        <Route
-          path="/partner-with-us"
-          element={<PartnerWithUs />}
-        />
-
-        {/* RECRUITMENT PROCESS */}
-        <Route
-          path="/recruitment-process"
-          element={<RecruitmentProcess />}
-        />
-
-        {/* VISA & IMMIGRATION SUPPORT */}
-        <Route
-          path="/visa-immigration-support"
-          element={<VisaSupport />}
-        />
-
-        {/* BLOG */}
-        <Route
-          path="/blog"
-          element={<Blog />}
-        />
-
-        {/* TESTIMONIALS */}
-        <Route
-          path="/testimonials"
-          element={<Testimonials />}
-        />
-
-        {/* CONTACT */}
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
-
-        {/* CAREERS */}
-        <Route
-          path="/careers"
-          element={<Careers />}
-        />
-
-        {/* JOB APPLICATION */}
         <Route
           path="/apply/:jobId"
-          element={<ProtectedRoute><JobApplication /></ProtectedRoute>}
-        />
-
-        {/* EMPLOYER REGISTRATION */}
-        <Route
-          path="/employer-registration"
-          element={<EmployerRegistration />}
-        />
-
-        {/* FOOTER */}
-        <Route
-          path="/footer"
           element={
-            <div style={{ minHeight: "100vh" }}>
-              <Footer />
-            </div>
+            <ProtectedRoute>
+              <JobApplication />
+            </ProtectedRoute>
           }
         />
 
-        {/* FALLBACK */}
         <Route
-          path="*"
-          element={<Home />}
+          path="/employer-registration"
+          element={
+            <ProtectedRoute>
+              <EmployerRegistration />
+            </ProtectedRoute>
+          }
         />
 
+        <Route
+          path="/post-job"
+          element={
+            <ProtectedRoute>
+              <PostAJob />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
+        />
       </Routes>
 
       <Chatbot />
-
       <Footer />
     </>
   );
 }
 
 
-// ==========================================
-// MAIN APP
-// ==========================================
+function AdminWebsite() {
+  return (
+    <Routes>
+      <Route path="/admin" element={<AdminRoute />}>
+
+        <Route index element={<Dashboard />} />
+
+        <Route path="dashboard" element={<Dashboard />} />
+
+        <Route path="chatbot-logs" element={<ChatbotLogs />} />
+        <Route
+          path="chatbot-logs/:id"
+          element={<ChatbotLogDetails />}
+        />
+
+        <Route path="candidates" element={<Candidates />} />
+        <Route
+          path="candidates/:id"
+          element={<CandidateDetails />}
+        />
+
+        <Route
+          path="employers/:id"
+          element={<EmployerDetails />}
+        />
+
+        <Route path="jobs" element={<Jobs />} />
+        <Route path="jobs/:id" element={<JobDetails />} />
+
+        <Route path="resumes" element={<Resumes />} />
+        <Route path="resumes/:id" element={<ResumeDetails />} />
+
+        <Route path="partners" element={<Partners />} />
+
+        <Route path="applications" element={<Applications />} />
+        <Route
+          path="applications/:id"
+          element={<ApplicationDetails />}
+        />
+
+        <Route
+          path="contact-messages"
+          element={<ContactMessages />}
+        />
+        <Route
+          path="contact-messages/:id"
+          element={<ContactMessageDetails />}
+        />
+
+        <Route path="add-candidate" element={<AddCandidate />} />
+
+        <Route
+          path="registration"
+          element={<AdminRegistration />}
+        />
+
+      </Route>
+    </Routes>
+  );
+}
+
+
+function PartnerWebsite() {
+  return (
+    <Routes>
+      <Route path="/partner-dashboard" element={<PartnerRoute />}>
+
+        <Route index element={<PartnerDashboard />} />
+
+        <Route
+          path="post-job"
+          element={
+            <div>
+              Post New Job
+            </div>
+          }
+        />
+
+        <Route
+          path="jobs"
+          element={
+            <div>
+              My Jobs
+            </div>
+          }
+        />
+
+        <Route
+          path="applications"
+          element={
+            <div>
+              Applications
+            </div>
+          }
+        />
+
+        <Route
+          path="profile"
+          element={
+            <div>
+              My Profile
+            </div>
+          }
+        />
+
+      </Route>
+    </Routes>
+  );
+}
+
 
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
 
-        {/* =====================================
-            FIRST PAGE
-            USER REGISTRATION
-        ===================================== */}
+        {/* Public Website */}
+        <Route path="/*" element={<PublicWebsite />} />
 
+        {/* Admin Panel */}
+        <Route path="/admin/*" element={<AdminWebsite />} />
+
+        {/* Partner Panel */}
         <Route
-          path="/"
-          element={<PublicWebsite />}
-        />
-
-        {/* =====================================
-            USER REGISTRATION
-        ===================================== */}
-
-        <Route
-          path="/register"
-          element={<UserRegistration />}
-        />
-
-        {/* =====================================
-            USER LOGIN
-        ===================================== */}
-
-        <Route
-          path="/user-login"
-          element={<UserLogin />}
-        />
-
-        {/* =====================================
-            ADMIN REGISTRATION
-        ===================================== */}
-
-        <Route
-          path="/admin/register"
-          element={<AdminRegistration />}
-        />
-
-        {/* =====================================
-            ADMIN PANEL
-        ===================================== */}
-
-        <Route
-          path="/admin"
-          element={<AdminRoute />}
-        >
-
-          {/* DASHBOARD */}
-
-          <Route
-            index
-            element={<Dashboard />}
-          />
-
-          {/* CHATBOT LOGS */}
-
-          <Route
-            path="chatbot-logs"
-            element={<ChatbotLogs />}
-          />
-
-          <Route
-            path="chatbot-logs/:id"
-            element={<ChatbotLogDetails />}
-          />
-
-          {/* APPLICATIONS */}
-
-          <Route
-            path="applications"
-            element={<Applications />}
-          />
-
-          <Route
-            path="applications/:id"
-            element={<ApplicationDetails />}
-          />
-
-          {/* CANDIDATES */}
-
-          <Route
-            path="candidates"
-            element={<Candidates />}
-          />
-
-          <Route
-            path="candidates/add"
-            element={<AddCandidate />}
-          />
-
-          <Route
-            path="candidates/:id"
-            element={<CandidateDetails />}
-          />
-
-          {/* EMPLOYERS */}
-
-          <Route
-            path="employers"
-            element={<EmployersAdmin />}
-          />
-
-          <Route
-            path="employers/:id"
-            element={<EmployerDetails />}
-          />
-
-          {/* JOBS */}
-
-          <Route
-            path="jobs"
-            element={<Jobs />}
-          />
-
-          <Route
-            path="jobs/:id"
-            element={<JobDetails />}
-          />
-
-          {/* RESUMES */}
-
-          <Route
-            path="resumes"
-            element={<Resumes />}
-          />
-
-          <Route
-            path="resumes/:id"
-            element={<ResumeDetails />}
-          />
-
-          {/* PARTNERS */}
-
-          <Route
-            path="partners"
-            element={<Partners />}
-          />
-
-          {/* CONTACT MESSAGES */}
-
-          <Route
-            path="contact-messages"
-            element={<ContactMessages />}
-          />
-
-          <Route
-            path="contact-messages/:id"
-            element={<ContactMessageDetails />}
-          />
-
-        </Route>
-
-
-        {/* =====================================
-            ADMIN LOGIN
-        ===================================== */}
-
-        <Route
-          path="/admin/login"
-          element={<AdminLogin />}
-        />
-
-
-        {/* =====================================
-            PUBLIC WEBSITE FALLBACK
-        ===================================== */}
-
-        <Route
-          path="*"
-          element={<PublicWebsite />}
+          path="/partner-dashboard/*"
+          element={<PartnerWebsite />}
         />
 
       </Routes>
-
     </BrowserRouter>
   );
 }

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
@@ -36,7 +35,7 @@ function AdminLogin() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
+            email: email.trim(),
             password,
           }),
         }
@@ -52,16 +51,32 @@ function AdminLogin() {
         return;
       }
 
-      // Save admin login session
+      /*
+       * ADMIN AUTHENTICATION
+       *
+       * Backend has already verified:
+       * - email
+       * - password
+       * - admin account
+       *
+       * Store the JWT token and admin role.
+       */
+
       localStorage.setItem("ragasAdminLoggedIn", "true");
       localStorage.setItem("ragasAdminToken", data.token);
 
-      if (data.admin) {
-        localStorage.setItem(
-          "ragasAdmin",
-          JSON.stringify(data.admin)
-        );
-      }
+      const adminData = {
+        ...(data.admin || {}),
+        role: "admin",
+      };
+
+      localStorage.setItem(
+        "ragasAdmin",
+        JSON.stringify(adminData)
+      );
+
+      // Store role separately for quick frontend checks
+      localStorage.setItem("ragasUserRole", "admin");
 
       setLoading(false);
 
@@ -82,12 +97,14 @@ function AdminLogin() {
     <div className="admin-login-page">
 
       <div className="admin-login-left">
+
         <div className="login-brand">
           <strong>RAGAS</strong>
           <span>CAREER WORLD</span>
         </div>
 
         <div className="login-left-content">
+
           <p>ADMINISTRATION PORTAL</p>
 
           <h1>
@@ -96,6 +113,7 @@ function AdminLogin() {
           </h1>
 
           <div className="login-features">
+
             <div>
               <span>✓</span>
               <p>Manage candidates & employers</p>
@@ -110,12 +128,15 @@ function AdminLogin() {
               <span>✓</span>
               <p>Control jobs, resumes & partners</p>
             </div>
+
           </div>
+
         </div>
 
         <div className="login-copyright">
           © 2026 RAGAS CAREER WORLD
         </div>
+
       </div>
 
       <div className="admin-login-right">
@@ -145,6 +166,7 @@ function AdminLogin() {
           <form onSubmit={handleLogin}>
 
             <div className="login-field">
+
               <label>Email Address</label>
 
               <input
@@ -154,12 +176,15 @@ function AdminLogin() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+
             </div>
 
             <div className="login-field">
+
               <label>Password</label>
 
               <div className="password-input">
+
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
@@ -170,22 +195,31 @@ function AdminLogin() {
 
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() =>
+                    setShowPassword(!showPassword)
+                  }
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
+
               </div>
+
             </div>
 
             <div className="login-options">
+
               <label>
                 <input type="checkbox" />
                 Remember me
               </label>
 
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => navigate("/forgot-password")}
+              >
                 Forgot password?
               </button>
+
             </div>
 
             <button
@@ -193,7 +227,10 @@ function AdminLogin() {
               className="admin-login-btn"
               disabled={loading}
             >
-              {loading ? "Signing In..." : "Sign In to Admin Panel"}
+              {loading
+                ? "Signing In..."
+                : "Sign In to Admin Panel"}
+
               {!loading && <span>→</span>}
             </button>
 
@@ -213,4 +250,3 @@ function AdminLogin() {
 }
 
 export default AdminLogin;
-
