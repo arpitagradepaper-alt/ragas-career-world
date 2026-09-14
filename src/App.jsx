@@ -246,8 +246,7 @@ function AdminWebsite() {
 function PartnerWebsite() {
   return (
     <Routes>
-      <Route path="/partner-dashboard" element={<PartnerRoute />}>
-
+      <Route path="/" element={<PartnerRoute />}>
         <Route index element={<PartnerDashboard />} />
 
         <Route
@@ -285,7 +284,6 @@ function PartnerWebsite() {
             </div>
           }
         />
-
       </Route>
     </Routes>
   );
@@ -303,6 +301,11 @@ function App() {
         {/* Partner Panel */}
         <Route
           path="/partner-dashboard/*"
+          element={<PartnerWebsite />}
+        />
+
+        <Route
+          path="/partner/*"
           element={<PartnerWebsite />}
         />
 

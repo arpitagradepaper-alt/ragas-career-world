@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const applicationSchema = new mongoose.Schema(
   {
+    partnerId: {
+      type: String,
+      default: null,
+      index: true,
+    },
+
     jobId: {
       type: String,
       required: true,
@@ -100,8 +106,15 @@ const applicationSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["New", "Under Review", "Shortlisted", "Rejected", "Hired"],
-      default: "New",
+      enum: [
+        "Applied",
+        "Under Review",
+        "Shortlisted",
+        "Interview",
+        "Selected",
+        "Rejected",
+      ],
+      default: "Applied",
     },
   },
   {

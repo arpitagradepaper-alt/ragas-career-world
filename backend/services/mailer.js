@@ -20,9 +20,13 @@ function getTransporter() {
     host: SMTP_HOST,
     port: Number(SMTP_PORT),
     secure: process.env.SMTP_SECURE === "true",
+    requireTLS: String(SMTP_PORT) === "587",
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 }
@@ -46,19 +50,19 @@ async function sendPartnerApprovalEmail({
   await transporter.sendMail({
     from:
       process.env.SMTP_FROM ||
-      process.env.SMTP_USER,
+      `RAGAS Career World <${process.env.SMTP_USER}>`,
 
     to: email,
 
     subject:
-      "RAGAS Career World – Partner Account Approved",
+      "RAGAS Career World – Partner Profile Verified",
 
     text: `
 Hello ${contactPerson},
 
-Your partner registration for ${companyName} has been approved by RAGAS Career World.
+Your partner profile for ${companyName} has been verified by RAGAS Career World.
 
-You can now log in to your Partner Dashboard.
+You can now log in to your Partner Dashboard using the credentials below:
 
 Login Email: ${email}
 Temporary Password: ${temporaryPassword}
@@ -80,9 +84,9 @@ RAGAS Career World
         <p>Hello ${contactPerson},</p>
 
         <p>
-          Your partner registration for
+          Your partner profile for
           <strong>${companyName}</strong>
-          has been approved by RAGAS Career World.
+          has been verified by RAGAS Career World.
         </p>
 
         <p>

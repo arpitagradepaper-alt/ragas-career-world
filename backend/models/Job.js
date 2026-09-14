@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const jobSchema = new mongoose.Schema(
   {
+    partnerId: {
+      type: String,
+      default: null,
+      index: true,
+    },
+
     companyName: {
       type: String,
       required: true,

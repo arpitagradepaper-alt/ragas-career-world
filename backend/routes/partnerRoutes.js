@@ -6,6 +6,8 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
 const Partner = require("../models/Partner");
+const Job = require("../models/Job");
+const Application = require("../models/Application");
 const { authMiddleware, adminMiddleware } = require("../middleware/authMiddleware");
 const { sendPartnerApprovalEmail } = require("../services/mailer");
 
@@ -165,6 +167,63 @@ router.get(
 ========================================================= */
 
 router.get(
+  "/dashboard",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      if (!req.user || req.user.role !== "partner") {
+        return res.status(403).json({
+          success: false,
+          message: "Partner access required.",
+        });
+      }
+
+      const partnerId = String(req.user.id || req.user._id || "");
+      if (!partnerId) {
+        return res.status(401).json({
+          success: false,
+          message: "Partner identity missing.",
+        });
+      }
+
+      const [jobs, applications, partner] = await Promise.all([
+        Job.find({ partnerId }).sort({ createdAt: -1 }),
+        Application.find({ partnerId }).sort({ createdAt: -1 }),
+        Partner.findById(partnerId).lean(),
+      ]);
+
+      const stats = {
+        totalJobs: jobs.length,
+        activeJobs: jobs.filter((job) => job.status === "Approved").length,
+        closedJobs: jobs.filter((job) => job.status === "Closed").length,
+        totalApplications: applications.length,
+        pendingReview: jobs.filter((job) => job.status === "Pending").length,
+        shortlisted: applications.filter((app) => app.status === "Shortlisted").length,
+        interviews: applications.filter((app) => app.status === "Interview").length,
+        selectedCandidates: applications.filter((app) => app.status === "Selected").length,
+      };
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          partner,
+          stats,
+          jobs,
+          applications,
+        },
+      });
+    } catch (error) {
+      console.error("Partner dashboard data error:", error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Failed to load partner dashboard data.",
+      });
+    }
+  }
+);
+
+router.get(
   "/:id",
   authMiddleware,
   adminMiddleware,
@@ -278,6 +337,8 @@ router.patch(
 
       /* -----------------------------------------
          SEND EMAIL
+         Do not block the approval result if the
+         mailer transport cannot deliver the email.
       ----------------------------------------- */
 
       try {
@@ -292,12 +353,6 @@ router.patch(
           "Partner approval email error:",
           emailError
         );
-
-        return res.status(500).json({
-          success: false,
-          message:
-            "Partner was approved, but the login email could not be sent.",
-        });
       }
 
       return res.status(200).json({

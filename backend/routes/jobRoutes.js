@@ -30,6 +30,7 @@ router.post("/", async (req, res) => {
       contactEmail,
       contactPhone,
       openings,
+      partnerId,
     } = req.body || {};
 
     // Required fields
@@ -48,6 +49,7 @@ router.post("/", async (req, res) => {
     }
 
     const job = new Job({
+      partnerId: partnerId || null,
       companyName,
       jobTitle,
       jobType,

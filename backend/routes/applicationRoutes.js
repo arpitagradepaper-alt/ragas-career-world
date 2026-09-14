@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 
 const Application = require("../models/Application");
+const Job = require("../models/Job");
 
 const router = express.Router();
 
@@ -92,6 +93,17 @@ router.post(
         coverLetter,
       } = req.body;
 
+      let partnerId = null;
+      let actualJobTitle = jobTitle;
+
+      if (jobId) {
+        const job = await Job.findById(jobId);
+        if (job) {
+          partnerId = job.partnerId || null;
+          actualJobTitle = job.jobTitle || actualJobTitle;
+        }
+      }
+
     
       if (
         !jobId ||
@@ -120,8 +132,9 @@ router.post(
 
       const application =
         new Application({
+          partnerId,
           jobId,
-          jobTitle,
+          jobTitle: actualJobTitle,
           fullName,
           email,
           phone,
@@ -141,7 +154,7 @@ router.post(
           resumeFile:
             req.file.filename,
 
-          status: "New",
+          status: "Applied",
         });
 
       await application.save();
@@ -235,11 +248,12 @@ router.patch("/:id/status", async (req, res) => {
     const { status } = req.body;
 
     const allowedStatuses = [
-      "New",
+      "Applied",
       "Under Review",
       "Shortlisted",
+      "Interview",
+      "Selected",
       "Rejected",
-      "Hired",
     ];
 
    
