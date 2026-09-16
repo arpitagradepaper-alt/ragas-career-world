@@ -33,7 +33,69 @@ const steps = [
   },
 ];
 
-function RecruitmentProcess() {
+function RecruitmentOverview() {
+  return (
+    <>
+      <div className="recruitment-heading">
+        <p className="recruitment-eyebrow">OUR METHODOLOGY</p>
+        <h1>Recruitment Process</h1>
+        <p>
+          A structured and transparent recruitment journey designed to connect
+          employers with qualified talent while providing candidates with
+          professional support from sourcing to onboarding.
+        </p>
+      </div>
+
+      <div className="recruitment-intro">
+        <div className="recruitment-intro-card">
+          <span>01</span>
+          <div>
+            <h3>Employer Requirements</h3>
+            <p>
+              We understand the role, required qualifications, experience,
+              skills, location and hiring expectations before beginning the
+              recruitment process.
+            </p>
+          </div>
+        </div>
+
+        <div className="recruitment-intro-card">
+          <span>02</span>
+          <div>
+            <h3>Candidate Evaluation</h3>
+            <p>
+              Candidate profiles are reviewed against relevant job
+              requirements to identify suitable professionals for the role.
+            </p>
+          </div>
+        </div>
+
+        <div className="recruitment-intro-card">
+          <span>03</span>
+          <div>
+            <h3>Placement Support</h3>
+            <p>
+              Our team coordinates interviews, selection, documentation,
+              joining and relevant overseas employment processes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function RecruitmentProcess({ featuredOnly = false }) {
+  if (featuredOnly) {
+    return (
+      <main className="recruitment-process-page">
+        <section className="recruitment-process-main">
+          <RecruitmentOverview />
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="recruitment-process-page">
 
@@ -43,96 +105,7 @@ function RecruitmentProcess() {
 
         {/* ================= HEADER ================= */}
 
-        <div className="recruitment-heading">
-
-          <p className="recruitment-eyebrow">
-            OUR METHODOLOGY
-          </p>
-
-          <h1>
-            Recruitment Process
-          </h1>
-
-          <p>
-            A structured and transparent recruitment journey designed to
-            connect employers with qualified talent while providing
-            candidates with professional support from sourcing to onboarding.
-          </p>
-
-        </div>
-
-
-        {/* ================= INTRO CARDS ================= */}
-
-        <div className="recruitment-intro">
-
-          <div className="recruitment-intro-card">
-
-            <span>
-              01
-            </span>
-
-            <div>
-
-              <h3>
-                Employer Requirements
-              </h3>
-
-              <p>
-                We understand the role, required qualifications, experience,
-                skills, location and hiring expectations before beginning the
-                recruitment process.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <div className="recruitment-intro-card">
-
-            <span>
-              02
-            </span>
-
-            <div>
-
-              <h3>
-                Candidate Evaluation
-              </h3>
-
-              <p>
-                Candidate profiles are reviewed against relevant job
-                requirements to identify suitable professionals for the role.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <div className="recruitment-intro-card">
-
-            <span>
-              03
-            </span>
-
-            <div>
-
-              <h3>
-                Placement Support
-              </h3>
-
-              <p>
-                Our team coordinates interviews, selection, documentation,
-                joining and relevant overseas employment processes.
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
+        <RecruitmentOverview />
 
 
         {/* ================= TIMELINE HEADER ================= */}

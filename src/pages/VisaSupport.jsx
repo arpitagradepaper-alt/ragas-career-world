@@ -64,7 +64,69 @@ const processSteps = [
   },
 ];
 
-function VisaSupport() {
+function VisaOverview() {
+  return (
+    <>
+      <div className="visa-heading">
+        <p className="visa-eyebrow">SUPPORTING YOUR MOVE</p>
+        <h1>Visa &amp; Immigration Support</h1>
+        <p>
+          Practical guidance for candidates moving abroad for employment,
+          from documentation and work permits to employer coordination and
+          visa-related processes.
+        </p>
+      </div>
+
+      <div className="visa-intro">
+        <div className="visa-intro-card">
+          <span>01</span>
+          <div>
+            <h3>Clear Guidance</h3>
+            <p>
+              Understand the key documentation, employment and
+              immigration-related requirements before starting your overseas
+              journey.
+            </p>
+          </div>
+        </div>
+
+        <div className="visa-intro-card">
+          <span>02</span>
+          <div>
+            <h3>Structured Documentation</h3>
+            <p>
+              Follow practical checklists to organise employment, identity
+              and supporting documents required for your role and destination.
+            </p>
+          </div>
+        </div>
+
+        <div className="visa-intro-card">
+          <span>03</span>
+          <div>
+            <h3>Recruitment Coordination</h3>
+            <p>
+              Receive support in coordinating relevant documentation, employer
+              communication and recruitment timelines.
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function VisaSupport({ featuredOnly = false }) {
+  if (featuredOnly) {
+    return (
+      <main className="visa-page">
+        <section className="visa-main">
+          <VisaOverview />
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="visa-page">
 
@@ -72,91 +134,7 @@ function VisaSupport() {
 
         {/* ================= HEADER ================= */}
 
-        <div className="visa-heading">
-
-          <p className="visa-eyebrow">
-            SUPPORTING YOUR MOVE
-          </p>
-
-          <h1>
-            Visa &amp; Immigration Support
-          </h1>
-
-          <p>
-            Practical guidance for candidates moving abroad for employment,
-            from documentation and work permits to employer coordination
-            and visa-related processes.
-          </p>
-
-        </div>
-
-
-        {/* ================= INTRO ================= */}
-
-        <div className="visa-intro">
-
-          <div className="visa-intro-card">
-
-            <span>01</span>
-
-            <div>
-
-              <h3>
-                Clear Guidance
-              </h3>
-
-              <p>
-                Understand the key documentation, employment and
-                immigration-related requirements before starting your
-                overseas journey.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <div className="visa-intro-card">
-
-            <span>02</span>
-
-            <div>
-
-              <h3>
-                Structured Documentation
-              </h3>
-
-              <p>
-                Follow practical checklists to organise employment,
-                identity and supporting documents required for your role
-                and destination.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <div className="visa-intro-card">
-
-            <span>03</span>
-
-            <div>
-
-              <h3>
-                Recruitment Coordination
-              </h3>
-
-              <p>
-                Receive support in coordinating relevant documentation,
-                employer communication and recruitment timelines.
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
+        <VisaOverview />
 
 
         {/* ================= SUPPORT SERVICES ================= */}

@@ -63,7 +63,105 @@ const jobs = [
   },
 ];
 
-function InternationalJobs() {
+function FeaturedInternationalJobs({ onApply, onViewJobs }) {
+  return (
+    <div className="international-jobs">
+
+      <div className="international-section-header">
+
+        <div>
+
+          <p className="jobs-eyebrow">
+            FEATURED OVERSEAS ROLES
+          </p>
+
+          <h2>
+            Current International Opportunities
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          className="view-all-jobs"
+          onClick={onViewJobs}
+        >
+          View All Jobs
+          <ArrowRight size={16} />
+        </button>
+
+      </div>
+
+      <div className="international-job-list">
+
+        {jobs.map((job) => (
+
+          <div
+            className="international-job-card"
+            key={job.id}
+          >
+
+            <div className="international-job-info">
+
+              <div className="job-icon">
+                <Briefcase
+                  size={17}
+                  strokeWidth={1.8}
+                />
+              </div>
+
+              <div>
+
+                <h3>
+                  {job.title}
+                </h3>
+
+                <p>
+                  {job.category}
+
+                  <span className="job-dot">
+                    •
+                  </span>
+
+                  <MapPin
+                    size={12}
+                    strokeWidth={1.8}
+                  />
+
+                  {job.location}
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="international-job-action">
+
+              <strong>
+                {job.salary}
+              </strong>
+
+              <button
+                type="button"
+                onClick={() => onApply(job.id)}
+              >
+                Apply
+                <ArrowRight size={14} />
+              </button>
+
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </div>
+  );
+}
+
+function InternationalJobs({ featuredOnly = false }) {
   const navigate = useNavigate();
 
   const handleApply = (jobId) => {
@@ -73,6 +171,19 @@ function InternationalJobs() {
   const handleViewJobs = () => {
     navigate("/current-openings");
   };
+
+  if (featuredOnly) {
+    return (
+      <main className="international-page">
+        <section className="international-main">
+          <FeaturedInternationalJobs
+            onApply={handleApply}
+            onViewJobs={handleViewJobs}
+          />
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="international-page">
@@ -228,101 +339,10 @@ function InternationalJobs() {
 
         {/* ================= FEATURED JOBS ================= */}
 
-        <div className="international-jobs">
-
-          <div className="international-section-header">
-
-            <div>
-
-              <p className="jobs-eyebrow">
-                FEATURED OVERSEAS ROLES
-              </p>
-
-              <h2>
-                Current International Opportunities
-              </h2>
-
-            </div>
-
-            <button
-              type="button"
-              className="view-all-jobs"
-              onClick={handleViewJobs}
-            >
-              View All Jobs
-              <ArrowRight size={16} />
-            </button>
-
-          </div>
-
-
-          <div className="international-job-list">
-
-            {jobs.map((job) => (
-
-              <div
-                className="international-job-card"
-                key={job.id}
-              >
-
-                <div className="international-job-info">
-
-                  <div className="job-icon">
-                    <Briefcase
-                      size={17}
-                      strokeWidth={1.8}
-                    />
-                  </div>
-
-                  <div>
-
-                    <h3>
-                      {job.title}
-                    </h3>
-
-                    <p>
-                      {job.category}
-
-                      <span className="job-dot">
-                        •
-                      </span>
-
-                      <MapPin
-                        size={12}
-                        strokeWidth={1.8}
-                      />
-
-                      {job.location}
-                    </p>
-
-                  </div>
-
-                </div>
-
-
-                <div className="international-job-action">
-
-                  <strong>
-                    {job.salary}
-                  </strong>
-
-                  <button
-                    type="button"
-                    onClick={() => handleApply(job.id)}
-                  >
-                    Apply
-                    <ArrowRight size={14} />
-                  </button>
-
-                </div>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
+        <FeaturedInternationalJobs
+          onApply={handleApply}
+          onViewJobs={handleViewJobs}
+        />
 
 
         {/* ================= INDUSTRIES ================= */}

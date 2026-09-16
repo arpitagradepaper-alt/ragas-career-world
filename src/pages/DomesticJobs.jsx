@@ -61,7 +61,60 @@ const jobs = [
   },
 ];
 
-function DomesticJobs() {
+function FeaturedDomesticJobs({ onApply, onViewJobs }) {
+  return (
+    <div className="domestic-openings">
+      <div className="domestic-section-header">
+        <div>
+          <p className="openings-eyebrow">
+            FEATURED OPENINGS — MNCs, Startups & Government Projects
+          </p>
+          <h2>Current Domestic Opportunities</h2>
+        </div>
+
+        <button
+          type="button"
+          className="view-all-domestic"
+          onClick={onViewJobs}
+        >
+          View All Jobs
+          <ArrowRight size={16} />
+        </button>
+      </div>
+
+      <div className="domestic-job-list">
+        {jobs.map((job) => (
+          <div className="domestic-job-card" key={job.id}>
+            <div className="domestic-job-info">
+              <div className="domestic-job-icon">
+                <Briefcase size={16} strokeWidth={1.8} />
+              </div>
+
+              <div>
+                <h3>{job.title}</h3>
+                <p>
+                  {job.category}
+                  <span>•</span>
+                  {job.location}
+                </p>
+              </div>
+            </div>
+
+            <div className="domestic-job-action">
+              <span>Full-time</span>
+              <button type="button" onClick={() => onApply(job.id)}>
+                Apply
+                <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DomesticJobs({ featuredOnly = false }) {
   const navigate = useNavigate();
 
   const handleApply = (jobId) => {
@@ -71,6 +124,19 @@ function DomesticJobs() {
   const handleViewJobs = () => {
     navigate("/current-openings");
   };
+
+  if (featuredOnly) {
+    return (
+      <main className="domestic-page">
+        <section className="domestic-main">
+          <FeaturedDomesticJobs
+            onApply={handleApply}
+            onViewJobs={handleViewJobs}
+          />
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="domestic-page">
@@ -232,100 +298,10 @@ function DomesticJobs() {
 
         {/* ================= FEATURED OPENINGS ================= */}
 
-        <div className="domestic-openings">
-
-          <div className="domestic-section-header">
-
-            <div>
-
-              <p className="openings-eyebrow">
-                FEATURED OPENINGS — MNCs, Startups & Government Projects
-              </p>
-
-              <h2>
-                Current Domestic Opportunities
-              </h2>
-
-            </div>
-
-            <button
-              type="button"
-              className="view-all-domestic"
-              onClick={handleViewJobs}
-            >
-              View All Jobs
-              <ArrowRight size={16} />
-            </button>
-
-          </div>
-
-
-          <div className="domestic-job-list">
-
-            {jobs.map((job) => (
-
-              <div
-                className="domestic-job-card"
-                key={job.id}
-              >
-
-                <div className="domestic-job-info">
-
-                  <div className="domestic-job-icon">
-
-                    <Briefcase
-                      size={16}
-                      strokeWidth={1.8}
-                    />
-
-                  </div>
-
-                  <div>
-
-                    <h3>
-                      {job.title}
-                    </h3>
-
-                    <p>
-
-                      {job.category}
-
-                      <span>
-                        •
-                      </span>
-
-                      {job.location}
-
-                    </p>
-
-                  </div>
-
-                </div>
-
-
-                <div className="domestic-job-action">
-
-                  <span>
-                    Full-time
-                  </span>
-
-                  <button
-                    type="button"
-                    onClick={() => handleApply(job.id)}
-                  >
-                    Apply
-                    <ArrowRight size={14} />
-                  </button>
-
-                </div>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
+        <FeaturedDomesticJobs
+          onApply={handleApply}
+          onViewJobs={handleViewJobs}
+        />
 
 
         {/* ================= INDUSTRIES ================= */}
