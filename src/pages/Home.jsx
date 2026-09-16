@@ -6,38 +6,6 @@ import {
   MapPin,
   BriefcaseBusiness,
   Building2,
-  Code2,
-  Landmark,
-  Plane,
-  Hotel,
-  Factory,
-  GraduationCap,
-  Car,
-  Utensils,
-  ShoppingBag,
-  Truck,
-  ShieldCheck,
-  Stethoscope,
-  Scale,
-  Wrench,
-  Users,
-  Globe2,
-  Package,
-  Megaphone,
-  Banknote,
-  Cpu,
-  HardHat,
-  Radio,
-  Ship,
-  Zap,
-  FlaskConical,
-  Leaf,
-  Newspaper,
-  Camera,
-  Palette,
-  Music,
-  Dumbbell,
-  Gamepad2,
 } from "lucide-react";
 
 import About from "./About";
@@ -61,58 +29,12 @@ import homeRecruitment from "../assets/home-recruitment.png";
 
 import "./Home.css";
 
-const industries = [
-  { name: "IT & Software", icon: Code2 },
-  { name: "Banking & Finance", icon: Landmark },
-  { name: "Aviation & Airports", icon: Plane },
-  { name: "Hospitality & Hotels", icon: Hotel },
-  { name: "Healthcare & Hospitals", icon: Stethoscope },
-  { name: "Manufacturing", icon: Factory },
-  { name: "Education & Training", icon: GraduationCap },
-  { name: "Automotive", icon: Car },
-  { name: "Food & Beverage", icon: Utensils },
-  { name: "Retail & E-commerce", icon: ShoppingBag },
-  { name: "Logistics & Transportation", icon: Truck },
-  { name: "Security Services", icon: ShieldCheck },
-  { name: "Medical & Pharma", icon: Stethoscope },
-  { name: "Construction", icon: HardHat },
-  { name: "Engineering", icon: Wrench },
-  { name: "Legal Services", icon: Scale },
-  { name: "Human Resources", icon: Users },
-  { name: "International Trade", icon: Globe2 },
-  { name: "Warehouse & Supply Chain", icon: Package },
-  { name: "Marketing & Advertising", icon: Megaphone },
-  { name: "Insurance", icon: Banknote },
-  { name: "Technology & AI", icon: Cpu },
-  { name: "Oil & Gas", icon: Zap },
-  { name: "Pharmaceuticals", icon: FlaskConical },
-  { name: "Agriculture", icon: Leaf },
-  { name: "Media & Journalism", icon: Newspaper },
-  { name: "Photography", icon: Camera },
-  { name: "Design & Creative", icon: Palette },
-  { name: "Entertainment", icon: Music },
-  { name: "Sports & Fitness", icon: Dumbbell },
-  { name: "Gaming", icon: Gamepad2 },
-  { name: "Telecommunications", icon: Radio },
-  { name: "Shipping & Maritime", icon: Ship },
-  { name: "Real Estate", icon: Building2 },
-  { name: "Travel & Tourism", icon: Globe2 },
-  { name: "Government Services", icon: Landmark },
-  { name: "Consulting", icon: BriefcaseBusiness },
-  { name: "Energy & Utilities", icon: Zap },
-  { name: "NGO & Social Services", icon: Users },
-  { name: "Other Industries", icon: BriefcaseBusiness },
-];
-
 export function Home() {
   const navigate = useNavigate();
 
   const isUserLoggedIn =
     localStorage.getItem("ragasUserLoggedIn") === "true" ||
     sessionStorage.getItem("ragasUserLoggedIn") === "true";
-
-  const [showAllIndustries, setShowAllIndustries] =
-    useState(false);
 
   useEffect(() => {
     const sectionId = window.location.hash.slice(1);
@@ -188,10 +110,6 @@ export function Home() {
   }, []);
 
   const handleSearch = () => {
-    navigate("/current-openings");
-  };
-
-  const handleIndustryOpenings = () => {
     navigate("/current-openings");
   };
 
@@ -301,82 +219,6 @@ export function Home() {
 
           </div>
         </div>
-      </section>
-
-      {/* INDUSTRIES */}
-
-      <section
-        id="industries"
-        className="page-slide"
-      >
-        <section className="industries-section">
-
-          <div className="section-top">
-
-            <div>
-              <p className="section-eyebrow">
-                FEATURED VERTICALS
-              </p>
-
-              <h2>Industries We Serve</h2>
-            </div>
-
-            <button
-              type="button"
-              className="outline-button"
-              onClick={() =>
-                setShowAllIndustries(
-                  (prev) => !prev
-                )
-              }
-            >
-              {showAllIndustries
-                ? "Show less"
-                : "View all 40 industries"}
-            </button>
-
-          </div>
-
-          <div
-            className={`industry-grid ${
-              showAllIndustries
-                ? "industry-grid-expanded"
-                : ""
-            }`}
-          >
-            {(showAllIndustries
-              ? industries
-              : industries.slice(0, 12)
-            ).map((industry) => {
-
-              const Icon = industry.icon;
-
-              return (
-                <div
-                  className="industry-card"
-                  key={industry.name}
-                >
-                  <div className="industry-icon">
-                    <Icon size={18} />
-                  </div>
-
-                  <h3>{industry.name}</h3>
-
-                  <button
-                    type="button"
-                    className="industry-opening-link"
-                    onClick={
-                      handleIndustryOpenings
-                    }
-                  >
-                    View Openings →
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-
-        </section>
       </section>
 
       {/* CURRENT OPENINGS */}

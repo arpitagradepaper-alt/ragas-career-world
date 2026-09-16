@@ -29,11 +29,39 @@ function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
 
   const scrollToSection = (id) => {
+    const pageRoutes = {
+      about: "/about",
+      services: "/services",
+      "international-jobs": "/international-jobs",
+      "domestic-jobs": "/domestic-jobs",
+      industries: "/industries",
+      "current-openings": "/current-openings",
+      employers: "/employers",
+      "job-seekers": "/job-seekers",
+      "upload-resume": "/upload-resume",
+      "post-a-job": "/post-a-job",
+      "partner-with-us": "/partner-with-us",
+      "recruitment-process": "/recruitment-process",
+      "visa-immigration": "/visa-support",
+      blog: "/blog",
+      testimonials: "/testimonials",
+      contact: "/contact",
+      careers: "/careers",
+    };
+
+    if (id !== "home") {
+      setMobileMenuOpen(false);
+      setMobileDropdown(null);
+      setDesktopDropdown(null);
+      navigate(pageRoutes[id] || "/");
+      return;
+    }
+
     if (location.pathname !== "/") {
       setMobileMenuOpen(false);
       setMobileDropdown(null);
       setDesktopDropdown(null);
-      navigate(`/#${id}`);
+      navigate("/");
       return;
     }
 
@@ -377,21 +405,6 @@ function Navbar() {
             )}
           </div>
 
-          <a
-            href="#industries"
-            className={
-              activeSection === "industries"
-                ? "active"
-                : ""
-            }
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("industries");
-            }}
-          >
-            Industries
-          </a>
-
           {/* CANDIDATES DROPDOWN */}
           <div
             className={`navbar-dropdown ${
@@ -507,45 +520,6 @@ function Navbar() {
           </div>
 
           <a
-            href="#blog"
-            className={activeSection === "blog" ? "active" : ""}
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("blog");
-            }}
-          >
-            Blog
-          </a>
-
-          <a
-            href="#testimonials"
-            className={
-              activeSection === "testimonials"
-                ? "active"
-                : ""
-            }
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("testimonials");
-            }}
-          >
-            Testimonials
-          </a>
-
-          <a
-            href="#careers"
-            className={
-              activeSection === "careers" ? "active" : ""
-            }
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("careers");
-            }}
-          >
-            Careers
-          </a>
-
-          <a
             href="#contact"
             className={
               activeSection === "contact" ? "active" : ""
@@ -561,13 +535,17 @@ function Navbar() {
 
         <div className="navbar-actions">
           {/* DESKTOP CTA */}
-          <button
-            type="button"
-            className="navbar-cta"
-            onClick={() => navigate("/user-login")}
-          >
-            Login
-          </button>
+          {!isUserLoggedIn && (
+            <button
+              type="button"
+              className="navbar-cta"
+              onClick={() => navigate("/user-login")}
+              aria-label="Open user login"
+            >
+              <UserRound size={17} aria-hidden="true" />
+              User
+            </button>
+          )}
 
           {isUserLoggedIn && (
             <div className="navbar-profile-menu">
@@ -778,21 +756,6 @@ function Navbar() {
           )}
         </div>
 
-        <a
-          href="#industries"
-          className={
-            activeSection === "industries"
-              ? "active"
-              : ""
-          }
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("industries");
-          }}
-        >
-          Industries
-        </a>
-
         <div className="mobile-dropdown">
           <button
             type="button"
@@ -890,47 +853,6 @@ function Navbar() {
         </div>
 
         <a
-          href="#blog"
-          className={
-            activeSection === "blog" ? "active" : ""
-          }
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("blog");
-          }}
-        >
-          Blog
-        </a>
-
-        <a
-          href="#testimonials"
-          className={
-            activeSection === "testimonials"
-              ? "active"
-              : ""
-          }
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("testimonials");
-          }}
-        >
-          Testimonials
-        </a>
-
-        <a
-          href="#careers"
-          className={
-            activeSection === "careers" ? "active" : ""
-          }
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("careers");
-          }}
-        >
-          Careers
-        </a>
-
-        <a
           href="#contact"
           className={
             activeSection === "contact" ? "active" : ""
@@ -947,8 +869,10 @@ function Navbar() {
           type="button"
           className="mobile-get-started"
           onClick={() => navigate("/user-login")}
+          aria-label="Open user login"
         >
-          Login
+          <UserRound size={17} aria-hidden="true" />
+          User
         </button>
       </div>
     </header>
