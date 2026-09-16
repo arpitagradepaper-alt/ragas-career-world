@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import HomeAbout from "./HomeAbout";
-import Services from "./Services";
+import HomeServices from "./HomeServices";
 import InternationalJobs from "./InternationalJobs";
 import DomesticJobs from "./DomesticJobs";
 import CurrentOpenings from "./CurrentOpenings";
@@ -247,7 +247,7 @@ export function Home() {
         id="services"
         className="page-slide home-existing-section"
       >
-        <Services />
+        <HomeServices />
       </section>
 
       {/* INTERNATIONAL JOBS */}
