@@ -114,6 +114,8 @@ function Navbar() {
   };
 
   useEffect(() => {
+    if (location.pathname !== "/") return undefined;
+
     const sectionIds = [
       "home",
       "about",
@@ -168,7 +170,32 @@ function Navbar() {
 
     return () =>
       window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const routeSections = {
+      "/": "home",
+      "/about": "about",
+      "/services": "services",
+      "/international-jobs": "international-jobs",
+      "/domestic-jobs": "domestic-jobs",
+      "/industries": "industries",
+      "/current-openings": "current-openings",
+      "/employers": "employers",
+      "/job-seekers": "job-seekers",
+      "/upload-resume": "upload-resume",
+      "/post-a-job": "post-a-job",
+      "/partner-with-us": "partner-with-us",
+      "/recruitment-process": "recruitment-process",
+      "/visa-support": "visa-immigration",
+      "/blog": "blog",
+      "/testimonials": "testimonials",
+      "/contact": "contact",
+      "/careers": "careers",
+    };
+
+    setActiveSection(routeSections[location.pathname] || "home");
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {

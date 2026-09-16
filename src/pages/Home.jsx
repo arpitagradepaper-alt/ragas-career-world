@@ -8,7 +8,7 @@ import {
   Building2,
 } from "lucide-react";
 
-import About from "./About";
+import HomeAbout from "./HomeAbout";
 import Services from "./Services";
 import InternationalJobs from "./InternationalJobs";
 import DomesticJobs from "./DomesticJobs";
@@ -238,7 +238,7 @@ export function Home() {
         id="about"
         className="page-slide home-existing-section"
       >
-        <About />
+        <HomeAbout />
       </section>
 
       {/* SERVICES */}
