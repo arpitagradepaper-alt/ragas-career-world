@@ -564,9 +564,9 @@ function Navbar() {
           <button
             type="button"
             className="navbar-cta"
-            onClick={() => scrollToSection("job-seekers")}
+            onClick={() => navigate("/user-login")}
           >
-            Get Started
+            Login
           </button>
 
           {isUserLoggedIn && (
@@ -946,11 +946,9 @@ function Navbar() {
         <button
           type="button"
           className="mobile-get-started"
-          onClick={() =>
-            scrollToSection("job-seekers")
-          }
+          onClick={() => navigate("/user-login")}
         >
-          Get Started
+          Login
         </button>
       </div>
     </header>

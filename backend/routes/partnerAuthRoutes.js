@@ -123,6 +123,7 @@ router.post("/login", async (req, res) => {
 
       partner: {
         id: partner._id,
+        role: "partner",
         companyName: partner.companyName,
         contactPerson: partner.contactPerson,
         email: partner.email,

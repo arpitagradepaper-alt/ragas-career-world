@@ -115,15 +115,6 @@ function AdminLayout() {
             Candidates
           </NavLink>
 
-          {/* EMPLOYERS */}
-          <NavLink
-            to="/admin/employers"
-            onClick={closeSidebar}
-          >
-            <span>▤</span>
-            Employers
-          </NavLink>
-
           {/* JOB POSTS */}
           <NavLink
             to="/admin/jobs"

@@ -106,7 +106,7 @@ function AdminRoute() {
     admin?.role === "admin";
 
   if (!isAdmin) {
-    return <AdminLogin />;
+    return <Navigate to="/admin/login" replace />;
   }
 
   return <AdminLayout />;
@@ -230,14 +230,13 @@ function AdminWebsite() {
     <Routes>
       <Route path="login" element={<AdminLogin />} />
 
-      <Route path="" element={<AdminRoute />}>
+      <Route element={<AdminRoute />}>
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="chatbot-logs" element={<ChatbotLogs />} />
         <Route path="chatbot-logs/:id" element={<ChatbotLogDetails />} />
         <Route path="candidates" element={<Candidates />} />
         <Route path="candidates/:id" element={<CandidateDetails />} />
-        <Route path="employers/:id" element={<EmployerDetails />} />
         <Route path="jobs" element={<Jobs />} />
         <Route path="jobs/:id" element={<JobDetails />} />
         <Route path="resumes" element={<Resumes />} />

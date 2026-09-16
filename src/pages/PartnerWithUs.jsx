@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./PartnerWithUs.css";
 
 const API_URL = "http://localhost:5000/api/partners";
@@ -146,6 +147,13 @@ function PartnerWithUs() {
             account — share job orders, track referrals, and see commission
             terms up front.
           </p>
+
+          <Link
+            to="/partner-login"
+            className="partner-login-link"
+          >
+            Partner Login
+          </Link>
 
           <div className="partner-steps">
 
