@@ -1,6 +1,7 @@
 import {
   MapPin,
   Briefcase,
+  ArrowRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -67,10 +68,18 @@ function DomesticJobs() {
     navigate(`/apply/${jobId}`);
   };
 
+  const handleViewJobs = () => {
+    navigate("/current-openings");
+  };
+
   return (
     <main className="domestic-page">
 
+      {/* ================= MAIN ================= */}
+
       <section className="domestic-main">
+
+        {/* ================= HEADER ================= */}
 
         <div className="domestic-heading">
 
@@ -82,21 +91,128 @@ function DomesticJobs() {
             Domestic Jobs
           </h1>
 
+          <p className="domestic-description">
+            Explore career opportunities with employers across India.
+            RAGAS CAREER WORLD connects qualified candidates with
+            organisations across multiple industries, locations and
+            experience levels through professional recruitment support.
+          </p>
+
         </div>
+
+
+        {/* ================= INTRO ================= */}
+
+        <div className="domestic-intro">
+
+          <div className="domestic-intro-card">
+
+            <span className="intro-number">
+              01
+            </span>
+
+            <div>
+
+              <h3>
+                Opportunities Across India
+              </h3>
+
+              <p>
+                Discover employment opportunities across major cities,
+                industrial hubs and emerging business locations throughout
+                India.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="domestic-intro-card">
+
+            <span className="intro-number">
+              02
+            </span>
+
+            <div>
+
+              <h3>
+                Multiple Industries
+              </h3>
+
+              <p>
+                Find roles across IT, banking, manufacturing, aviation,
+                healthcare, hospitality, engineering, logistics and other
+                growing sectors.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="domestic-intro-card">
+
+            <span className="intro-number">
+              03
+            </span>
+
+            <div>
+
+              <h3>
+                Professional Recruitment Support
+              </h3>
+
+              <p>
+                Our recruitment team supports candidates through profile
+                screening, employer coordination, interviews and the
+                selection process.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        {/* ================= STATES ================= */}
+
+        <div className="domestic-section-header">
+
+          <div>
+
+            <p className="openings-eyebrow">
+              TOP RECRUITMENT LOCATIONS
+            </p>
+
+            <h2>
+              Explore Jobs by Location
+            </h2>
+
+          </div>
+
+        </div>
+
 
         <div className="state-grid">
 
           {states.map((state, index) => (
+
             <div
               className="state-card"
               key={index}
             >
 
               <div className="state-icon">
-                <MapPin size={17} />
+                <MapPin
+                  size={17}
+                  strokeWidth={1.8}
+                />
               </div>
 
               <div>
+
                 <h3>
                   {state.name}
                 </h3>
@@ -104,22 +220,50 @@ function DomesticJobs() {
                 <span>
                   {state.openings}
                 </span>
+
               </div>
 
             </div>
+
           ))}
 
         </div>
 
+
+        {/* ================= FEATURED OPENINGS ================= */}
+
         <div className="domestic-openings">
 
-          <p className="openings-eyebrow">
-            FEATURED OPENINGS — MNCs, Startups & Government Projects
-          </p>
+          <div className="domestic-section-header">
+
+            <div>
+
+              <p className="openings-eyebrow">
+                FEATURED OPENINGS — MNCs, Startups & Government Projects
+              </p>
+
+              <h2>
+                Current Domestic Opportunities
+              </h2>
+
+            </div>
+
+            <button
+              type="button"
+              className="view-all-domestic"
+              onClick={handleViewJobs}
+            >
+              View All Jobs
+              <ArrowRight size={16} />
+            </button>
+
+          </div>
+
 
           <div className="domestic-job-list">
 
             {jobs.map((job) => (
+
               <div
                 className="domestic-job-card"
                 key={job.id}
@@ -128,7 +272,12 @@ function DomesticJobs() {
                 <div className="domestic-job-info">
 
                   <div className="domestic-job-icon">
-                    <Briefcase size={16} />
+
+                    <Briefcase
+                      size={16}
+                      strokeWidth={1.8}
+                    />
+
                   </div>
 
                   <div>
@@ -138,14 +287,21 @@ function DomesticJobs() {
                     </h3>
 
                     <p>
+
                       {job.category}
-                      <span>•</span>
+
+                      <span>
+                        •
+                      </span>
+
                       {job.location}
+
                     </p>
 
                   </div>
 
                 </div>
+
 
                 <div className="domestic-job-action">
 
@@ -158,16 +314,225 @@ function DomesticJobs() {
                     onClick={() => handleApply(job.id)}
                   >
                     Apply
+                    <ArrowRight size={14} />
                   </button>
 
                 </div>
 
               </div>
+
             ))}
 
           </div>
 
         </div>
+
+
+        {/* ================= INDUSTRIES ================= */}
+
+        <section className="domestic-industries">
+
+          <div className="domestic-section-header">
+
+            <div>
+
+              <p className="openings-eyebrow">
+                CAREER SECTORS
+              </p>
+
+              <h2>
+                Recruitment Across Key Industries
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <div className="domestic-industry-grid">
+
+            <span>
+              Information Technology
+            </span>
+
+            <span>
+              Banking & Financial Services
+            </span>
+
+            <span>
+              Manufacturing
+            </span>
+
+            <span>
+              Healthcare & Hospitals
+            </span>
+
+            <span>
+              Aviation & Airports
+            </span>
+
+            <span>
+              Construction & Engineering
+            </span>
+
+            <span>
+              Hospitality & Hotels
+            </span>
+
+            <span>
+              Logistics & Transportation
+            </span>
+
+            <span>
+              Retail & E-commerce
+            </span>
+
+            <span>
+              Pharmaceuticals
+            </span>
+
+            <span>
+              Education & Training
+            </span>
+
+            <span>
+              Business Services
+            </span>
+
+          </div>
+
+        </section>
+
+
+        {/* ================= CANDIDATE SUPPORT ================= */}
+
+        <section className="domestic-support">
+
+          <div className="domestic-section-header">
+
+            <div>
+
+              <p className="openings-eyebrow">
+                CANDIDATE SUPPORT
+              </p>
+
+              <h2>
+                Support Throughout Your Job Search
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <div className="domestic-support-grid">
+
+            <div className="support-step">
+
+              <span>
+                01
+              </span>
+
+              <h3>
+                Profile Registration
+              </h3>
+
+              <p>
+                Register your professional profile and share your skills,
+                experience and preferred job locations.
+              </p>
+
+            </div>
+
+
+            <div className="support-step">
+
+              <span>
+                02
+              </span>
+
+              <h3>
+                Profile Screening
+              </h3>
+
+              <p>
+                Our recruitment team reviews your profile against suitable
+                opportunities and employer requirements.
+              </p>
+
+            </div>
+
+
+            <div className="support-step">
+
+              <span>
+                03
+              </span>
+
+              <h3>
+                Interview Coordination
+              </h3>
+
+              <p>
+                Shortlisted candidates receive support with employer
+                communication and interview coordination.
+              </p>
+
+            </div>
+
+
+            <div className="support-step">
+
+              <span>
+                04
+              </span>
+
+              <h3>
+                Selection & Placement
+              </h3>
+
+              <p>
+                Successful candidates are supported through the final
+                selection and joining process.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        {/* ================= CTA ================= */}
+
+        <section className="domestic-cta">
+
+          <div>
+
+            <p className="openings-eyebrow">
+              FIND YOUR NEXT OPPORTUNITY
+            </p>
+
+            <h2>
+              Ready to take the next step in your career?
+            </h2>
+
+            <p>
+              Upload your resume and allow our recruitment team to connect
+              your profile with suitable opportunities across India.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            onClick={() => navigate("/upload-resume")}
+          >
+            Upload Your Resume
+            <ArrowRight size={16} />
+          </button>
+
+        </section>
 
       </section>
 
