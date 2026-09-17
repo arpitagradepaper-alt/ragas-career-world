@@ -412,6 +412,7 @@ router.patch("/:id/status", async (req, res) => {
 });
 
 
+
 // =====================================================
 // GET - SINGLE PUBLIC JOB
 // =====================================================
@@ -459,6 +460,75 @@ router.get("/:id", async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Unable to fetch job.",
+    });
+  }
+});
+
+// =====================================================
+// POST - ADMIN CREATE JOB (AUTO-APPROVED)
+// =====================================================
+router.post("/admin/create", async (req, res) => {
+  try {
+    const {
+      postFor, // "self" | "partner"
+      partnerId,
+      companyName,
+      jobTitle,
+      jobType,
+      category,
+      experience,
+      qualification,
+      location,
+      country,
+      salary,
+      skills,
+      description,
+      requirements,
+      contactEmail,
+      contactPhone,
+    } = req.body || {};
+
+    const finalCompanyName =
+      postFor === "self" ? "RAGAS CAREER WORLD" : (companyName || "").trim();
+
+    if (!finalCompanyName || !jobTitle || !jobType || !location || !description) {
+      return res.status(400).json({
+        success: false,
+        message: "Company name, job title, job type, location and description are required.",
+      });
+    }
+
+    const job = new Job({
+      partnerId: postFor === "partner" && partnerId ? String(partnerId).trim() : null,
+      companyName: finalCompanyName,
+      jobTitle: jobTitle.trim(),
+      jobType: jobType.trim(),
+      category: (category || "").trim(),
+      experience: (experience || "").trim(),
+      qualification: (qualification || "").trim(),
+      location: location.trim(),
+      country: (country || "India").trim(),
+      salary: (salary || "").trim(),
+      skills: (skills || "").trim(),
+      description: description.trim(),
+      requirements: (requirements || "").trim(),
+      contactEmail: (contactEmail || "").trim().toLowerCase(),
+      contactPhone: (contactPhone || "").trim(),
+      status: "Approved", // Admin direct post karega to auto-approved rahega
+    });
+
+    await job.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Job created and published successfully.",
+      data: job,
+    });
+  } catch (error) {
+    console.error("Admin job post error:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create job.",
     });
   }
 });
