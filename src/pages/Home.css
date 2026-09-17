@@ -105,7 +105,7 @@
   width: 100% !important;
   min-height: 0 !important;
 
-  background: #082b25;
+  background: #f7f8f9;
 }
 
 .home-hero {
@@ -123,17 +123,8 @@
   overflow: hidden;
 
   background:
-    radial-gradient(
-      circle at 88% 25%,
-      rgba(201, 164, 93, 0.12),
-      transparent 24%
-    ),
-    linear-gradient(
-      115deg,
-      #08231f 0%,
-      #0b3029 55%,
-      #123c33 100%
-    );
+    radial-gradient(circle at 88% 18%, rgba(182, 151, 89, 0.16), transparent 24%),
+    linear-gradient(135deg, #ffffff 0%, #f7f8f9 58%, #edf2f1 100%);
 }
 
 
@@ -154,7 +145,7 @@
 
   border-radius: 50%;
 
-  background: rgba(200, 164, 93, 0.07);
+  background: rgba(182, 151, 89, 0.09);
 
   filter: blur(5px);
 
@@ -174,7 +165,7 @@
 
   border-radius: 50%;
 
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(16, 36, 63, 0.08);
 }
 
 
@@ -265,7 +256,7 @@
 
   margin: 0;
 
-  color: #ffffff;
+  color: #10243f;
 
   font-size: clamp(46px, 5vw, 68px);
 
@@ -290,7 +281,7 @@
 
   margin: 25px 0 27px;
 
-  color: rgba(255, 255, 255, 0.72);
+  color: #68717b;
 
   font-size: 15px;
 
@@ -347,18 +338,18 @@
 
   background: #c8a45d;
 
-  color: #08231f;
+  color: #10243f;
 
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .hero-secondary-action {
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(16, 36, 63, 0.22);
 
-  background: rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.7);
 
-  color: #ffffff;
+  color: #10243f;
 }
 
 .hero-primary-action:hover,
@@ -376,7 +367,7 @@
 .hero-secondary-action:hover {
   border-color: #c8a45d;
 
-  background: rgba(255, 255, 255, 0.09);
+  background: #ffffff;
 }
 
 
@@ -400,14 +391,14 @@
 
   padding: 6px;
 
-  background: rgba(255, 255, 255, 0.075);
+  background: rgba(255, 255, 255, 0.92);
 
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid #dfe5e9;
 
   border-radius: 15px;
 
   box-shadow:
-    0 18px 45px rgba(0, 0, 0, 0.16);
+    0 18px 45px rgba(16, 36, 63, 0.1);
 
   backdrop-filter: blur(12px);
 
@@ -564,7 +555,7 @@
 }
 
 .hero-stat strong {
-  color: #ffffff;
+  color: #10243f;
 
   font-size: 22px;
 
@@ -576,7 +567,7 @@
 }
 
 .hero-stat span {
-  color: rgba(255, 255, 255, 0.62);
+  color: #68717b;
 
   font-size: 10px;
 
@@ -587,7 +578,7 @@
   width: 1px;
   height: 23px;
 
-  background: rgba(255, 255, 255, 0.20);
+  background: #d6dde1;
 }
 
 
@@ -2158,5 +2149,88 @@
   .home-page *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+/* =========================================================
+   PREMIUM HERO HEADING ANIMATION
+   GradLead AI inspired reveal
+   ========================================================= */
+
+.home-hero-content h1 {
+  overflow: hidden;
+}
+
+/* Main heading */
+.home-hero-content h1 {
+  animation: heroHeadingReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.15s;
+}
+
+/* Highlighted text */
+.home-hero-content h1 span {
+  display: inline-block;
+
+  animation: heroHighlightReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.42s;
+
+  transform-origin: left center;
+}
+
+
+/* =========================================================
+   HEADING KEYFRAMES
+   ========================================================= */
+
+@keyframes heroHeadingReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(45px);
+    filter: blur(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+
+@keyframes heroHighlightReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+
+/* =========================================================
+   OPTIONAL PREMIUM LINE EFFECT
+   ========================================================= */
+
+.home-hero-content h1 span {
+  position: relative;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .home-hero-content h1,
+  .home-hero-content h1 span {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }

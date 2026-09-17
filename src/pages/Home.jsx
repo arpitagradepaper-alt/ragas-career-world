@@ -18,8 +18,6 @@ import Employers from "./Employers";
 import JobSeekers from "./JobSeekers";
 import PostAJob from "./PostAJob";
 import PartnerWithUs from "./PartnerWithUs";
-import RecruitmentProcess from "./RecruitmentProcess";
-import VisaSupport from "./VisaSupport";
 import Blog from "./Blog";
 import Testimonials from "./Testimonials";
 import Contact from "./Contact";
@@ -430,30 +428,6 @@ export function Home() {
         className="page-slide home-existing-section"
       >
         <PartnerWithUs />
-      </section>
-
-
-      {/* =====================================================
-          RECRUITMENT PROCESS
-      ===================================================== */}
-
-      <section
-        id="recruitment-process"
-        className="page-slide home-existing-section"
-      >
-        <RecruitmentProcess featuredOnly />
-      </section>
-
-
-      {/* =====================================================
-          VISA & IMMIGRATION
-      ===================================================== */}
-
-      <section
-        id="visa-immigration"
-        className="page-slide home-existing-section"
-      >
-        <VisaSupport featuredOnly />
       </section>
 
 

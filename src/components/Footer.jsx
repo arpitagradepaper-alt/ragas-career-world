@@ -3,6 +3,7 @@ import {
   Mail,
   ArrowUpRight,
 } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   FaLinkedinIn,
@@ -14,14 +15,51 @@ import {
 import "./Footer.css";
 
 function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
 
-    if (element) {
+    const standaloneRoutes = {
+      "recruitment-process": "/recruitment-process",
+      "visa-immigration": "/visa-support",
+    };
+
+    if (standaloneRoutes[id]) {
+      navigate(standaloneRoutes[id]);
+      return;
+    }
+
+    if (location.pathname === "/" && element) {
       element.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
+      return;
+    }
+
+    const routeBySection = {
+      home: "/",
+      about: "/about",
+      services: "/services",
+      "international-jobs": "/international-jobs",
+      "domestic-jobs": "/domestic-jobs",
+      industries: "/industries",
+      "current-openings": "/current-openings",
+      employers: "/employers",
+      "job-seekers": "/job-seekers",
+      "upload-resume": "/upload-resume",
+      "post-a-job": "/post-a-job",
+      "partner-with-us": "/partner-with-us",
+      blog: "/blog",
+      testimonials: "/testimonials",
+      contact: "/contact",
+      careers: "/careers",
+    };
+
+    if (routeBySection[id]) {
+      navigate(routeBySection[id]);
     }
   };
 

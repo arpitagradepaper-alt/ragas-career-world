@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -53,6 +54,23 @@ import AddCandidate from "./admin/AddCandidate";
 // Partner Panel
 import PartnerLayout from "./partner/PartnerLayout";
 import PartnerDashboard from "./partner/PartnerDashboard";
+
+
+function ScrollManager() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) return;
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+  }, [location.pathname, location.search, location.hash]);
+
+  return null;
+}
 
 
 function ProtectedRoute({ children }) {
@@ -303,6 +321,7 @@ function PartnerWebsite() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollManager />
       <Routes>
 
         {/* Admin Panel */}

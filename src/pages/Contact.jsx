@@ -124,8 +124,8 @@ function Contact() {
           </div>
 
           <div className="head-office">
-            <strong>Head Office</strong>
-            <span>RAGAS CAREER WORLD, Business District, India</span>
+            <strong>1885, Ground Floor, South End C Cross Road, 28th Main Road, E End B Main Rd, near Kabab Magic, Jayanagara 11th Block, Jayanagar, Bengaluru, Karnataka 56004</strong>
+            <span>RAGAS CAREER WORLD</span>
           </div>
 
           <div className="contact-actions">
