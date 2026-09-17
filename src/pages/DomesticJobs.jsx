@@ -4,6 +4,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import "./DomesticJobs.css";
 
@@ -34,42 +35,85 @@ const states = [
   },
 ];
 
-const jobs = [
-  {
-    id: "software-developer-bengaluru",
-    title: "Software Developer",
-    category: "IT",
-    location: "Bengaluru, KA",
-  },
-  {
-    id: "bank-relationship-manager-mumbai",
-    title: "Bank Relationship Manager",
-    category: "Banking",
-    location: "Mumbai, MH",
-  },
-  {
-    id: "plant-operations-head-pune",
-    title: "Plant Operations Head",
-    category: "Manufacturing",
-    location: "Pune, MH",
-  },
-  {
-    id: "airport-customer-service-hyderabad",
-    title: "Airport Customer Service",
-    category: "Aviation",
-    location: "Hyderabad, TS",
-  },
-];
+// const jobs = [
+//   {
+//     id: "software-developer-bengaluru",
+//     title: "Software Developer",
+//     category: "IT",
+//     location: "Bengaluru, KA",
+//   },
+//   {
+//     id: "bank-relationship-manager-mumbai",
+//     title: "Bank Relationship Manager",
+//     category: "Banking",
+//     location: "Mumbai, MH",
+//   },
+//   {
+//     id: "plant-operations-head-pune",
+//     title: "Plant Operations Head",
+//     category: "Manufacturing",
+//     location: "Pune, MH",
+//   },
+//   {
+//     id: "airport-customer-service-hyderabad",
+//     title: "Airport Customer Service",
+//     category: "Aviation",
+//     location: "Hyderabad, TS",
+//   },
+// ];
 
 function FeaturedDomesticJobs({ onApply, onViewJobs }) {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDomesticJobs = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/jobs");
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to fetch jobs");
+        }
+
+        const allJobs = result.data || [];
+
+        const domesticJobs = allJobs.filter((job) => {
+          const country = String(job.country || "")
+            .trim()
+            .toLowerCase();
+
+          return country === "india";
+        });
+
+        setJobs(domesticJobs.slice(0, 4));
+      } catch (error) {
+        console.error("Domestic Jobs Error:", error);
+        setJobs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDomesticJobs();
+  }, []);
+
   return (
     <div className="domestic-openings">
+
       <div className="domestic-section-header">
+
         <div>
+
           <p className="openings-eyebrow">
             FEATURED OPENINGS — MNCs, Startups & Government Projects
           </p>
-          <h2>Current Domestic Opportunities</h2>
+
+          <h2>
+            Current Domestic Opportunities
+          </h2>
+
         </div>
 
         <button
@@ -80,36 +124,86 @@ function FeaturedDomesticJobs({ onApply, onViewJobs }) {
           View All Jobs
           <ArrowRight size={16} />
         </button>
+
       </div>
 
       <div className="domestic-job-list">
-        {jobs.map((job) => (
-          <div className="domestic-job-card" key={job.id}>
-            <div className="domestic-job-info">
-              <div className="domestic-job-icon">
-                <Briefcase size={16} strokeWidth={1.8} />
-              </div>
 
-              <div>
-                <h3>{job.title}</h3>
-                <p>
-                  {job.category}
-                  <span>•</span>
-                  {job.location}
-                </p>
-              </div>
-            </div>
+        {loading ? (
 
-            <div className="domestic-job-action">
-              <span>Full-time</span>
-              <button type="button" onClick={() => onApply(job.id)}>
-                Apply
-                <ArrowRight size={14} />
-              </button>
-            </div>
+          <div className="jobs-loading">
+            Loading domestic jobs...
           </div>
-        ))}
+
+        ) : jobs.length === 0 ? (
+
+          <div className="jobs-empty">
+            No domestic jobs available at the moment.
+          </div>
+
+        ) : (
+
+          jobs.map((job) => (
+
+            <div
+              className="domestic-job-card"
+              key={job._id}
+            >
+
+              <div className="domestic-job-info">
+
+                <div className="domestic-job-icon">
+                  <Briefcase
+                    size={16}
+                    strokeWidth={1.8}
+                  />
+                </div>
+
+                <div>
+
+                  <h3>
+                    {job.jobTitle}
+                  </h3>
+
+                  <p>
+                    {job.category || "General"}
+
+                    <span>
+                      •
+                    </span>
+
+                    {job.location}
+                    {job.country ? `, ${job.country}` : ""}
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="domestic-job-action">
+
+                <span>
+                  {job.jobType || "Full Time"}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => onApply(job._id)}
+                >
+                  Apply
+                  <ArrowRight size={14} />
+                </button>
+
+              </div>
+
+            </div>
+
+          ))
+
+        )}
+
       </div>
+
     </div>
   );
 }
