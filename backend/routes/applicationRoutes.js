@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const mongoose = require("mongoose");
 
 const Application = require("../models/Application");
 const Job = require("../models/Job");
@@ -96,8 +97,9 @@ router.post(
       let partnerId = null;
       let actualJobTitle = jobTitle;
 
-      if (jobId) {
+      if (jobId && mongoose.Types.ObjectId.isValid(jobId)) {
         const job = await Job.findById(jobId);
+
         if (job) {
           partnerId = job.partnerId || null;
           actualJobTitle = job.jobTitle || actualJobTitle;

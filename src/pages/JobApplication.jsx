@@ -367,7 +367,7 @@ function JobApplication() {
         MongoDB _id is sent as jobId.
       */
 
-      data.append("jobId", jobId);
+      data.append("jobId", job.id ||jobId);
 
       /*
         IMPORTANT:

@@ -11,7 +11,8 @@
   padding: 0;
 
   background: var(--canvas, #ffffff);
-  color: var(--ink, #10243f);
+  color: var(--ink, #ffffff);
+  /* color: var(--ink, #10243f); */
 
   overflow-x: hidden;
   box-sizing: border-box;
