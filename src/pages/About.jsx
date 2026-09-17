@@ -14,27 +14,8 @@ import headRecruitment from "../assets/head-of-recruitment.png";
 import headCompliance from "../assets/head-of-compliance.png";
 
 /* =========================================================
-   DATA (100% UNTOUCHED CONTENT)
+   DATA
 ========================================================= */
-
-const stats = [
-  {
-    value: "2010",
-    label: "Founded",
-  },
-  {
-    value: "40+",
-    label: "Industries",
-  },
-  {
-    value: "18",
-    label: "Countries",
-  },
-  {
-    value: "1000+",
-    label: "Placements",
-  },
-];
 
 const industries = [
   "IT & Software",
@@ -78,21 +59,30 @@ const approach = [
   },
 ];
 
-const leaders = [
+const journey = [
   {
-    role: "Founder & CEO",
-    text: "Providing strategic direction and building long-term relationships with employers and professionals.",
-    image: founderCeo,
+    year: "2010",
+    tag: "RCW / EST",
+    title: "Foundation",
+    text: "RAGAS CAREER WORLD begins its journey with a focus on professional recruitment services.",
   },
   {
-    role: "Head of Recruitment",
-    text: "Leading recruitment operations and supporting effective talent identification and matching.",
-    image: headRecruitment,
+    year: "GROWTH",
+    tag: "CAPABILITY",
+    title: "Expanding Recruitment",
+    text: "Recruitment capabilities grow across multiple industries and professional hiring requirements.",
   },
   {
-    role: "Head of Compliance",
-    text: "Supporting structured processes, professional standards and recruitment compliance.",
-    image: headCompliance,
+    year: "GLOBAL",
+    tag: "CROSS-BORDER",
+    title: "International Opportunities",
+    text: "The recruitment network develops to support international career and workforce opportunities.",
+  },
+  {
+    year: "TODAY",
+    tag: "NETWORK",
+    title: "40+ Industries",
+    text: "Continuing to connect employers and talent across domestic and international markets.",
   },
 ];
 
@@ -105,22 +95,26 @@ function About() {
     <main className="about-page">
 
       {/* =====================================================
-          HERO (EXECUTIVE CANVAS)
+          HERO
       ===================================================== */}
-      <section className="about-hero">
-        <div className="about-hero-architectural-grid"></div>
-        <div className="about-hero-ambient-glow"></div>
 
-        <div className="about-hero-inner">
+      <section className="about-hero">
+
+        <div className="about-hero-grid"></div>
+        <div className="about-hero-glow"></div>
+
+        <div className="about-container about-hero-inner">
+
           <div className="about-hero-content">
-            <div className="about-eyebrow-badge">
-              <span className="about-eyebrow-accent-dot"></span>
-              <p className="about-eyebrow">ABOUT RAGAS CAREER WORLD</p>
+
+            <div className="about-eyebrow">
+              <span className="eyebrow-dot"></span>
+              ABOUT RAGAS CAREER WORLD
             </div>
 
-            <h1 className="about-hero-headline">
+            <h1>
               Connecting Talent
-              <span className="about-hero-gold-text"> With Opportunity.</span>
+              <span> With Opportunity.</span>
             </h1>
 
             <p className="about-hero-description">
@@ -131,250 +125,369 @@ function About() {
             </p>
 
             <div className="about-hero-actions">
-              <a href="/current-openings" className="about-primary-btn">
+
+              <a
+                href="/current-openings"
+                className="about-btn about-btn-primary"
+              >
                 <span>Explore Opportunities</span>
-                <div className="btn-icon-wrapper">
-                  <ArrowRight size={15} />
-                </div>
+                <span className="about-btn-icon">
+                  <ArrowRight size={16} />
+                </span>
               </a>
 
-              <a href="/contact" className="about-secondary-btn">
+              <a
+                href="/contact"
+                className="about-btn about-btn-secondary"
+              >
                 Contact Us
               </a>
+
             </div>
+
           </div>
 
-          <div className="about-hero-sculpture">
-            <div className="hero-sculpture-halo"></div>
-            
-            <div className="hero-sculpture-card">
-              <div className="hero-card-pattern-grid"></div>
-              
-              <div className="hero-sculpture-top">
-                <div className="hero-sculpture-badge">
-                  <span className="badge-pulse"></span>
+          {/* HERO VISUAL */}
+
+          <div className="about-hero-visual">
+
+            <div className="hero-orbit hero-orbit-one"></div>
+            <div className="hero-orbit hero-orbit-two"></div>
+
+            <div className="hero-main-card">
+
+              <div className="hero-card-top">
+                <span className="hero-status">
+                  <span></span>
                   GLOBAL RECRUITMENT
-                </div>
-                <span className="hero-sculpture-code">RCW / 2026</span>
+                </span>
+
+                <span className="hero-code">
+                  RCW / 2026
+                </span>
               </div>
 
-              <div className="hero-sculpture-middle">
-                <div className="hero-sculpture-metric">
-                  18<span className="hero-metric-plus">+</span>
+              <div className="hero-card-center">
+
+                <span className="hero-card-label">
+                  CONNECTING
+                </span>
+
+                <div className="hero-card-number">
+                  20<span>+</span>
                 </div>
-                <p className="hero-sculpture-caption">
+
+                <p>
                   Countries connected through our recruitment network.
                 </p>
+
               </div>
 
-              <div className="hero-sculpture-bottom">
-                <div className="sculpture-tag-pill">INDIA</div>
-                <div className="sculpture-line-connect"></div>
-                <div className="sculpture-tag-pill">GLOBAL</div>
+              <div className="hero-card-bottom">
+
+                <span>INDIA</span>
+
+                <div className="hero-connection">
+                  <span></span>
+                  <div></div>
+                  <span></span>
+                </div>
+
+                <span>GLOBAL</span>
+
               </div>
+
             </div>
 
-            <div className="hero-floating-glass-tile">
-              <div className="floating-tile-icon-box">
-                <Globe2 size={20} />
+            <div className="hero-floating-card">
+
+              <div className="floating-icon">
+                <Globe2 size={21} />
               </div>
-              <div className="floating-tile-text">
+
+              <div>
                 <strong>People First</strong>
-                <span>Built around meaningful connections.</span>
+                <p>Meaningful connections.</p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* =====================================================
-          STATS (CONNECTED MONOLITHIC RIBBON)
-      ===================================================== */}
-      <section className="about-stats-ribbon">
-        <div className="about-stats-ribbon-inner">
-          {stats.map((stat, index) => (
-            <div className="stat-monolith-card" key={index}>
-              <div className="stat-card-meta">
-                <span className="stat-monolith-index">// 0{index + 1}</span>
-                <span className="stat-monolith-label">{stat.label}</span>
-              </div>
-              <strong className="stat-monolith-val">{stat.value}</strong>
-              <div className="stat-hover-floorline"></div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* =====================================================
-          WHO WE ARE (ASYMMETRIC BENTO SHOWCASE)
-      ===================================================== */}
-      <section className="about-section about-who-section">
-        <div className="about-who-bento-grid">
-          
-          <div className="about-who-left-frame">
-            <div className="about-eyebrow-badge">
-              <span className="about-eyebrow-accent-dot"></span>
-              <p className="about-eyebrow">WHO WE ARE</p>
             </div>
 
-            <h2 className="about-who-title">
-              Recruitment Built
-              <span> Around People.</span>
-            </h2>
-            
-            <div className="about-who-accent-card">
-              <p className="about-lead">
-                Successful recruitment starts with understanding people,
-                organisations, skills and career goals.
-              </p>
-            </div>
           </div>
 
-          <div className="about-who-right-frame">
-            <div className="who-editorial-box">
-              <div className="who-box-corner-accent"></div>
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          WHO WE ARE
+      ===================================================== */}
+
+      <section className="about-section who-section">
+
+        <div className="about-container">
+
+          <div className="who-layout">
+
+            <div className="who-intro">
+
+              <div className="about-eyebrow">
+                <span className="eyebrow-dot"></span>
+                WHO WE ARE
+              </div>
+
+              <h2>
+                Recruitment Built
+                <span> Around People.</span>
+              </h2>
+
+              <div className="who-highlight">
+
+                <span className="highlight-line"></span>
+
+                <p>
+                  Successful recruitment starts with understanding people,
+                  organisations, skills and career goals.
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="who-content">
+
+              <div className="who-content-number">
+                01
+              </div>
+
               <p>
                 We support job seekers and employers with professional
                 recruitment services, clear communication and structured
                 coordination throughout the hiring journey.
               </p>
 
-              <div className="who-editorial-divider"></div>
+              <div className="who-divider"></div>
 
               <p>
                 Our focus is not simply on filling positions. We aim to create
-                meaningful connections between qualified talent and organisations
-                looking for the right people.
+                meaningful connections between qualified talent and
+                organisations looking for the right people.
               </p>
+
             </div>
+
           </div>
 
         </div>
+
       </section>
 
-      {/* =====================================================
-          PURPOSE (HIGH-PRECISION SPLIT PILLARS)
-      ===================================================== */}
-      <section className="about-purpose-pillar-section">
-        <div className="about-purpose-container">
 
-          <div className="purpose-header-block">
-            <div className="about-eyebrow-badge">
-              <span className="about-eyebrow-accent-dot"></span>
-              <p className="about-eyebrow">OUR PURPOSE</p>
+      {/* =====================================================
+          PURPOSE
+      ===================================================== */}
+
+      <section className="purpose-section">
+
+        <div className="about-container">
+
+          <div className="purpose-header">
+
+            <div className="about-eyebrow">
+              <span className="eyebrow-dot"></span>
+              OUR PURPOSE
             </div>
 
             <h2>
               Creating connections
               <span> that matter.</span>
             </h2>
+
           </div>
 
-          <div className="purpose-pillars-grid">
-            
-            <div className="purpose-pillar-card">
-              <div className="pillar-watermark-num">01</div>
-              <div className="pillar-header-group">
-                <span className="pillar-pill-label">OUR MISSION</span>
-                <span className="pillar-step-code">PHASE / 01</span>
-              </div>
-              <div className="pillar-content">
-                <h3>Connecting Employers With Qualified Talent</h3>
-                <p>
-                  Our mission is to connect employers with qualified talent and
-                  job seekers with genuine career opportunities through
-                  professional, transparent and structured recruitment services.
-                </p>
-              </div>
-              <div className="pillar-bottom-edge"></div>
-            </div>
 
-            <div className="purpose-pillar-card">
-              <div className="pillar-watermark-num">02</div>
-              <div className="pillar-header-group">
-                <span className="pillar-pill-label">OUR VISION</span>
-                <span className="pillar-step-code">PHASE / 02</span>
+          <div className="purpose-grid">
+
+            {/* MISSION */}
+
+            <article className="purpose-card">
+
+              <div className="purpose-card-number">
+                01
               </div>
-              <div className="pillar-content">
-                <h3>Building Trusted Recruitment Connections</h3>
+
+              <div className="purpose-card-top">
+                <span>OUR MISSION</span>
+                <small>PHASE / 01</small>
+              </div>
+
+              <div className="purpose-card-content">
+
+                <h3>
+                  Connecting Employers With Qualified Talent
+                </h3>
+
+                <p>
+                  Our mission is to connect employers with qualified talent
+                  and job seekers with genuine career opportunities through
+                  professional, transparent and structured recruitment
+                  services.
+                </p>
+
+              </div>
+
+              <div className="purpose-card-line"></div>
+
+            </article>
+
+
+            {/* VISION */}
+
+            <article className="purpose-card">
+
+              <div className="purpose-card-number">
+                02
+              </div>
+
+              <div className="purpose-card-top">
+                <span>OUR VISION</span>
+                <small>PHASE / 02</small>
+              </div>
+
+              <div className="purpose-card-content">
+
+                <h3>
+                  Building Trusted Recruitment Connections
+                </h3>
+
                 <p>
                   Our vision is to become a trusted recruitment partner across
                   international and domestic markets by creating reliable
                   connections between organisations and talented professionals.
                 </p>
+
               </div>
-              <div className="pillar-bottom-edge"></div>
+
+              <div className="purpose-card-line"></div>
+
+            </article>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          APPROACH
+      ===================================================== */}
+
+      <section className="about-section approach-section">
+
+        <div className="about-container">
+
+          <div className="approach-header">
+
+            <div>
+
+              <div className="about-eyebrow">
+                <span className="eyebrow-dot"></span>
+                OUR APPROACH
+              </div>
+
+              <h2>
+                Simple process.
+                <span> Professional results.</span>
+              </h2>
+
             </div>
 
+            <p>
+              Our recruitment approach is designed to keep the journey clear,
+              structured and focused from the initial requirement through
+              successful joining.
+            </p>
+
+          </div>
+
+
+          <div className="approach-line"></div>
+
+
+          <div className="approach-grid">
+
+            {approach.map((item) => {
+
+              const Icon = item.icon;
+
+              return (
+                <article
+                  className="approach-card"
+                  key={item.number}
+                >
+
+                  <div className="approach-card-top">
+
+                    <span className="approach-number">
+                      {item.number}
+                    </span>
+
+                    <div className="approach-icon">
+                      <Icon size={19} />
+                    </div>
+
+                  </div>
+
+                  <div className="approach-card-content">
+
+                    <h3>
+                      {item.title}
+                    </h3>
+
+                    <p>
+                      {item.text}
+                    </p>
+
+                  </div>
+
+                  <div className="approach-card-footer">
+
+                    <span>
+                      EXECUTION
+                    </span>
+
+                    <ArrowRight size={15} />
+
+                  </div>
+
+                </article>
+              );
+
+            })}
+
           </div>
 
         </div>
+
       </section>
 
-      {/* =====================================================
-          APPROACH (INTERACTIVE WORKFLOW PIPELINE)
-      ===================================================== */}
-      <section className="about-section about-approach-section">
-        <div className="approach-section-top">
-          <div className="about-eyebrow-badge">
-            <span className="about-eyebrow-accent-dot"></span>
-            <p className="about-eyebrow">OUR APPROACH</p>
-          </div>
-
-          <h2>
-            Simple process.
-            <span> Professional results.</span>
-          </h2>
-
-          <p className="approach-header-desc">
-            Our recruitment approach is designed to keep the journey clear,
-            structured and focused from the initial requirement through
-            successful joining.
-          </p>
-        </div>
-
-        <div className="approach-pipeline-grid">
-          {approach.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <div className="approach-pipeline-step" key={item.number}>
-                <div className="step-watermark-bg">{item.number}</div>
-                
-                <div className="pipeline-step-head">
-                  <span className="pipeline-step-badge">STEP {item.number}</span>
-                  <div className="pipeline-icon-pod">
-                    <Icon size={19} />
-                  </div>
-                </div>
-
-                <div className="pipeline-step-body">
-                  <h3 className="pipeline-step-title">{item.title}</h3>
-                  <p className="pipeline-step-desc">{item.text}</p>
-                </div>
-
-                <div className="pipeline-step-footer">
-                  <span className="step-footer-indicator">EXECUTION</span>
-                  <div className="step-footer-arrow">
-                    <ArrowRight size={14} />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
 
       {/* =====================================================
-          GLOBAL REACH (EXECUTIVE GLOBAL TERMINAL)
+          GLOBAL REACH
       ===================================================== */}
-      <section className="about-reach-terminal-section">
-        <div className="about-reach-terminal-inner">
 
-          <div className="reach-terminal-left">
-            <div className="about-eyebrow-badge">
-              <span className="about-eyebrow-accent-dot"></span>
-              <p className="about-eyebrow terminal-eyebrow">OUR REACH</p>
+      <section className="reach-section">
+
+        <div className="reach-background"></div>
+
+        <div className="about-container reach-inner">
+
+          <div className="reach-content">
+
+            <div className="about-eyebrow reach-eyebrow">
+              <span className="eyebrow-dot"></span>
+              OUR REACH
             </div>
 
             <h2>
@@ -382,206 +495,164 @@ function About() {
               <span> Across markets.</span>
             </h2>
 
-            <p className="reach-terminal-desc">
+            <p>
               RAGAS CAREER WORLD supports recruitment requirements across
               diverse industries, helping employers and professionals connect
               across domestic and international markets.
             </p>
 
-            <div className="reach-terminal-metric-card">
-              <div className="metric-accent-stripe"></div>
-              <div className="metric-content">
-                <strong>40+</strong>
-                <span>Industries Covered</span>
+            <div className="reach-metric">
+
+              <div className="reach-metric-number">
+                40<span>+</span>
               </div>
+
+              <div>
+                <strong>Industries Covered</strong>
+                <span>Domestic & International</span>
+              </div>
+
             </div>
+
           </div>
 
-          <div className="reach-terminal-right">
-            <div className="terminal-industries-box">
-              <div className="terminal-box-header">
-                <span className="header-title">SECTORS & DOMAINS</span>
-                <span className="header-counter">INDEX: 01 — 12</span>
-              </div>
 
-              <div className="terminal-industries-grid">
-                {industries.map((industry, index) => (
-                  <div className="terminal-industry-pill" key={index}>
-                    <span className="terminal-pill-index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+          <div className="industries-panel">
 
-                    <p className="terminal-pill-name">{industry}</p>
+            <div className="industries-header">
 
-                    <div className="terminal-pill-check">
-                      <Check size={12} />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <span>SECTORS & DOMAINS</span>
+
+              <small>
+                INDEX: 01 — 12
+              </small>
+
             </div>
+
+            <div className="industries-grid">
+
+              {industries.map((industry, index) => (
+
+                <div
+                  className="industry-item"
+                  key={industry}
+                >
+
+                  <span className="industry-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className="industry-name">
+                    {industry}
+                  </span>
+
+                  <span className="industry-check">
+                    <Check size={11} />
+                  </span>
+
+                </div>
+
+              ))}
+
+            </div>
+
           </div>
 
         </div>
+
       </section>
 
+
       {/* =====================================================
-          LEADERSHIP (BOARDROOM GALLERY)
+          JOURNEY
       ===================================================== */}
-      <section className="about-section leadership-gallery-section">
-        <div className="leadership-gallery-header">
-          <div className="leadership-gallery-title-col">
-            <div className="about-eyebrow-badge">
-              <span className="about-eyebrow-accent-dot"></span>
-              <p className="about-eyebrow">LEADERSHIP</p>
+
+      <section className="about-section journey-section">
+
+        <div className="about-container">
+
+          <div className="journey-header">
+
+            <div className="about-eyebrow">
+              <span className="eyebrow-dot"></span>
+              OUR JOURNEY
             </div>
 
             <h2>
-              Experienced
-              <span> leadership.</span>
+              Growing with employers
+              <span> & job seekers.</span>
             </h2>
+
           </div>
 
-          <p className="leadership-gallery-desc">
-            Strategic direction, recruitment expertise and professional
-            standards come together to support our recruitment services.
-          </p>
+
+          <div className="journey-track">
+
+            <div className="journey-line"></div>
+
+            {journey.map((item, index) => (
+
+              <div
+                className="journey-item"
+                key={item.year}
+              >
+
+                <div className="journey-marker">
+
+                  <span className="journey-dot"></span>
+
+                  <span className="journey-year">
+                    {item.year}
+                  </span>
+
+                </div>
+
+                <div className="journey-card">
+
+                  <div className="journey-card-header">
+
+                    <h3>
+                      {item.title}
+                    </h3>
+
+                    <span>
+                      {item.tag}
+                    </span>
+
+                  </div>
+
+                  <p>
+                    {item.text}
+                  </p>
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
         </div>
 
-        <div className="leadership-gallery-grid">
-          {leaders.map((leader, index) => (
-            <div className="leader-executive-card" key={index}>
-              <div className="leader-executive-media">
-                <div className="leader-media-frame">
-                  <img src={leader.image} alt={leader.role} />
-                </div>
-                <div className="leader-badge-num">0{index + 1}</div>
-              </div>
-
-              <div className="leader-executive-info">
-                <span className="leader-executive-label">EXECUTIVE MANAGEMENT</span>
-                <h3>{leader.role}</h3>
-                <p>{leader.text}</p>
-              </div>
-
-              <div className="leader-executive-bottom">
-                <span className="executive-view-label">LEADERSHIP PROFILE</span>
-                <div className="executive-arrow-link">
-                  <ArrowRight size={15} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
       </section>
 
-      {/* =====================================================
-          JOURNEY (CHRONO-TRACK STEPPER)
-      ===================================================== */}
-      <section className="about-section about-journey-section">
-        <div className="journey-heading-wrap">
-          <div className="about-eyebrow-badge">
-            <span className="about-eyebrow-accent-dot"></span>
-            <p className="about-eyebrow">OUR JOURNEY</p>
-          </div>
-
-          <h2>
-            Growing with employers
-            <span> & job seekers.</span>
-          </h2>
-        </div>
-
-        <div className="journey-chrono-track">
-          <div className="journey-track-stem"></div>
-
-          <div className="chrono-card-row">
-            <div className="chrono-badge-anchor">
-              <div className="chrono-pulse-ring">
-                <span className="chrono-pulse-core"></span>
-              </div>
-              <span className="chrono-badge-text">2010</span>
-            </div>
-            <div className="chrono-info-tile">
-              <div className="chrono-tile-header">
-                <h3>Foundation</h3>
-                <span className="chrono-sub-tag">RCW / EST</span>
-              </div>
-              <p>
-                RAGAS CAREER WORLD begins its journey with a focus on
-                professional recruitment services.
-              </p>
-            </div>
-          </div>
-
-          <div className="chrono-card-row">
-            <div className="chrono-badge-anchor">
-              <div className="chrono-pulse-ring">
-                <span className="chrono-pulse-core"></span>
-              </div>
-              <span className="chrono-badge-text">GROWTH</span>
-            </div>
-            <div className="chrono-info-tile">
-              <div className="chrono-tile-header">
-                <h3>Expanding Recruitment</h3>
-                <span className="chrono-sub-tag">CAPABILITY</span>
-              </div>
-              <p>
-                Recruitment capabilities grow across multiple industries and
-                professional hiring requirements.
-              </p>
-            </div>
-          </div>
-
-          <div className="chrono-card-row">
-            <div className="chrono-badge-anchor">
-              <div className="chrono-pulse-ring">
-                <span className="chrono-pulse-core"></span>
-              </div>
-              <span className="chrono-badge-text">GLOBAL</span>
-            </div>
-            <div className="chrono-info-tile">
-              <div className="chrono-tile-header">
-                <h3>International Opportunities</h3>
-                <span className="chrono-sub-tag">CROSS-BORDER</span>
-              </div>
-              <p>
-                The recruitment network develops to support international
-                career and workforce opportunities.
-              </p>
-            </div>
-          </div>
-
-          <div className="chrono-card-row">
-            <div className="chrono-badge-anchor">
-              <div className="chrono-pulse-ring">
-                <span className="chrono-pulse-core"></span>
-              </div>
-              <span className="chrono-badge-text">TODAY</span>
-            </div>
-            <div className="chrono-info-tile">
-              <div className="chrono-tile-header">
-                <h3>40+ Industries</h3>
-                <span className="chrono-sub-tag">NETWORK</span>
-              </div>
-              <p>
-                Continuing to connect employers and talent across domestic and
-                international markets.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* =====================================================
-          FINAL CTA (CORPORATE HORIZON)
+          FINAL CTA
       ===================================================== */}
-      <section className="about-cta-horizon">
-        <div className="about-cta-ambient-grid"></div>
-        <div className="about-cta-horizon-inner">
-          <div className="about-cta-horizon-content">
-            <div className="about-eyebrow-badge">
-              <span className="about-eyebrow-accent-dot"></span>
-              <p className="about-eyebrow cta-horizon-eyebrow">LET'S CONNECT</p>
+
+      <section className="about-cta">
+
+        <div className="cta-grid"></div>
+
+        <div className="about-container cta-inner">
+
+          <div className="cta-content">
+
+            <div className="about-eyebrow cta-eyebrow">
+              <span className="eyebrow-dot"></span>
+              LET'S CONNECT
             </div>
 
             <h2>
@@ -594,19 +665,31 @@ function About() {
               professional exploring your next opportunity, we are here to
               support your recruitment journey.
             </p>
+
           </div>
 
-          <div className="about-cta-horizon-actions">
-            <a href="/current-openings" className="about-cta-primary-btn">
+
+          <div className="cta-actions">
+
+            <a
+              href="/current-openings"
+              className="cta-primary"
+            >
               <span>Explore Opportunities</span>
-              <ArrowRight size={15} />
+              <ArrowRight size={16} />
             </a>
 
-            <a href="/contact" className="about-cta-secondary-btn">
+            <a
+              href="/contact"
+              className="cta-secondary"
+            >
               Contact Us
             </a>
+
           </div>
+
         </div>
+
       </section>
 
     </main>

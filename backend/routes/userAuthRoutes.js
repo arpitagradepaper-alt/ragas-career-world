@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const User = require("../models/user.js");
 const LoginLog = require("../models/LoginLog");
+const Candidate = require("../models/Candidate");
 const { sendPasswordResetOtp } = require("../services/mailer.js");
 
 const router = express.Router();
@@ -55,7 +56,13 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-   
+    await Candidate.create({
+    userId: user._id,
+    name: user.fullName,
+    email: user.email,
+    phone: user.phone,
+  });
+    
 
     return res.status(201).json({
       success: true,

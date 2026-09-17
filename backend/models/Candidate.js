@@ -2,6 +2,14 @@ const mongoose = require("mongoose");
 
 const candidateSchema = new mongoose.Schema(
   {
+    // Link candidate with User account
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
+
     name: {
       type: String,
       required: true,
@@ -12,6 +20,7 @@ const candidateSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
 
     phone: {
@@ -23,26 +32,36 @@ const candidateSchema = new mongoose.Schema(
     location: {
       type: String,
       trim: true,
+      default: "",
     },
 
     qualification: {
       type: String,
       trim: true,
+      default: "",
     },
 
     experience: {
       type: String,
       trim: true,
+      default: "",
     },
 
     skills: {
       type: String,
       trim: true,
+      default: "",
     },
 
     resume: {
       type: String,
       default: null,
+    },
+
+    status: {
+      type: String,
+      enum: ["Active", "Inactive", "Shortlisted", "Placed"],
+      default: "Active",
     },
   },
   {

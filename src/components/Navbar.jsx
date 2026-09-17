@@ -328,26 +328,6 @@ function Navbar() {
                 </a>
 
                 <a
-                  href="#international-jobs"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("international-jobs");
-                  }}
-                >
-                  International Jobs
-                </a>
-
-                <a
-                  href="#domestic-jobs"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection("domestic-jobs");
-                  }}
-                >
-                  Domestic Jobs
-                </a>
-
-                <a
                   href="#recruitment-process"
                   onClick={(e) => {
                     e.preventDefault();
@@ -570,7 +550,7 @@ function Navbar() {
               aria-label="Open user login"
             >
               <UserRound size={17} aria-hidden="true" />
-              User
+          Log in
             </button>
           )}
 
@@ -899,7 +879,7 @@ function Navbar() {
           aria-label="Open user login"
         >
           <UserRound size={17} aria-hidden="true" />
-          User
+          user
         </button>
       </div>
     </header>

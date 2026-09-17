@@ -175,7 +175,7 @@
    ========================================================= */
 
 .hero-layout {
-  width: min(1240px, calc(100% - 100px));
+  width: min(1400px, calc(100% - 80px));
 
   margin: 0 auto;
 
@@ -1478,7 +1478,7 @@
 @media (max-width: 1350px) {
 
   .hero-layout {
-    width: min(1160px, calc(100% - 80px));
+    width: calc(100% - 80px);
 
     grid-template-columns:
       minmax(0, 1fr)
